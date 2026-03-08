@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CourierX — Operations System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#070910;--surface:#0d1017;--surface2:#131720;--surface3:#1a2030;
+  --border:#1e2535;--border2:#252d3d;
+  --blue:#1e6fff;--blue-dim:rgba(30,111,255,0.12);
+  --green:#00d68f;--green-dim:rgba(0,214,143,0.1);
+  --yellow:#ffb547;--yellow-dim:rgba(255,181,71,0.1);
+  --red:#ff4d6a;--red-dim:rgba(255,77,106,0.1);
+  --text:#e8edf5;--text2:#8892a4;--text3:#4a5568;
+  --keeta:#ff6b35;--keeta-dim:rgba(255,107,53,0.12);
+  --jahez:#8b5cf6;--jahez-dim:rgba(139,92,246,0.12);
+  --ninja:#06b6d4;--ninja-dim:rgba(6,182,212,0.12);
+  --noon:#f59e0b;--noon-dim:rgba(245,158,11,0.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;display:flex;height:100vh;overflow:hidden;font-size:13px;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(–surface);border-right:1px solid var(–border);display:flex;flex-direction:column;flex-shrink:0;}
+.logo{padding:18px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:10px;}
+.logo-icon{width:32px;height:32px;background:var(–blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:‘Syne’,sans-serif;font-weight:800;font-size:14px;color:white;}
+.logo-text{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1rem;color:var(–text);}
+.logo-sub{font-size:0.6rem;color:var(–text2);}
+.role-badge{margin:10px;background:var(–blue-dim);border:1px solid rgba(30,111,255,0.2);border-radius:8px;padding:9px 12px;}
+.role-name{font-weight:600;font-size:0.78rem;color:var(–blue);}
+.role-title{font-size:0.65rem;color:var(–text2);margin-top:2px;}
+.nav{flex:1;padding:8px;overflow-y:auto;}
+.nav-section{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(–text3);padding:12px 8px 5px;font-weight:600;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;color:var(–text2);transition:all 0.15s;margin-bottom:1px;font-size:0.79rem;border:1px solid transparent;}
+.nav-item:hover{background:var(–surface2);color:var(–text);}
+.nav-item.active{background:var(–blue-dim);color:var(–blue);border-color:rgba(30,111,255,0.15);}
+.nav-item .icon{font-size:0.85rem;width:16px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(–red);color:white;border-radius:10px;padding:1px 6px;font-size:0.58rem;font-weight:700;}
+.sidebar-bottom{padding:12px;border-top:1px solid var(–border);}
+.user-row{display:flex;align-items:center;gap:8px;}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(–blue),#6366f1);display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;color:white;flex-shrink:0;}
+.user-info .name{font-size:0.76rem;font-weight:600;color:var(–text);}
+.user-info .role{font-size:0.62rem;color:var(–text2);}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{background:var(–surface);border-bottom:1px solid var(–border);padding:0 24px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.page-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.95rem;color:var(–text);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.time-display{font-family:‘IBM Plex Mono’,monospace;font-size:0.72rem;color:var(–text2);}
+.alert-btn{position:relative;background:var(–surface2);border:1px solid var(–border);border-radius:7px;padding:5px 10px;cursor:pointer;color:var(–text2);font-size:0.82rem;}
+.alert-dot{position:absolute;top:4px;right:4px;width:6px;height:6px;background:var(–red);border-radius:50%;}
+.content{flex:1;overflow-y:auto;padding:16px 20px;}
+
+/* PLATFORM TABS */
+.platform-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(–surface);border:1px solid var(–border);border-radius:10px;padding:4px;width:fit-content;}
+.ptab{display:flex;align-items:center;gap:6px;padding:6px 16px;border-radius:7px;cursor:pointer;font-size:0.78rem;color:var(–text2);transition:all 0.15s;font-weight:500;border:1px solid transparent;}
+.ptab:hover{background:var(–surface2);color:var(–text);}
+.ptab.active{color:white;font-weight:600;}
+.ptab[data-p=“all”].active{background:var(–blue);border-color:rgba(30,111,255,0.3);}
+.ptab[data-p=“keeta”].active{background:var(–keeta);border-color:rgba(255,107,53,0.3);}
+.ptab[data-p=“jahez”].active{background:var(–jahez);border-color:rgba(139,92,246,0.3);}
+.ptab[data-p=“ninja”].active{background:var(–ninja);border-color:rgba(6,182,212,0.3);}
+.ptab[data-p=“noon”].active{background:var(–noon);border-color:rgba(245,158,11,0.3);}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.kpi-card{background:var(–surface);border:1px solid var(–border);border-radius:12px;padding:14px;position:relative;overflow:hidden;}
+.kpi-card::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:var(–ac,var(–blue));}
+.kpi-label{font-size:0.62rem;color:var(–text2);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;}
+.kpi-value{font-family:‘Syne’,sans-serif;font-size:1.6rem;font-weight:800;color:var(–text);margin:5px 0 3px;line-height:1;}
+.kpi-sub{font-size:0.65rem;color:var(–text2);display:flex;align-items:center;gap:4px;}
+.up{color:var(–green);}.down{color:var(–red);}
+
+/* GRID LAYOUTS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px;}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px;}
+.grid-1-2{display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:12px;}
+
+/* PANEL */
+.panel{background:var(–surface);border:1px solid var(–border);border-radius:12px;overflow:hidden;height:100%;}
+.panel-header{padding:12px 16px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;}
+.panel-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.8rem;color:var(–text);}
+.panel-action{font-size:0.68rem;color:var(–blue);cursor:pointer;}
+.panel-body{padding:12px 16px;}
+
+/* CHART CONTAINERS */
+.chart-wrap{position:relative;width:100%;}
+.chart-wrap canvas{width:100%!important;}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;}
+.data-table th{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(–text3);padding:7px 10px;text-align:left;border-bottom:1px solid var(–border);font-weight:600;}
+.data-table td{padding:9px 10px;border-bottom:1px solid var(–border);font-size:0.76rem;color:var(–text);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:var(–surface2);}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:0.62rem;font-weight:600;}
+.bg{background:var(–green-dim);color:var(–green);border:1px solid rgba(0,214,143,0.2);}
+.by{background:var(–yellow-dim);color:var(–yellow);border:1px solid rgba(255,181,71,0.2);}
+.br{background:var(–red-dim);color:var(–red);border:1px solid rgba(255,77,106,0.2);}
+.bb{background:var(–blue-dim);color:var(–blue);border:1px solid rgba(30,111,255,0.2);}
+
+/* SCORE */
+.score-wrap{display:flex;align-items:center;gap:6px;}
+.score-bar{flex:1;height:4px;background:var(–border);border-radius:4px;overflow:hidden;}
+.score-fill{height:100%;border-radius:4px;}
+.score-num{font-family:‘IBM Plex Mono’,monospace;font-size:0.68rem;color:var(–text2);width:28px;text-align:right;}
+
+/* LIVE */
+.live{display:inline-flex;align-items:center;gap:5px;font-size:0.62rem;color:var(–green);font-weight:600;}
+.live-dot{width:6px;height:6px;background:var(–green);border-radius:50%;animation:livep 2s infinite;}
+@keyframes livep{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* SUPERVISOR CARD */
+.sup-card{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(–border);}
+.sup-card:last-child{border-bottom:none;}
+.sup-rank{font-family:‘IBM Plex Mono’,monospace;font-size:0.68rem;color:var(–text3);width:16px;text-align:center;}
+.sup-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:white;flex-shrink:0;}
+.sup-info{flex:1;}
+.sup-name{font-size:0.76rem;font-weight:600;color:var(–text);}
+.sup-meta{font-size:0.62rem;color:var(–text2);}
+.sup-score{font-family:‘IBM Plex Mono’,monospace;font-size:0.8rem;font-weight:700;}
+
+/* DRIVER CARD */
+.drv-card{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(–border);}
+.drv-card:last-child{border-bottom:none;}
+.drv-num{font-family:‘IBM Plex Mono’,monospace;font-size:0.68rem;color:var(–text3);width:16px;}
+.drv-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:white;flex-shrink:0;}
+.drv-info{flex:1;}
+.drv-name{font-size:0.73rem;font-weight:600;color:var(–text);}
+.drv-sub{font-size:0.6rem;color:var(–text2);}
+
+/* COD FLOW */
+.cod-stages{display:flex;gap:8px;margin-bottom:12px;}
+.cod-stage{flex:1;background:var(–surface2);border:1px solid var(–border);border-radius:8px;padding:10px;text-align:center;}
+.cod-num{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.3rem;}
+.cod-lbl{font-size:0.6rem;color:var(–text2);margin-top:2px;}
+
+/* ALERT ITEMS */
+.alert-row{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(–border);}
+.alert-row:last-child{border-bottom:none;}
+.alert-ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;}
+.alert-txt{font-size:0.72rem;color:var(–text);line-height:1.4;}
+.alert-time{font-size:0.62rem;color:var(–text2);margin-top:2px;}
+
+/* SECTION SYSTEM */
+.section{display:none;}
+.section.active{display:block;}
+
+/* PLATFORM HEADER BANNER */
+.platform-banner{border-radius:12px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.pb-left h2{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.2rem;}
+.pb-left p{font-size:0.72rem;opacity:0.7;margin-top:3px;}
+.pb-right{text-align:right;}
+.pb-right .big{font-family:‘Syne’,sans-serif;font-weight:800;font-size:2rem;line-height:1;}
+.pb-right .sub{font-size:0.68rem;opacity:0.7;margin-top:3px;}
+
+/* DONUT LEGEND */
+.donut-legend{display:flex;flex-direction:column;gap:8px;justify-content:center;}
+.dl-item{display:flex;align-items:center;gap:8px;}
+.dl-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.dl-label{font-size:0.72rem;color:var(–text2);}
+.dl-val{margin-left:auto;font-family:‘IBM Plex Mono’,monospace;font-size:0.72rem;font-weight:600;color:var(–text);}
+</style>
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">CX</div>
+    <div><div class="logo-text">CourierX</div><div class="logo-sub">Operations System</div></div>
+  </div>
+  <div class="role-badge">
+    <div class="role-name">CEO / Owner</div>
+    <div class="role-title">Full System Access</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="nav(this,'dashboard','CEO Dashboard')"><span class="icon">⬛</span> Dashboard</div>
+    <div class="nav-item" onclick="nav(this,'operations','Live Operations')"><span class="icon">🚴</span> Operations</div>
+    <div class="nav-section">Management</div>
+    <div class="nav-item" onclick="nav(this,'drivers','Driver Management')"><span class="icon">👥</span> Drivers</div>
+    <div class="nav-item" onclick="nav(this,'hr','HR & Compliance')"><span class="icon">📋</span> HR & Compliance<span class="nav-badge">7</span></div>
+    <div class="nav-item" onclick="nav(this,'finance','Finance & COD')"><span class="icon">💰</span> Finance & COD<span class="nav-badge">3</span></div>
+    <div class="nav-item" onclick="nav(this,'crm','CRM & Tickets')"><span class="icon">💬</span> CRM & Tickets</div>
+    <div class="nav-section">Platforms</div>
+    <div class="nav-item" onclick="nav(this,'keeta','Keeta Platform')" style="color:var(--keeta)"><span class="icon">🔶</span> Keeta</div>
+    <div class="nav-item" onclick="nav(this,'jahez','Jahez Platform')" style="color:var(--jahez)"><span class="icon">🟣</span> Jahez</div>
+    <div class="nav-item" onclick="nav(this,'ninja','Ninja Platform')" style="color:var(--ninja)"><span class="icon">🔵</span> Ninja</div>
+    <div class="nav-item" onclick="nav(this,'noon','Noon Platform')" style="color:var(--noon)"><span class="icon">🟡</span> Noon</div>
+    <div class="nav-section">System</div>
+    <div class="nav-item"><span class="icon">📊</span> Reports</div>
+    <div class="nav-item"><span class="icon">🔒</span> Security Logs</div>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <div class="avatar">MK</div>
+      <div class="user-info"><div class="name">Mohammed K.</div><div class="role">Owner / CEO</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">CEO Dashboard</div>
+    <div class="topbar-right">
+      <span class="live"><span class="live-dot"></span>Live</span>
+      <span class="time-display" id="clock"></span>
+      <div class="alert-btn">🔔<div class="alert-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+  <!-- ═══════════════════════════════════════════════ CEO DASHBOARD ══ -->
+
+  <div class="section active" id="sec-dashboard">
+
+```
+<!-- Platform filter tabs -->
+<div class="platform-tabs">
+  <div class="ptab active" data-p="all" onclick="filterDash(this,'all')">🏢 All Platforms</div>
+  <div class="ptab" data-p="keeta" onclick="filterDash(this,'keeta')">🔶 Keeta</div>
+  <div class="ptab" data-p="jahez" onclick="filterDash(this,'jahez')">🟣 Jahez</div>
+  <div class="ptab" data-p="ninja" onclick="filterDash(this,'ninja')">🔵 Ninja</div>
+  <div class="ptab" data-p="noon" onclick="filterDash(this,'noon')">🟡 Noon</div>
+</div>
+
+<!-- KPIs -->
+<div class="kpi-grid" id="dashKpis">
+  <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Active Drivers</div><div class="kpi-value" id="kpiDrivers">1,247</div><div class="kpi-sub"><span class="up">↑ 23</span> from yesterday</div></div>
+  <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">COD Outstanding</div><div class="kpi-value" id="kpiCod">BD 18.4K</div><div class="kpi-sub"><span class="down">↑ BD 2.1K</span> unsettled</div></div>
+  <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Compliance Alerts</div><div class="kpi-value" id="kpiAlerts">34</div><div class="kpi-sub"><span class="down">7</span> expiring this week</div></div>
+  <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">Avg Performance</div><div class="kpi-value" id="kpiPerf">82%</div><div class="kpi-sub"><span class="up">↑ 3%</span> vs last week</div></div>
+</div>
+
+<!-- Charts row 1 -->
+<div class="grid-2-1">
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">📈 COD Revenue — Last 7 Days</div><div class="panel-action">Export</div></div>
+    <div class="panel-body"><div class="chart-wrap" style="height:180px"><canvas id="lineChart"></canvas></div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">🍩 Drivers by Platform</div></div>
+    <div class="panel-body" style="display:flex;align-items:center;gap:16px;">
+      <div class="chart-wrap" style="height:150px;width:150px;flex-shrink:0"><canvas id="donutChart"></canvas></div>
+      <div class="donut-legend">
+        <div class="dl-item"><div class="dl-dot" style="background:var(--keeta)"></div><div class="dl-label">Keeta</div><div class="dl-val">340</div></div>
+        <div class="dl-item"><div class="dl-dot" style="background:var(--jahez)"></div><div class="dl-label">Jahez</div><div class="dl-val">512</div></div>
+        <div class="dl-item"><div class="dl-dot" style="background:var(--ninja)"></div><div class="dl-label">Ninja</div><div class="dl-val">218</div></div>
+        <div class="dl-item"><div class="dl-dot" style="background:var(--noon)"></div><div class="dl-label">Noon</div><div class="dl-val">177</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts row 2 -->
+<div class="grid-3">
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">⚡ Performance by Platform</div></div>
+    <div class="panel-body"><div class="chart-wrap" style="height:160px"><canvas id="barChart"></canvas></div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">📊 Driver Status Distribution</div></div>
+    <div class="panel-body"><div class="chart-wrap" style="height:160px"><canvas id="statusChart"></canvas></div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">🕐 Hourly Order Volume</div></div>
+    <div class="panel-body"><div class="chart-wrap" style="height:160px"><canvas id="areaChart"></canvas></div></div>
+  </div>
+</div>
+
+<!-- Top Supervisors + Top Drivers + Alerts -->
+<div class="grid-3">
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">🏆 Top Supervisors</div><div class="panel-action">All platforms</div></div>
+    <div class="panel-body">
+      <div class="sup-card">
+        <div class="sup-rank">1</div>
+        <div class="sup-avatar" style="background:linear-gradient(135deg,var(--keeta),#ff9a6b)">SA</div>
+        <div class="sup-info"><div class="sup-name">Supervisor Ahmed</div><div class="sup-meta">Keeta · 120 drivers</div></div>
+        <div class="sup-score" style="color:var(--green)">94%</div>
+      </div>
+      <div class="sup-card">
+        <div class="sup-rank">2</div>
+        <div class="sup-avatar" style="background:linear-gradient(135deg,var(--ninja),#38bdf8)">SK</div>
+        <div class="sup-info"><div class="sup-name">Supervisor Khalid</div><div class="sup-meta">Ninja · 118 drivers</div></div>
+        <div class="sup-score" style="color:var(--green)">91%</div>
+      </div>
+      <div class="sup-card">
+        <div class="sup-rank">3</div>
+        <div class="sup-avatar" style="background:linear-gradient(135deg,var(--jahez),#a78bfa)">SM</div>
+        <div class="sup-info"><div class="sup-name">Supervisor Mohammed</div><div class="sup-meta">Jahez · 122 drivers</div></div>
+        <div class="sup-score" style="color:var(--green)">89%</div>
+      </div>
+      <div class="sup-card">
+        <div class="sup-rank">4</div>
+        <div class="sup-avatar" style="background:linear-gradient(135deg,var(--noon),#fbbf24)">SF</div>
+        <div class="sup-info"><div class="sup-name">Supervisor Fahad</div><div class="sup-meta">Noon · 115 drivers</div></div>
+        <div class="sup-score" style="color:var(--yellow)">78%</div>
+      </div>
+      <div class="sup-card">
+        <div class="sup-rank">5</div>
+        <div class="sup-avatar" style="background:linear-gradient(135deg,#64748b,#94a3b8)">SO</div>
+        <div class="sup-info"><div class="sup-name">Supervisor Omar</div><div class="sup-meta">Jahez · 119 drivers</div></div>
+        <div class="sup-score" style="color:var(--yellow)">74%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">⭐ Top Drivers</div><div class="panel-action">This month</div></div>
+    <div class="panel-body">
+      <div class="drv-card">
+        <div class="drv-num">1</div>
+        <div class="drv-av" style="background:linear-gradient(135deg,var(--ninja),#38bdf8)">RK</div>
+        <div class="drv-info"><div class="drv-name">Raj Kumar Singh</div><div class="drv-sub">Ninja · DRV-0156</div></div>
+        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--green)">91%</div><div style="font-size:0.6rem;color:var(--text2)">218 orders</div></div>
+      </div>
+      <div class="drv-card">
+        <div class="drv-num">2</div>
+        <div class="drv-av" style="background:linear-gradient(135deg,var(--keeta),#ff9a6b)">AA</div>
+        <div class="drv-info"><div class="drv-name">Ahmed Al-Rashidi</div><div class="drv-sub">Keeta · DRV-0041</div></div>
+        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--green)">87%</div><div style="font-size:0.6rem;color:var(--text2)">204 orders</div></div>
+      </div>
+      <div class="drv-card">
+        <div class="drv-num">3</div>
+        <div class="drv-av" style="background:linear-gradient(135deg,var(--noon),#fbbf24)">FA</div>
+        <div class="drv-info"><div class="drv-name">Faisal Al-Ahmad</div><div class="drv-sub">Noon · DRV-0089</div></div>
+        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--green)">85%</div><div style="font-size:0.6rem;color:var(--text2)">197 orders</div></div>
+      </div>
+      <div class="drv-card">
+        <div class="drv-num">4</div>
+        <div class="drv-av" style="background:linear-gradient(135deg,var(--jahez),#a78bfa)">MA</div>
+        <div class="drv-info"><div class="drv-name">Mohammed Al-Ali</div><div class="drv-sub">Jahez · DRV-0203</div></div>
+        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--green)">83%</div><div style="font-size:0.6rem;color:var(--text2)">189 orders</div></div>
+      </div>
+      <div class="drv-card">
+        <div class="drv-num">5</div>
+        <div class="drv-av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">PN</div>
+        <div class="drv-info"><div class="drv-name">Priya Nair</div><div class="drv-sub">Ninja · DRV-0312</div></div>
+        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--yellow)">79%</div><div style="font-size:0.6rem;color:var(--text2)">176 orders</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="panel-title">🚨 Live Alerts</div><div class="panel-action">View all</div></div>
+    <div class="panel-body">
+      <div class="alert-row">
+        <div class="alert-ic" style="background:var(--red-dim)">🔴</div>
+        <div><div class="alert-txt">Ahmed K. (Jahez) — 3rd warning. Suspension recommended.</div><div class="alert-time">2 mins ago</div></div>
+      </div>
+      <div class="alert-row">
+        <div class="alert-ic" style="background:var(--yellow-dim)">🟡</div>
+        <div><div class="alert-txt">COD mismatch — Keeta · BD 240 vs BD 190 screenshot</div><div class="alert-time">14 mins ago</div></div>
+      </div>
+      <div class="alert-row">
+        <div class="alert-ic" style="background:var(--red-dim)">📄</div>
+        <div><div class="alert-txt">7 driver visas expiring within 14 days</div><div class="alert-time">1 hour ago</div></div>
+      </div>
+      <div class="alert-row">
+        <div class="alert-ic" style="background:var(--yellow-dim)">⚡</div>
+        <div><div class="alert-txt">Jahez Supervisor B — 89/120 drivers active (low)</div><div class="alert-time">2 hours ago</div></div>
+      </div>
+      <div class="alert-row">
+        <div class="alert-ic" style="background:var(--blue-dim)">💬</div>
+        <div><div class="alert-txt">12 unresolved CRM tickets older than 24h</div><div class="alert-time">3 hours ago</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ PLATFORM PAGES ══ -->
+
+  <!-- KEETA -->
+
+  <div class="section" id="sec-keeta">
+    <div class="platform-banner" style="background:linear-gradient(135deg,rgba(255,107,53,0.15),rgba(255,107,53,0.05));border:1px solid rgba(255,107,53,0.2);">
+      <div class="pb-left"><h2 style="color:var(--keeta)">🔶 Keeta Platform</h2><p style="color:var(--text2)">Account Manager: Ali Mohammed · 3 Supervisors</p></div>
+      <div class="pb-right" style="color:var(--keeta)"><div class="big">340</div><div class="sub">Active Drivers</div></div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--ac:var(--keeta)"><div class="kpi-label">Active Drivers</div><div class="kpi-value">340</div><div class="kpi-sub"><span class="up">↑ 8</span> today</div></div>
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">COD Today</div><div class="kpi-value">BD 4.2K</div><div class="kpi-sub"><span class="up">↑ 12%</span> vs yesterday</div></div>
+      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Performance</div><div class="kpi-value">84%</div><div class="kpi-sub"><span class="up">↑ 2%</span> this week</div></div>
+      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Open Alerts</div><div class="kpi-value">6</div><div class="kpi-sub"><span class="down">2</span> critical</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📈 Keeta COD — This Week</div></div>
+        <div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="keetaLine"></canvas></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">👥 Supervisors — Keeta</div></div>
+        <div class="panel-body">
+          <div class="sup-card">
+            <div class="sup-rank">1</div>
+            <div class="sup-avatar" style="background:linear-gradient(135deg,var(--keeta),#ff9a6b)">SA</div>
+            <div class="sup-info"><div class="sup-name">Supervisor Ahmed</div><div class="sup-meta">120 drivers · 114 active</div></div>
+            <div><div class="sup-score" style="color:var(--green)">94%</div><div style="font-size:0.6rem;color:var(--text2)">top performer</div></div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-rank">2</div>
+            <div class="sup-avatar" style="background:linear-gradient(135deg,#f97316,#fb923c)">SH</div>
+            <div class="sup-info"><div class="sup-name">Supervisor Hassan</div><div class="sup-meta">118 drivers · 109 active</div></div>
+            <div><div class="sup-score" style="color:var(--yellow)">81%</div><div style="font-size:0.6rem;color:var(--text2)">on track</div></div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-rank">3</div>
+            <div class="sup-avatar" style="background:linear-gradient(135deg,#dc2626,#ef4444)">SR</div>
+            <div class="sup-info"><div class="sup-name">Supervisor Rami</div><div class="sup-meta">102 drivers · 88 active</div></div>
+            <div><div class="sup-score" style="color:var(--red)">71%</div><div style="font-size:0.6rem;color:var(--red)">needs attention</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">⭐ Top Drivers — Keeta</div><div class="panel-action">View all 340</div></div>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Driver</th><th>Supervisor</th><th>Orders</th><th>Performance</th><th>COD Today</th><th>Last Login</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">1</td><td><div style="font-weight:600">Ahmed Al-Rashidi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0041</div></td><td>Sup. Ahmed</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">204</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-num">87%</div></div></td><td><span class="badge bg">✓ BD 124.50</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">08:32 AM</td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">2</td><td><div style="font-weight:600">Ali Hassan</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0271</div></td><td>Sup. Hassan</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">189</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:82%;background:var(--green)"></div></div><div class="score-num">82%</div></div></td><td><span class="badge bg">✓ BD 98.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">09:14 AM</td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">3</td><td><div style="font-weight:600">Khalid Al-Sayed</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0088</div></td><td>Sup. Rami</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">171</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:79%;background:var(--yellow)"></div></div><div class="score-num">79%</div></div></td><td><span class="badge by">⏳ Pending</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">10:02 AM</td><td><span class="badge by">Warning</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- JAHEZ -->
+
+  <div class="section" id="sec-jahez">
+    <div class="platform-banner" style="background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(139,92,246,0.05));border:1px solid rgba(139,92,246,0.2);">
+      <div class="pb-left"><h2 style="color:var(--jahez)">🟣 Jahez Platform</h2><p style="color:var(--text2)">Account Manager: Tariq Al-Dosari · 4 Supervisors</p></div>
+      <div class="pb-right" style="color:var(--jahez)"><div class="big">512</div><div class="sub">Active Drivers</div></div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--ac:var(--jahez)"><div class="kpi-label">Active Drivers</div><div class="kpi-value">512</div><div class="kpi-sub"><span class="up">↑ 11</span> today</div></div>
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">COD Today</div><div class="kpi-value">BD 6.8K</div><div class="kpi-sub"><span class="up">↑ 8%</span> vs yesterday</div></div>
+      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Performance</div><div class="kpi-value">79%</div><div class="kpi-sub"><span class="down">↓ 1%</span> this week</div></div>
+      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Open Alerts</div><div class="kpi-value">11</div><div class="kpi-sub"><span class="down">4</span> critical</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📈 Jahez COD — This Week</div></div>
+        <div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="jahezLine"></canvas></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">👥 Supervisors — Jahez</div></div>
+        <div class="panel-body">
+          <div class="sup-card"><div class="sup-rank">1</div><div class="sup-avatar" style="background:linear-gradient(135deg,var(--jahez),#a78bfa)">SM</div><div class="sup-info"><div class="sup-name">Supervisor Mohammed</div><div class="sup-meta">122 drivers · 118 active</div></div><div><div class="sup-score" style="color:var(--green)">89%</div></div></div>
+          <div class="sup-card"><div class="sup-rank">2</div><div class="sup-avatar" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)">SO</div><div class="sup-info"><div class="sup-name">Supervisor Omar</div><div class="sup-meta">119 drivers · 107 active</div></div><div><div class="sup-score" style="color:var(--yellow)">74%</div></div></div>
+          <div class="sup-card"><div class="sup-rank">3</div><div class="sup-avatar" style="background:linear-gradient(135deg,#6d28d9,#7c3aed)">SY</div><div class="sup-info"><div class="sup-name">Supervisor Yousef</div><div class="sup-meta">121 drivers · 98 active</div></div><div><div class="sup-score" style="color:var(--yellow)">72%</div></div></div>
+          <div class="sup-card"><div class="sup-rank">4</div><div class="sup-avatar" style="background:linear-gradient(135deg,#dc2626,#ef4444)">SN</div><div class="sup-info"><div class="sup-name">Supervisor Nasser</div><div class="sup-meta">150 drivers · 116 active</div></div><div><div class="sup-score" style="color:var(--red)">65%</div><div style="font-size:0.6rem;color:var(--red)">⚠ critical</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">⭐ Top Drivers — Jahez</div><div class="panel-action">View all 512</div></div>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Driver</th><th>Supervisor</th><th>Orders</th><th>Performance</th><th>COD Today</th><th>Last Login</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">1</td><td><div style="font-weight:600">Mohammed Al-Ali</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0203</div></td><td>Sup. Mohammed</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">189</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:83%;background:var(--green)"></div></div><div class="score-num">83%</div></div></td><td><span class="badge bg">✓ BD 211.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">07:58 AM</td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">2</td><td><div style="font-weight:600">Samir Al-Zahra</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0334</div></td><td>Sup. Omar</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">165</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:77%;background:var(--yellow)"></div></div><div class="score-num">77%</div></div></td><td><span class="badge by">⏳ Pending</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">08:44 AM</td><td><span class="badge by">Warning</span></td></tr>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">3</td><td><div style="font-weight:600">Ahmed K. (flagged)</div><div style="font-size:0.6rem;color:var(--red)">DRV-0089 · 3rd warning</div></td><td>Sup. Nasser</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">82</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">✕ Missing</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red)">Yesterday</td><td><span class="badge br">⚠ Suspended</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NINJA -->
+
+  <div class="section" id="sec-ninja">
+    <div class="platform-banner" style="background:linear-gradient(135deg,rgba(6,182,212,0.15),rgba(6,182,212,0.05));border:1px solid rgba(6,182,212,0.2);">
+      <div class="pb-left"><h2 style="color:var(--ninja)">🔵 Ninja Platform</h2><p style="color:var(--text2)">Account Manager: Sara Al-Mansour · 2 Supervisors</p></div>
+      <div class="pb-right" style="color:var(--ninja)"><div class="big">218</div><div class="sub">Active Drivers</div></div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--ac:var(--ninja)"><div class="kpi-label">Active Drivers</div><div class="kpi-value">218</div><div class="kpi-sub"><span class="up">↑ 4</span> today</div></div>
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">COD Today</div><div class="kpi-value">BD 2.9K</div><div class="kpi-sub"><span class="up">↑ 15%</span> vs yesterday</div></div>
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">Performance</div><div class="kpi-value">88%</div><div class="kpi-sub"><span class="up">↑ 4%</span> this week</div></div>
+      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Open Alerts</div><div class="kpi-value">3</div><div class="kpi-sub">all minor</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📈 Ninja COD — This Week</div></div>
+        <div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="ninjaLine"></canvas></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">👥 Supervisors — Ninja</div></div>
+        <div class="panel-body">
+          <div class="sup-card"><div class="sup-rank">1</div><div class="sup-avatar" style="background:linear-gradient(135deg,var(--ninja),#38bdf8)">SK</div><div class="sup-info"><div class="sup-name">Supervisor Khalid</div><div class="sup-meta">118 drivers · 116 active</div></div><div><div class="sup-score" style="color:var(--green)">91%</div></div></div>
+          <div class="sup-card"><div class="sup-rank">2</div><div class="sup-avatar" style="background:linear-gradient(135deg,#0891b2,#06b6d4)">SZ</div><div class="sup-info"><div class="sup-name">Supervisor Ziad</div><div class="sup-meta">100 drivers · 96 active</div></div><div><div class="sup-score" style="color:var(--green)">85%</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">⭐ Top Drivers — Ninja</div><div class="panel-action">View all 218</div></div>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Driver</th><th>Supervisor</th><th>Orders</th><th>Performance</th><th>COD Today</th><th>Last Login</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">1</td><td><div style="font-weight:600">Raj Kumar Singh</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0156</div></td><td>Sup. Khalid</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">218</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:91%;background:var(--green)"></div></div><div class="score-num">91%</div></div></td><td><span class="badge bg">✓ BD 87.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">09:01 AM</td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">2</td><td><div style="font-weight:600">Priya Nair</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0312</div></td><td>Sup. Ziad</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">176</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:79%;background:var(--yellow)"></div></div><div class="score-num">79%</div></div></td><td><span class="badge bg">✓ BD 54.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">09:45 AM</td><td><span class="badge bg">Active</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NOON -->
+
+  <div class="section" id="sec-noon">
+    <div class="platform-banner" style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));border:1px solid rgba(245,158,11,0.2);">
+      <div class="pb-left"><h2 style="color:var(--noon)">🟡 Noon Platform</h2><p style="color:var(--text2)">Account Manager: Waleed Al-Hamdan · 2 Supervisors</p></div>
+      <div class="pb-right" style="color:var(--noon)"><div class="big">177</div><div class="sub">Active Drivers</div></div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--ac:var(--noon)"><div class="kpi-label">Active Drivers</div><div class="kpi-value">177</div><div class="kpi-sub"><span class="up">↑ 2</span> today</div></div>
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">COD Today</div><div class="kpi-value">BD 2.1K</div><div class="kpi-sub"><span class="up">↑ 5%</span> vs yesterday</div></div>
+      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Performance</div><div class="kpi-value">81%</div><div class="kpi-sub"><span class="up">↑ 1%</span> this week</div></div>
+      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Open Alerts</div><div class="kpi-value">5</div><div class="kpi-sub"><span class="down">1</span> critical</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📈 Noon COD — This Week</div></div>
+        <div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="noonLine"></canvas></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">👥 Supervisors — Noon</div></div>
+        <div class="panel-body">
+          <div class="sup-card"><div class="sup-rank">1</div><div class="sup-avatar" style="background:linear-gradient(135deg,var(--noon),#fbbf24)">SF</div><div class="sup-info"><div class="sup-name">Supervisor Fahad</div><div class="sup-meta">90 drivers · 88 active</div></div><div><div class="sup-score" style="color:var(--green)">84%</div></div></div>
+          <div class="sup-card"><div class="sup-rank">2</div><div class="sup-avatar" style="background:linear-gradient(135deg,#d97706,#f59e0b)">SB</div><div class="sup-info"><div class="sup-name">Supervisor Bader</div><div class="sup-meta">87 drivers · 78 active</div></div><div><div class="sup-score" style="color:var(--yellow)">75%</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">⭐ Top Drivers — Noon</div><div class="panel-action">View all 177</div></div>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Driver</th><th>Supervisor</th><th>Orders</th><th>Performance</th><th>COD Today</th><th>Last Login</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">1</td><td><div style="font-weight:600">Faisal Al-Ahmad</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0089</div></td><td>Sup. Fahad</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">197</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:85%;background:var(--green)"></div></div><div class="score-num">85%</div></div></td><td><span class="badge bg">✓ BD 143.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">08:10 AM</td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">2</td><td><div style="font-weight:600">Faisal Al-Mutairi</div><div style="font-size:0.6rem;color:var(--red)">DRV-0203 · Expired CPR</div></td><td>Sup. Bader</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">0</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">✕ Missing</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red)">Yesterday</td><td><span class="badge br">Suspended</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- OPERATIONS -->
+
+  <div class="section" id="sec-operations">
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">On Shift Now</div><div class="kpi-value">847</div></div>
+      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Not Logged In</div><div class="kpi-value">53</div></div>
+      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Delayed Today</div><div class="kpi-value">29</div></div>
+      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Orders Complete</div><div class="kpi-value">4,821</div></div>
+    </div>
+    <div class="grid-2" style="margin-bottom:12px">
+      <div class="panel"><div class="panel-header"><div class="panel-title">⚡ Orders Per Hour</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="opsArea"></canvas></div></div></div>
+      <div class="panel"><div class="panel-header"><div class="panel-title">📊 Platform Activity Now</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="opsBar"></canvas></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">🚴 Live Driver Activity</div><div class="live"><span class="live-dot"></span>Live</div></div>
+      <table class="data-table">
+        <thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Last Login</th><th>Shift</th><th>Orders</th><th>Score</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><div style="font-weight:600">Ahmed Al-Rashidi</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Sup. Ahmed</td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">08:32 AM</td><td><span class="badge bg">On Shift</span></td><td style="font-family:'IBM Plex Mono',monospace">14</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-num">87%</div></div></td><td><span class="badge bg">🟢 Active</span></td></tr>
+          <tr><td><div style="font-weight:600">Mohammed Al-Zahra</div></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Sup. Nasser</td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red)">Yesterday</td><td><span class="badge br">Not In</span></td><td style="font-family:'IBM Plex Mono',monospace">0</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">🔴 Absent</span></td></tr>
+          <tr><td><div style="font-weight:600">Raj Kumar Singh</div></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Sup. Khalid</td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">09:01 AM</td><td><span class="badge bg">On Shift</span></td><td style="font-family:'IBM Plex Mono',monospace">21</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:91%;background:var(--green)"></div></div><div class="score-num">91%</div></div></td><td><span class="badge bg">🟢 Active</span></td></tr>
+          <tr><td><div style="font-weight:600">Ali Hassan</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Sup. Hassan</td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">10:17 AM</td><td><span class="badge bg">On Shift</span></td><td style="font-family:'IBM Plex Mono',monospace">9</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:78%;background:var(--yellow)"></div></div><div class="score-num">78%</div></div></td><td><span class="badge by">🟡 Warning</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DRIVERS -->
+
+  <div class="section" id="sec-drivers">
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">Active</div><div class="kpi-value">1,141</div></div>
+      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">On Warning</div><div class="kpi-value">63</div></div>
+      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Suspended</div><div class="kpi-value">18</div></div>
+      <div class="kpi-card" style="--ac:var(--text3)"><div class="kpi-label">Onboarding</div><div class="kpi-value">25</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">Driver List</div><div class="panel-action">+ Add Driver</div></div>
+      <table class="data-table">
+        <thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Type</th><th>Performance</th><th>COD Today</th><th>Documents</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><div style="font-weight:600">Ahmed Al-Rashidi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0041</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Sup. Ahmed</td><td><span class="badge bb">Local</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-num">87%</div></div></td><td><span class="badge bg">✓ Submitted</span></td><td><span class="badge bg">✓ Valid</span></td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td><div style="font-weight:600">Mohammed Al-Zahra</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0089</div></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Sup. Nasser</td><td><span class="badge by">Offshore</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">✕ Missing</span></td><td><span class="badge br">❌ Expired</span></td><td><span class="badge br">Suspended</span></td></tr>
+          <tr><td><div style="font-weight:600">Raj Kumar Singh</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0156</div></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Sup. Khalid</td><td><span class="badge by">Offshore</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:91%;background:var(--green)"></div></div><div class="score-num">91%</div></div></td><td><span class="badge bg">✓ Submitted</span></td><td><span class="badge bg">✓ Valid</span></td><td><span class="badge bg">Active</span></td></tr>
+          <tr><td><div style="font-weight:600">Faisal Al-Mutairi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0203</div></td><td style="color:var(--noon);font-weight:600">Noon</td><td>Sup. Bader</td><td><span class="badge bb">Local</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">✕ Missing</span></td><td><span class="badge br">❌ Expired</span></td><td><span class="badge br">Suspended</span></td></tr>
+          <tr><td><div style="font-weight:600">Ali Hassan</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0271</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Sup. Hassan</td><td><span class="badge bb">Local</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:78%;background:var(--yellow)"></div></div><div class="score-num">78%</div></div></td><td><span class="badge bg">✓ Submitted</span></td><td><span class="badge by">⚠ Expiring</span></td><td><span class="badge by">Warning</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- HR -->
+
+  <div class="section" id="sec-hr">
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Expired Docs</div><div class="kpi-value">12</div></div>
+      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Expiring ≤14 days</div><div class="kpi-value">22</div></div>
+      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Expiring ≤30 days</div><div class="kpi-value">47</div></div>
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">All Valid</div><div class="kpi-value">1,166</div></div>
+    </div>
+    <div class="grid-2" style="margin-bottom:12px">
+      <div class="panel"><div class="panel-header"><div class="panel-title">📊 Document Expiry by Type</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="hrBar"></canvas></div></div></div>
+      <div class="panel"><div class="panel-header"><div class="panel-title">📈 Compliance Trend — 30 Days</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="hrLine"></canvas></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">🚨 Document Expiry Alerts</div><div class="panel-action">Export list</div></div>
+      <table class="data-table">
+        <thead><tr><th>Driver</th><th>Platform</th><th>Document</th><th>Expiry Date</th><th>Days Left</th><th>Status</th><th>HR Officer</th></tr></thead>
+        <tbody>
+          <tr><td><div style="font-weight:600">Mohammed Al-Zahra</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0089</div></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Visa</td><td>15 Mar 2026</td><td style="color:var(--red);font-weight:700;font-family:'IBM Plex Mono',monospace">7 days</td><td><span class="badge br">🔴 Critical</span></td><td>Sara H.</td></tr>
+          <tr><td><div style="font-weight:600">Priya Nair</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0312</div></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Driving License</td><td>18 Mar 2026</td><td style="color:var(--red);font-weight:700;font-family:'IBM Plex Mono',monospace">10 days</td><td><span class="badge br">🔴 Critical</span></td><td>Omar K.</td></tr>
+          <tr><td><div style="font-weight:600">Faisal Al-Mutairi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0203</div></td><td style="color:var(--noon);font-weight:600">Noon</td><td>CPR</td><td>1 Mar 2026</td><td style="color:var(--red);font-weight:700;font-family:'IBM Plex Mono',monospace">Expired</td><td><span class="badge br">❌ Expired</span></td><td>Sara H.</td></tr>
+          <tr><td><div style="font-weight:600">Ali Hassan</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0271</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Passport</td><td>22 Mar 2026</td><td style="color:var(--yellow);font-weight:700;font-family:'IBM Plex Mono',monospace">14 days</td><td><span class="badge by">🟡 Warning</span></td><td>Omar K.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FINANCE -->
+
+  <div class="section" id="sec-finance">
+    <div class="cod-stages">
+      <div class="cod-stage"><div class="cod-num" style="color:var(--text2)">147</div><div class="cod-lbl">Pending</div></div>
+      <div class="cod-stage"><div class="cod-num" style="color:var(--green)">3,241</div><div class="cod-lbl">Approved</div></div>
+      <div class="cod-stage"><div class="cod-num" style="color:var(--red)">23</div><div class="cod-lbl">Flagged</div></div>
+      <div class="cod-stage"><div class="cod-num" style="color:var(--blue)">2,890</div><div class="cod-lbl">Settled</div></div>
+    </div>
+    <div class="grid-2" style="margin-bottom:12px">
+      <div class="panel"><div class="panel-header"><div class="panel-title">💰 COD by Platform — This Month</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="finBar"></canvas></div></div></div>
+      <div class="panel"><div class="panel-header"><div class="panel-title">📈 Settlement Rate — 30 Days</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="finLine"></canvas></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">💰 COD Review Queue</div><div class="panel-action">Export</div></div>
+      <table class="data-table">
+        <thead><tr><th>Driver</th><th>Platform</th><th>Amount</th><th>Submitted</th><th>Screenshot</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><div style="font-weight:600">Ahmed Al-Rashidi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0041</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">BD 124.50</td><td>08:32 AM</td><td><span class="badge bg">✓ Uploaded</span></td><td><span class="badge by">⏳ Pending</span></td><td><div style="display:flex;gap:4px"><button style="background:var(--green-dim);border:1px solid var(--green);color:var(--green);border-radius:5px;padding:3px 8px;font-size:0.62rem;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;" onclick="this.textContent='✓ Done';this.style.opacity='0.5'">Approve</button><button style="background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:5px;padding:3px 8px;font-size:0.62rem;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Flag</button></div></td></tr>
+          <tr><td><div style="font-weight:600">Raj Kumar Singh</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0156</div></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">BD 87.00</td><td>09:14 AM</td><td><span class="badge bg">✓ Uploaded</span></td><td><span class="badge br">⚠ Flagged</span></td><td><div style="display:flex;gap:4px"><button style="background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:5px;padding:3px 8px;font-size:0.62rem;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Review</button></div></td></tr>
+          <tr><td><div style="font-weight:600">Ali Hassan</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0271</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">BD 210.00</td><td>10:02 AM</td><td><span class="badge br">✕ Missing</span></td><td><span class="badge br">⚠ No Screenshot</span></td><td><div style="display:flex;gap:4px"><button style="background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:5px;padding:3px 8px;font-size:0.62rem;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Review</button></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CRM -->
+
+  <div class="section" id="sec-crm">
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Open Tickets</div><div class="kpi-value">38</div></div>
+      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">In Progress</div><div class="kpi-value">21</div></div>
+      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">Resolved Today</div><div class="kpi-value">64</div></div>
+      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Avg Response</div><div class="kpi-value">18m</div></div>
+    </div>
+    <div class="grid-2" style="margin-bottom:12px">
+      <div class="panel"><div class="panel-header"><div class="panel-title">📊 Tickets by Category</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="crmDonut"></canvas></div></div></div>
+      <div class="panel"><div class="panel-header"><div class="panel-title">📈 Ticket Volume — This Week</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="crmLine"></canvas></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">💬 Recent Tickets</div><div class="panel-action">View all</div></div>
+      <table class="data-table">
+        <thead><tr><th>Ticket</th><th>Driver</th><th>Platform</th><th>Category</th><th>Assigned</th><th>Open Since</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">#TKT-0821</td><td>Ahmed Al-Rashidi</td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Payment / COD</td><td>Finance Team</td><td>23 mins</td><td><span class="badge by">In Progress</span></td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">#TKT-0820</td><td>Raj Kumar Singh</td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Document / Visa</td><td>HR Officer</td><td>1h 12m</td><td><span class="badge br">Open</span></td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">#TKT-0819</td><td>Mohammed Al-Zahra</td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Platform Issue</td><td>Supervisor B</td><td>2h 04m</td><td><span class="badge br">Escalated</span></td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">#TKT-0818</td><td>Ali Hassan</td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Operations</td><td>Sup. Ahmed</td><td>3h 30m</td><td><span class="badge bg">Resolved</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div><!-- end content -->
+</div><!-- end main -->
+
+<script>
+// ── CLOCK ──
+function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB');}
+setInterval(tick,1000);tick();
+
+// ── NAVIGATION ──
+const titles={dashboard:'CEO Dashboard',operations:'Live Operations',drivers:'Driver Management',hr:'HR & Compliance',finance:'Finance & COD',crm:'CRM & Tickets',keeta:'Keeta Platform',jahez:'Jahez Platform',ninja:'Ninja Platform',noon:'Noon Platform'};
+function nav(el,id,title){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const sec=document.getElementById('sec-'+id);
+  if(sec){sec.classList.add('active');}
+  document.getElementById('pageTitle').textContent=title||titles[id]||id;
+  el.classList.add('active');
+  // lazy init charts
+  setTimeout(()=>initChartsForSection(id),50);
+}
+
+// ── DASHBOARD PLATFORM FILTER ──
+const dashData={
+  all:{drivers:'1,247',cod:'BD 18.4K',alerts:'34',perf:'82%'},
+  keeta:{drivers:'340',cod:'BD 4.2K',alerts:'6',perf:'84%'},
+  jahez:{drivers:'512',cod:'BD 6.8K',alerts:'11',perf:'79%'},
+  ninja:{drivers:'218',cod:'BD 2.9K',alerts:'3',perf:'88%'},
+  noon:{drivers:'177',cod:'BD 2.1K',alerts:'5',perf:'81%'},
+};
+function filterDash(el,p){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const d=dashData[p];
+  document.getElementById('kpiDrivers').textContent=d.drivers;
+  document.getElementById('kpiCod').textContent=d.cod;
+  document.getElementById('kpiAlerts').textContent=d.alerts;
+  document.getElementById('kpiPerf').textContent=d.perf;
+}
+
+// ── CHART DEFAULTS ──
+Chart.defaults.color='#8892a4';
+Chart.defaults.borderColor='#1e2535';
+Chart.defaults.font.family="'IBM Plex Sans', sans-serif";
+Chart.defaults.font.size=11;
+
+const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const hrs=['6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm'];
+
+function mkLine(id,labels,datasets,opts={}){
+  const ctx=document.getElementById(id);
+  if(!ctx||ctx._chart)return;
+  ctx._chart=new Chart(ctx,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#4a5568'}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4a5568'}}},elements:{point:{radius:3,hoverRadius:5}},...opts}});
+}
+function mkBar(id,labels,datasets,opts={}){
+  const ctx=document.getElementById(id);
+  if(!ctx||ctx._chart)return;
+  ctx._chart=new Chart(ctx,{type:'bar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#4a5568'}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4a5568'}}},...opts}});
+}
+function mkDoughnut(id,labels,data,colors){
+  const ctx=document.getElementById(id);
+  if(!ctx||ctx._chart)return;
+  ctx._chart=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#0d1017',borderWidth:3,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'70%'}});
+}
+
+let chartsInit={};
+function initChartsForSection(id){
+  if(chartsInit[id])return;
+  chartsInit[id]=true;
+
+  if(id==='dashboard'){
+    // Main line chart
+    mkLine('lineChart',days,[
+      {label:'Keeta',data:[3200,4100,3800,5200,4700,6100,4230],borderColor:'#ff6b35',backgroundColor:'rgba(255,107,53,0.05)',tension:0.4,fill:true},
+      {label:'Jahez',data:[4800,5200,6100,5800,7200,6400,6870],borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.05)',tension:0.4,fill:true},
+      {label:'Ninja',data:[1800,2100,2400,2200,3100,2800,2940],borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.05)',tension:0.4,fill:true},
+      {label:'Noon',data:[1400,1700,1900,2100,1800,2300,2110],borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.05)',tension:0.4,fill:true},
+    ]);
+    mkDoughnut('donutChart',['Keeta','Jahez','Ninja','Noon'],[340,512,218,177],['#ff6b35','#8b5cf6','#06b6d4','#f59e0b']);
+    mkBar('barChart',['Keeta','Jahez','Ninja','Noon'],[
+      {label:'Performance %',data:[84,79,88,81],backgroundColor:['rgba(255,107,53,0.7)','rgba(139,92,246,0.7)','rgba(6,182,212,0.7)','rgba(245,158,11,0.7)'],borderRadius:6,borderSkipped:false}
+    ],{plugins:{legend:{display:false}}});
+    mkDoughnut('statusChart',['Active','Warning','Suspended','Onboarding'],[1141,63,18,25],['#00d68f','#ffb547','#ff4d6a','#1e6fff']);
+    mkLine('areaChart',hrs,[
+      {label:'Orders',data:[12,45,89,142,168,201,189,210,178,145,112,78],borderColor:'#1e6fff',backgroundColor:'rgba(30,111,255,0.08)',tension:0.4,fill:true}
+    ]);
+  }
+
+  if(id==='keeta'){
+    mkLine('keetaLine',days,[{label:'COD (BD)',data:[2800,3400,3100,4200,3900,5100,4230],borderColor:'#ff6b35',backgroundColor:'rgba(255,107,53,0.08)',tension:0.4,fill:true}]);
+  }
+  if(id==='jahez'){
+    mkLine('jahezLine',days,[{label:'COD (BD)',data:[4200,5100,5800,5400,6800,6200,6870],borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.08)',tension:0.4,fill:true}]);
+  }
+  if(id==='ninja'){
+    mkLine('ninjaLine',days,[{label:'COD (BD)',data:[1600,1900,2200,2000,2800,2600,2940],borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.08)',tension:0.4,fill:true}]);
+  }
+  if(id==='noon'){
+    mkLine('noonLine',days,[{label:'COD (BD)',data:[1200,1500,1700,1900,1600,2100,2110],borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.08)',tension:0.4,fill:true}]);
+  }
+
+  if(id==='operations'){
+    mkLine('opsArea',hrs,[{label:'Orders/Hour',data:[8,32,71,118,145,167,154,178,142,119,88,54],borderColor:'#00d68f',backgroundColor:'rgba(0,214,143,0.08)',tension:0.4,fill:true}]);
+    mkBar('opsBar',['Keeta','Jahez','Ninja','Noon'],[
+      {label:'On Shift',data:[310,478,208,165],backgroundColor:'rgba(0,214,143,0.7)',borderRadius:4},
+      {label:'Not In',data:[30,34,10,12],backgroundColor:'rgba(255,77,106,0.7)',borderRadius:4},
+    ],{scales:{x:{stacked:false},y:{stacked:false}}});
+  }
+
+  if(id==='hr'){
+    mkBar('hrBar',['Passport','Visa','CPR','License','Insurance','Contract'],[
+      {label:'Expiring Soon',data:[8,12,5,7,9,3],backgroundColor:'rgba(255,181,71,0.7)',borderRadius:4},
+      {label:'Expired',data:[2,4,3,1,2,0],backgroundColor:'rgba(255,77,106,0.7)',borderRadius:4},
+    ]);
+    const d30=Array.from({length:10},(_,i)=>`Mar ${i+1}`);
+    mkLine('hrLine',d30,[{label:'Active Alerts',data:[18,22,19,25,28,24,30,27,34,34],borderColor:'#ff4d6a',backgroundColor:'rgba(255,77,106,0.06)',tension:0.4,fill:true}]);
+  }
+
+  if(id==='finance'){
+    mkBar('finBar',['Keeta','Jahez','Ninja','Noon'],[
+      {label:'Collected (BD)',data:[42300,68700,29400,21100],backgroundColor:['rgba(255,107,53,0.7)','rgba(139,92,246,0.7)','rgba(6,182,212,0.7)','rgba(245,158,11,0.7)'],borderRadius:6},
+    ],{plugins:{legend:{display:false}}});
+    const d30=Array.from({length:10},(_,i)=>`Mar ${i+1}`);
+    mkLine('finLine',d30,[
+      {label:'Collected',data:[5200,6100,5800,7200,6400,8100,7400,8800,7900,9200],borderColor:'#1e6fff',tension:0.4},
+      {label:'Settled',data:[4800,5700,5400,6800,6100,7600,6900,8200,7400,8700],borderColor:'#00d68f',tension:0.4},
+    ]);
+  }
+
+  if(id==='crm'){
+    mkDoughnut('crmDonut',['Payment/COD','Documents','Platform','Operations','Other'],[34,28,18,12,8],['#1e6fff','#8b5cf6','#ff6b35','#00d68f','#ffb547']);
+    mkLine('crmLine',days,[
+      {label:'New Tickets',data:[18,24,21,32,28,38,35],borderColor:'#ff4d6a',tension:0.4},
+      {label:'Resolved',data:[15,21,19,29,25,34,31],borderColor:'#00d68f',tension:0.4},
+    ]);
+  }
+}
+
+// Init dashboard charts on load
+setTimeout(()=>initChartsForSection('dashboard'),200);
+</script>
+
+</body>
+</html>
