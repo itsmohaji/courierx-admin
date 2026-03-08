@@ -99,16 +99,18 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 /* SIDEBAR USER */
 .sidebar-user{padding:12px;border-top:1px solid var(--border);position:relative;}
-.su-row{display:flex;align-items:center;gap:9px;cursor:pointer;padding:8px 10px;border-radius:var(--r-sm);transition:background 0.15s;}
-.su-row:hover{background:var(--surface2);}
+.su-row{display:flex;align-items:center;gap:9px;cursor:pointer;padding:8px 10px;border-radius:var(--r-sm);transition:all 0.15s;border:1px solid transparent;}
+.su-row:hover{background:var(--blue-light);border-color:rgba(37,99,235,0.15);}
+.su-row:active{transform:scale(0.98);}
 .su-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;color:white;flex-shrink:0;}
 .su-name{font-size:0.78rem;font-weight:600;}
 .su-role{font-size:0.62rem;color:var(--text3);}
-.su-cog{margin-left:auto;font-size:0.85rem;color:var(--text3);}
+.su-cog{margin-left:auto;font-size:0.85rem;color:var(--text3);transition:transform 0.3s;}
+.su-row:hover .su-cog{transform:rotate(60deg);color:var(--blue);}
 
 /* USER SETTINGS POPUP */
-.user-popup{display:none;position:absolute;bottom:calc(100% + 4px);left:8px;right:8px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);box-shadow:var(--shadow-lg);z-index:300;}
-.user-popup.show{display:block;}
+.user-popup{display:none;position:fixed;bottom:64px;left:8px;width:360px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);box-shadow:var(--shadow-lg);z-index:9999;}
+.user-popup.show{display:flex;flex-direction:column;}
 .up-header{padding:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
 .up-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:white;}
 .up-name{font-size:0.85rem;font-weight:600;}
@@ -536,7 +538,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 </div>
 
 <!-- USER SETTINGS POPUP -->
-<div class="user-popup" id="userPopup" style="width:360px;max-height:560px;overflow:hidden;display:flex;flex-direction:column;">
+<div class="user-popup" id="userPopup" style="max-height:560px;">
   <div class="up-header" style="padding:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;">
     <div class="up-av" id="upAv" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:white;flex-shrink:0;">CE</div>
     <div style="flex:1;min-width:0;"><div class="up-name" id="upName" style="font-size:0.9rem;font-weight:700;">Fahad Al-Mansoori</div><div class="up-email" id="upEmail" style="font-size:0.68rem;color:var(--text3);">fahad@courierx.com</div></div>
@@ -906,12 +908,17 @@ function toggleMsg(){
 }
 function toggleUserPopup(){
   const p=document.getElementById('userPopup');
+  const suRow=document.querySelector('.su-row');
+  const rect=suRow.getBoundingClientRect();
+  // Position popup just above the user row
+  p.style.bottom=(window.innerHeight-rect.top+8)+'px';
+  p.style.left=rect.left+'px';
+  p.style.width=Math.max(360,rect.width)+'px';
   p.classList.toggle('show');
   if(p.classList.contains('show')){
-    // Ensure profile tab is active and styled
     const tabs=p.querySelectorAll('.up-tab');
-    tabs.forEach(t=>{t.style.color='var(--text3)';t.style.borderBottomColor='transparent';});
-    if(tabs[0]){tabs[0].style.color='var(--blue)';tabs[0].style.borderBottomColor='var(--blue)';tabs[0].classList.add('active');}
+    tabs.forEach(t=>{t.classList.remove('active');t.style.color='var(--text3)';t.style.borderBottomColor='transparent';});
+    if(tabs[0]){tabs[0].classList.add('active');tabs[0].style.color='var(--blue)';tabs[0].style.borderBottomColor='var(--blue)';}
     switchUpTab(tabs[0],'profile');
   }
 }
@@ -1000,7 +1007,7 @@ function upSave(){
 document.addEventListener('click',function(e){
   if(!e.target.closest('#notifPopup')&&!e.target.closest('.icon-btn'))document.getElementById('notifPopup').classList.remove('show');
   if(!e.target.closest('#msgPopup')&&!e.target.closest('.icon-btn'))document.getElementById('msgPopup').classList.remove('show');
-  if(!e.target.closest('#userPopup')&&!e.target.closest('.sidebar-user'))document.getElementById('userPopup').classList.remove('show');
+  if(!e.target.closest('#userPopup')&&!e.target.closest('.su-row'))document.getElementById('userPopup').classList.remove('show');
   if(!e.target.closest('#roleDropdown')&&!e.target.closest('#roleSwitcherBtn'))closeRoleDropdown();
 });
 
