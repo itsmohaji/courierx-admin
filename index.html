@@ -48,7 +48,15 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 /* APP LAYOUT */
 .app{display:flex;flex:1;overflow:hidden;}
-.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:all 0.3s;box-shadow:var(--shadow);}
+.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:width 0.3s ease;box-shadow:var(--shadow);overflow:hidden;}
+.sidebar.collapsed{width:56px;}
+.sidebar.collapsed .logo-text,.sidebar.collapsed .logo-sub,.sidebar.collapsed .rs-info,.sidebar.collapsed .rs-arrow,.sidebar.collapsed .nav-item span:not(.ni),.sidebar.collapsed .nav-badge,.sidebar.collapsed .nav-group,.sidebar.collapsed .su-name,.sidebar.collapsed .su-role,.sidebar.collapsed .su-cog,.sidebar.collapsed .sidebar-role-section{display:none !important;}
+.sidebar.collapsed .sidebar-logo{padding:10px;justify-content:center;}
+.sidebar.collapsed .nav-item{justify-content:center;padding:10px;}
+.sidebar.collapsed .su-row{justify-content:center;}
+.sidebar.collapsed .nav{padding:4px;}
+.sidebar-collapse-btn{width:24px;height:24px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.75rem;color:var(--text3);margin-left:auto;flex-shrink:0;transition:all 0.15s;}
+.sidebar-collapse-btn:hover{background:var(--surface3);color:var(--text);}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 
 /* SIDEBAR LOGO */
@@ -470,6 +478,23 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 /* SELECT */
 .sel{background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:var(--r-sm);padding:7px 12px;font-size:0.76rem;font-family:'DM Sans',sans-serif;outline:none;}
 .sel:focus{border-color:var(--blue);}
+
+/* DRIVER PROFILE TABS */
+.drv-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface2);}
+.drv-tab{flex:1;padding:10px 6px;text-align:center;font-size:0.72rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;}
+.drv-tab:hover{color:var(--text);}
+.drv-tab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--surface);}
+.doc-row{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);transition:background 0.15s;}
+.doc-row:hover{background:var(--surface2);}
+.doc-row:last-child{border-bottom:none;}
+.doc-icon{font-size:1.4rem;flex-shrink:0;}
+.doc-info{flex:1;}
+.doc-name{font-size:0.8rem;font-weight:600;color:var(--text);}
+.doc-expiry{font-size:0.68rem;color:var(--text3);margin-top:2px;}
+.doc-actions{display:flex;gap:6px;}
+/* SIDEBAR TOOLTIP when collapsed */
+.sidebar.collapsed .nav-item{position:relative;}
+.sidebar.collapsed .nav-item:hover::after{content:attr(data-label);position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);background:var(--text);color:white;padding:4px 10px;border-radius:6px;font-size:0.72rem;white-space:nowrap;z-index:999;pointer-events:none;}
 </style>
 </head>
 <body>
@@ -511,25 +536,28 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 </div>
 
 <!-- USER SETTINGS POPUP -->
-<div class="user-popup" id="userPopup">
-  <div class="up-header">
-    <div class="up-av" id="upAv">CE</div>
-    <div><div class="up-name" id="upName">Fahad Al-Mansoori</div><div class="up-email" id="upEmail">fahad@courierx.com</div></div>
+<div class="user-popup" id="userPopup" style="width:360px;max-height:560px;overflow:hidden;display:flex;flex-direction:column;">
+  <div class="up-header" style="padding:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;">
+    <div class="up-av" id="upAv" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;color:white;flex-shrink:0;">CE</div>
+    <div style="flex:1;min-width:0;"><div class="up-name" id="upName" style="font-size:0.9rem;font-weight:700;">Fahad Al-Mansoori</div><div class="up-email" id="upEmail" style="font-size:0.68rem;color:var(--text3);">fahad@courierx.com</div></div>
+    <div style="cursor:pointer;font-size:1rem;color:var(--text3);" onclick="closeUserPopup()">✕</div>
   </div>
-  <div class="up-tabs">
-    <div class="up-tab active" onclick="switchUpTab(this,'profile')">Profile</div>
-    <div class="up-tab" onclick="switchUpTab(this,'security')">Security</div>
-    <div class="up-tab" onclick="switchUpTab(this,'leave')">Leave / Holiday</div>
+  <div class="up-tabs" style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;">
+    <div class="up-tab active" onclick="switchUpTab(this,'profile')" style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:0.68rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">👤 Profile</div>
+    <div class="up-tab" onclick="switchUpTab(this,'security')" style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:0.68rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">🔒 Security</div>
+    <div class="up-tab" onclick="switchUpTab(this,'payroll')" style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:0.68rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">💵 Payroll</div>
+    <div class="up-tab" onclick="switchUpTab(this,'leave')" style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:0.68rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">🏖️ Leave</div>
+    <div class="up-tab" onclick="switchUpTab(this,'ticket')" style="flex:1;min-width:60px;padding:8px 4px;text-align:center;font-size:0.68rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;">🎫 Ticket</div>
   </div>
-  <div class="up-body" id="upBody">
+  <div class="up-body" id="upBody" style="padding:14px;overflow-y:auto;flex:1;">
     <div class="up-field"><label>Full Name</label><input type="text" value="Fahad Al-Mansoori"></div>
     <div class="up-field"><label>Phone</label><input type="tel" value="+973 3300 1122"></div>
     <div class="up-field"><label>Email</label><input type="email" value="fahad@courierx.com"></div>
     <div class="up-field"><label>Department</label><input type="text" value="Executive" disabled style="opacity:0.5"></div>
   </div>
-  <div class="up-footer">
+  <div class="up-footer" id="upFooter" style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:6px;flex-shrink:0;">
     <button class="btn btn-ghost btn-sm" onclick="closeUserPopup()">Cancel</button>
-    <button class="btn btn-primary btn-sm" onclick="closeUserPopup()">Save Changes</button>
+    <button class="btn btn-primary btn-sm" style="flex:1" onclick="upSave()">Save Changes</button>
   </div>
 </div>
 
@@ -550,10 +578,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 <div class="app">
   <!-- SIDEBAR -->
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div class="logo-mark">CX</div>
       <div><div class="logo-text">CourierX</div><div class="logo-sub">Enterprise Platform</div></div>
+      <div class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebar()" title="Collapse sidebar">◀</div>
     </div>
 
     <!-- ROLE SWITCHER -->
@@ -727,7 +756,7 @@ const ROLES={
   supervisor:{label:'Supervisor',level:'Level 4 — Field',access:'Assigned Drivers Only',name:'Mohammed Hassan',initials:'MH',email:'mhosn@courierx.com',addBtn:null,
     nav:[
       {g:'My Team',items:[{i:'📊',l:'Dashboard',s:'dashboard'},{i:'🚗',l:'My Drivers',s:'drivers'},{i:'🏆',l:'Performance',s:'performance'},{i:'📅',l:'My Calendar',s:'hr-calendar'},{i:'📋',l:'Attendance',s:'attendance'}]},
-      {g:'COD',items:[{i:'📦',l:'COD View',s:'cod-list'}]},
+      {g:'COD',items:[{i:'📦',l:'COD View (Read Only)',s:'cod-list'}]},
       {g:'Alerts',items:[{i:'📣',l:'Alerts',s:'alerts'},{i:'🔺',l:'Escalations',s:'escalations'}]},
     ]
   },
@@ -817,8 +846,8 @@ function renderSidebar(roleKey){
     html+=`<div class="nav-group">${g.g}</div>`;
     for(const item of g.items){
       const isActive=item.s===currentSection;
-      html+=`<div class="nav-item${isActive?' active':''}" onclick="navTo('${item.s}',this,'${item.l}')">
-        <span class="ni">${item.i}</span> ${item.l}
+      html+=`<div class="nav-item${isActive?' active':''}" data-label="${item.l}" onclick="navTo('${item.s}',this,'${item.l}')">
+        <span class="ni">${item.i}</span> <span class="nav-label">${item.l}</span>
         ${item.badge?`<span class="nav-badge">${item.badge}</span>`:''}
       </div>`;
     }
@@ -835,6 +864,13 @@ function selectRole(roleKey, el){
   renderSidebar(roleKey);
   renderContent(roleKey,'dashboard','Dashboard');
   destroyCharts();
+}
+
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const btn=document.getElementById('sidebarCollapseBtn');
+  sb.classList.toggle('collapsed');
+  btn.textContent=sb.classList.contains('collapsed')?'▶':'◀';
 }
 
 function toggleRoleDropdown(){
@@ -867,32 +903,95 @@ function toggleMsg(){
   document.getElementById('notifPopup').classList.remove('show');
 }
 function toggleUserPopup(){
-  document.getElementById('userPopup').classList.toggle('show');
+  const p=document.getElementById('userPopup');
+  p.classList.toggle('show');
+  if(p.classList.contains('show')){
+    // Ensure profile tab is active and styled
+    const tabs=p.querySelectorAll('.up-tab');
+    tabs.forEach(t=>{t.style.color='var(--text3)';t.style.borderBottomColor='transparent';});
+    if(tabs[0]){tabs[0].style.color='var(--blue)';tabs[0].style.borderBottomColor='var(--blue)';tabs[0].classList.add('active');}
+    switchUpTab(tabs[0],'profile');
+  }
 }
 function closeUserPopup(){
   document.getElementById('userPopup').classList.remove('show');
 }
 function switchUpTab(el,tab){
-  document.querySelectorAll('.up-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.up-tab').forEach(t=>{t.classList.remove('active');t.style.color='var(--text3)';t.style.borderBottomColor='transparent';});
   el.classList.add('active');
+  el.style.color='var(--blue)';
+  el.style.borderBottomColor='var(--blue)';
   const r=ROLES[currentRole];
   const body=document.getElementById('upBody');
+  const footer=document.getElementById('upFooter');
   if(tab==='profile'){
-    body.innerHTML=`<div class="up-field"><label>Full Name</label><input type="text" value="${r.name}"></div>
-    <div class="up-field"><label>Phone</label><input type="tel" value="+973 3300 1122"></div>
-    <div class="up-field"><label>Email</label><input type="email" value="${r.email}"></div>
-    <div class="up-field"><label>Department</label><input type="text" value="${r.label}" disabled style="opacity:0.5"></div>`;
+    body.innerHTML=`
+      <div class="up-field"><label>Full Name</label><input type="text" id="upFullName" value="${r.name}"></div>
+      <div class="up-field"><label>Phone</label><input type="tel" value="+973 3300 1122"></div>
+      <div class="up-field"><label>Email</label><input type="email" value="${r.email}"></div>
+      <div class="up-field"><label>Job Title</label><input type="text" value="${r.label}" disabled style="opacity:0.5"></div>
+      <div class="up-field"><label>Upload Profile Photo</label><input type="file" accept="image/*" style="font-size:0.75rem;padding:4px"></div>
+      <div style="margin-top:10px"><div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">My Documents</div>
+      ${['CPR / ID','Passport','Driving License','Contract'].map(d=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:0.78rem">${d}</span><button class="btn btn-ghost btn-sm" onclick="this.textContent='✓ Uploaded';this.className='btn btn-success btn-sm'">Upload</button></div>`).join('')}
+      </div>`;
+    footer.innerHTML=`<button class="btn btn-ghost btn-sm" onclick="closeUserPopup()">Cancel</button><button class="btn btn-primary btn-sm" style="flex:1" onclick="upSave()">Save Changes</button>`;
   } else if(tab==='security'){
-    body.innerHTML=`<div class="up-field"><label>Current Password</label><input type="password" placeholder="••••••••"></div>
-    <div class="up-field"><label>New Password</label><input type="password" placeholder="••••••••"></div>
-    <div class="up-field"><label>Confirm Password</label><input type="password" placeholder="••••••••"></div>`;
+    body.innerHTML=`
+      <div class="up-field"><label>Current Password</label><input type="password" placeholder="Enter current password"></div>
+      <div class="up-field"><label>New Password</label><input type="password" placeholder="Min 8 characters"></div>
+      <div class="up-field"><label>Confirm New Password</label><input type="password" placeholder="Repeat new password"></div>
+      <div style="background:var(--blue-light);border:1px solid rgba(37,99,235,0.15);border-radius:6px;padding:10px;font-size:0.72rem;color:var(--blue);margin-top:4px">🔒 Passwords are encrypted and never stored in plain text</div>`;
+    footer.innerHTML=`<button class="btn btn-ghost btn-sm" onclick="closeUserPopup()">Cancel</button><button class="btn btn-primary btn-sm" style="flex:1" onclick="upSave()">Update Password</button>`;
+  } else if(tab==='payroll'){
+    body.innerHTML=`
+      <div style="background:var(--surface2);border-radius:var(--r-sm);padding:14px;margin-bottom:12px;text-align:center">
+        <div style="font-size:0.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em">Net Salary — March 2026</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--green);margin:6px 0">BD 1,600</div>
+        <span class="b bg">✓ Paid — 1 Mar 2026</span>
+      </div>
+      <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Breakdown</div>
+      ${[['Base Salary','BD 1,800',''],['Housing Allowance','BD 200',''],['Transport Allowance','BD 100',''],['Advance Deduction','- BD 300','negative'],['Penalty','- BD 200','negative'],['Net Pay','BD 1,600','positive']].map((r,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);${i===5?'border-top:2px solid var(--border2);font-weight:700;':''}"><span style="font-size:0.78rem;color:var(--text)">${r[0]}</span><span style="font-family:'JetBrains Mono';font-size:0.78rem;font-weight:700;color:${r[2]==='negative'?'var(--red)':r[2]==='positive'?'var(--green)':'var(--text)'}">${r[1]}</span></div>`).join('')}
+      <div style="margin-top:12px"><div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Previous Months</div>
+      ${[['February 2026','BD 1,600','bg','Paid'],['January 2026','BD 1,750','bg','Paid'],['December 2025','BD 1,600','bg','Paid']].map(m=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:0.75rem">${m[0]}</span><span style="font-family:'JetBrains Mono';font-size:0.75rem;font-weight:600">${m[1]}</span><span class="b ${m[2]}">${m[3]}</span><button class="btn btn-ghost btn-sm">📥</button></div>`).join('')}
+      </div>
+      <div style="margin-top:12px;background:var(--amber-light);border:1px solid var(--amber-dim);border-radius:6px;padding:10px;font-size:0.72rem;color:var(--amber)">
+        💡 To dispute a salary or report an issue, use the Ticket tab
+      </div>`;
+    footer.innerHTML=`<button class="btn btn-ghost btn-sm" style="flex:1" onclick="closeUserPopup()">Close</button><button class="btn btn-primary btn-sm" onclick="switchUpTab(document.querySelectorAll('.up-tab')[4],'ticket')">Report Salary Issue</button>`;
   } else if(tab==='leave'){
-    body.innerHTML=`<div class="up-field"><label>Leave Type</label><select><option>Annual Leave</option><option>Sick Leave</option><option>Emergency Leave</option><option>Unpaid Leave</option><option>Public Holiday</option></select></div>
-    <div class="up-field"><label>Start Date</label><input type="date"></div>
-    <div class="up-field"><label>End Date</label><input type="date"></div>
-    <div class="up-field"><label>Reason / Notes</label><textarea rows="3" placeholder="Briefly describe the reason..."></textarea></div>
-    <div style="background:var(--amber-light);border:1px solid var(--amber-dim);border-radius:6px;padding:10px;font-size:0.72rem;color:var(--amber)">⏳ Request will be sent to HR Lead for approval</div>`;
+    body.innerHTML=`
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+        ${[['Annual Leave','18 days','bg'],['Sick Leave','30 days','bb'],['Used','12 days','ba']].map(b=>`<div style="background:var(--surface2);border-radius:var(--r-sm);padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--text)">${b[1]}</div><div style="font-size:0.65rem;color:var(--text3);margin-top:2px">${b[0]}</div></div>`).join('')}
+      </div>
+      <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Apply for Leave</div>
+      <div class="up-field"><label>Leave Type</label><select><option>Annual Leave</option><option>Sick Leave</option><option>Emergency Leave</option><option>Unpaid Leave</option><option>Compassionate Leave</option></select></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="up-field"><label>Start Date</label><input type="date"></div>
+        <div class="up-field"><label>End Date</label><input type="date"></div>
+      </div>
+      <div class="up-field"><label>Reason / Notes</label><textarea rows="3" placeholder="Briefly describe your reason..."></textarea></div>
+      <div style="background:var(--amber-light);border:1px solid var(--amber-dim);border-radius:6px;padding:10px;font-size:0.72rem;color:var(--amber);margin-top:6px">⏳ Request will be submitted to HR Lead for approval</div>
+      <div style="margin-top:12px"><div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Recent Requests</div>
+      ${[['Annual Leave','20–24 Jan 2026','bg','Approved'],['Sick Leave','5 Feb 2026','ba','Pending']].map(l=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:0.75rem">${l[0]} · ${l[1]}</span><span class="b ${l[2]}">${l[3]}</span></div>`).join('')}
+      </div>`;
+    footer.innerHTML=`<button class="btn btn-ghost btn-sm" onclick="closeUserPopup()">Cancel</button><button class="btn btn-primary btn-sm" style="flex:1" onclick="upSave()">Submit Request</button>`;
+  } else if(tab==='ticket'){
+    body.innerHTML=`
+      <div class="up-field"><label>Ticket Type</label><select><option>Salary Dispute / Issue</option><option>Payroll Error</option><option>Leave Not Approved</option><option>Document Update Request</option><option>HR Complaint</option><option>System Access Issue</option><option>Other</option></select></div>
+      <div class="up-field"><label>Subject</label><input type="text" placeholder="Brief subject of your ticket"></div>
+      <div class="up-field"><label>Description</label><textarea rows="4" placeholder="Describe the issue in detail..."></textarea></div>
+      <div class="up-field"><label>Priority</label><select><option>Normal</option><option>Urgent</option><option>Low</option></select></div>
+      <div class="up-field"><label>Attachment (optional)</label><input type="file" style="font-size:0.75rem;padding:4px"></div>
+      <div style="background:var(--blue-light);border:1px solid rgba(37,99,235,0.15);border-radius:6px;padding:10px;font-size:0.72rem;color:var(--blue);margin-top:6px">📋 Ticket will be sent to HR Lead and your department manager</div>
+      <div style="margin-top:12px"><div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">My Open Tickets</div>
+      ${[['TKT-0041','Salary Dispute Mar','ba','Open'],['TKT-0038','Leave Not Approved','bg','Resolved']].map(t=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)"><span style="font-family:'JetBrains Mono';font-size:0.65rem;color:var(--text3)">${t[0]}</span><span style="flex:1;font-size:0.75rem">${t[1]}</span><span class="b ${t[2]}">${t[3]}</span></div>`).join('')}
+      </div>`;
+    footer.innerHTML=`<button class="btn btn-ghost btn-sm" onclick="closeUserPopup()">Cancel</button><button class="btn btn-primary btn-sm" style="flex:1" onclick="upSave()">Submit Ticket</button>`;
   }
+}
+function upSave(){
+  closeUserPopup();
+  showFlash('✅','Saved','Your request has been submitted successfully.');
 }
 
 // Click outside to close popups
@@ -1178,29 +1277,40 @@ function renderContent(role,section,title){
 
   if(section==='dashboard'&&role==='supervisor'){
     el.innerHTML=`
-      <div class="restricted">🔒 You are viewing your assigned drivers only (Keeta · Supervisor Mohammed). You cannot see other platforms.</div>
+      <div style="background:var(--keeta-light);border:1px solid var(--keeta-dim);border-radius:var(--r-sm);padding:10px 14px;font-size:0.78rem;color:var(--keeta);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+        🔶 <strong>Keeta Platform</strong> — You manage your assigned drivers only. COD is read-only. Use calendar to manage shifts.
+      </div>
       <div class="g4">
-        ${kpiHTML('My Drivers','42','Keeta · Active','#ea580c',[38,39,40,40,41,42,42])}
-        ${kpiHTML('On Shift Today','38','<span class="up">4</span> absent','#059669',[30,32,35,36,37,38,38])}
-        ${kpiHTML('COD Collected','BD 4,820','Today so far','#2563eb',[3000,3500,3800,4000,4200,4600,4820])}
+        ${kpiHTML('My Drivers','42','Keeta · Your team','#ea580c',[38,39,40,40,41,42,42])}
+        ${kpiHTML('On Shift Today','38','<span class="up">↑ 4</span> absent','#059669',[30,32,35,36,37,38,38])}
+        ${kpiHTML('COD Today','BD 4,820','<span style="font-size:0.62rem;color:var(--text3)">read-only</span>','#2563eb',[3000,3500,3800,4000,4200,4600,4820])}
         ${kpiHTML('Incidents','2','<span class="dn">1</span> escalated','#dc2626',[0,1,1,2,1,2,2])}
       </div>
-      <div class="g2">
-        <div class="panel"><div class="ph"><div class="ph-title">📈 My Team Performance</div></div><div class="pb"><div class="chart-wrap"><canvas id="supLine"></canvas></div></div></div>
-        <div class="panel"><div class="ph"><div class="ph-title">📊 Driver Status Today</div></div><div class="pb"><div class="chart-wrap"><canvas id="supDonut"></canvas></div></div></div>
+      <div class="g2-1">
+        <div class="panel"><div class="ph"><div class="ph-title">👷 My Drivers — Today</div><div class="ph-actions"><input class="search-input" style="width:160px" placeholder="Search driver..."></div></div>
+          <table class="tbl"><thead><tr><th>Driver</th><th>Status</th><th>Orders</th><th>COD (View)</th><th>Shift</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr onclick="showDriverDetail('Ahmed Al-Rashidi','Keeta','var(--keeta)','Active')"><td><b>Ahmed Al-Rashidi</b><br><span class="mono" style="font-size:0.6rem;color:var(--text3)">DRV-0041</span></td><td><span class="b bg">🟢 Active</span></td><td>28</td><td class="mono" style="color:var(--text2)">BD 124.500</td><td>AM 06:00–14:00</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">Contact</button><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openCalEventModal('2026-3-8')">Shift</button></div></td></tr>
+            <tr onclick="showDriverDetail('Khalid Hassan','Keeta','var(--keeta)','Active')"><td><b>Khalid Hassan</b><br><span class="mono" style="font-size:0.6rem;color:var(--text3)">DRV-0048</span></td><td><span class="b bg">🟢 Active</span></td><td>22</td><td class="mono" style="color:var(--text2)">BD 98.000</td><td>AM 06:00–14:00</td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">Contact</button><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openCalEventModal('2026-3-8')">Shift</button></div></td></tr>
+            <tr onclick="showDriverDetail('Ali Al-Sayed','Keeta','var(--keeta)','Active')"><td><b>Ali Al-Sayed</b><br><span class="mono" style="font-size:0.6rem;color:var(--text3)">DRV-0071</span></td><td><span class="b ba">🟡 Late</span></td><td>8</td><td class="mono" style="color:var(--text2)">BD 34.500</td><td>AM 06:00–14:00</td><td><div style="display:flex;gap:4px"><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();showFlash('🔺','Escalated','Ali Al-Sayed — late report sent')">Escalate</button></div></td></tr>
+            <tr onclick="showDriverDetail('Yousef Mansour','Keeta','var(--keeta)','Suspended')"><td><b>Yousef Mansour</b><br><span class="mono" style="font-size:0.6rem;color:var(--text3)">DRV-0082</span></td><td><span class="b br">🔴 Absent</span></td><td>0</td><td class="mono" style="color:var(--text2)">BD 0</td><td>AM 06:00–14:00</td><td><div style="display:flex;gap:4px"><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();showFlash('📋','Reported','Yousef Mansour absence reported')">Report</button></div></td></tr>
+          </tbody></table>
+        </div>
+        <div>
+          <div class="panel" style="margin-bottom:12px"><div class="ph"><div class="ph-title">📊 Team Status</div></div><div class="pb"><div class="chart-wrap" style="height:130px"><canvas id="supDonut"></canvas></div></div></div>
+          <div class="panel" style="margin-bottom:0"><div class="ph"><div class="ph-title">📅 Quick Shift Actions</div></div>
+            <div class="pb">
+              <button class="btn btn-primary" style="width:100%;margin-bottom:6px" onclick="navTo('hr-calendar',null,'My Calendar')">📅 Manage Shifts in Calendar</button>
+              <button class="btn btn-ghost" style="width:100%;margin-bottom:6px" onclick="showFlash('📢','Broadcast Sent','Morning shift reminder sent to all 42 drivers')">📢 Broadcast to My Drivers</button>
+              <button class="btn btn-ghost" style="width:100%" onclick="showFlash('📋','Report Created','Daily attendance report generated')">📋 Generate Attendance Report</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="panel"><div class="ph"><div class="ph-title">👷 My Drivers — Today</div></div>
-        <table class="tbl"><thead><tr><th>Driver</th><th>Status</th><th>Orders</th><th>COD</th><th>Shift</th><th>Action</th></tr></thead>
-        <tbody>
-          <tr><td><b>Ahmed Al-Rashidi</b></td><td><span class="b bg">🟢 Active</span></td><td>28</td><td class="mono">BD 124.500</td><td>AM 06:00–14:00</td><td><button class="btn btn-ghost btn-sm">Contact</button></td></tr>
-          <tr><td><b>Khalid Hassan</b></td><td><span class="b bg">🟢 Active</span></td><td>22</td><td class="mono">BD 98.000</td><td>AM 06:00–14:00</td><td><button class="btn btn-ghost btn-sm">Contact</button></td></tr>
-          <tr><td><b>Ali Al-Sayed</b></td><td><span class="b ba">🟡 Late</span></td><td>8</td><td class="mono">BD 34.500</td><td>AM 06:00–14:00</td><td><button class="btn btn-danger btn-sm">Escalate</button></td></tr>
-          <tr><td><b>Yousef Mansour</b></td><td><span class="b br">🔴 Absent</span></td><td>0</td><td class="mono">BD 0</td><td>AM 06:00–14:00</td><td><button class="btn btn-danger btn-sm">Report</button></td></tr>
-        </tbody></table>
-      </div>`;
+      <div class="panel"><div class="ph"><div class="ph-title">📈 My Team — 7 Day Performance</div></div><div class="pb"><div class="chart-wrap"><canvas id="supLine"></canvas></div></div></div>`;
     setTimeout(()=>{
-      mkLine('supLine',DAYS,[{label:'Orders',data:[120,135,141,138,145,150,148],borderColor:'#ea580c',tension:0.4,backgroundColor:'rgba(234,88,12,0.05)',fill:true}]);
-      mkDoughnut('supDonut',['Active','Late','Absent','Off'],[38,2,1,1],['#059669','#d97706','#dc2626','#94a3b8']);
+      mkLine('supLine',DAYS,[{label:'Orders',data:[120,135,141,138,145,150,148],borderColor:'#ea580c',tension:0.4,backgroundColor:'rgba(234,88,12,0.05)',fill:true},{label:'On-Time',data:[112,128,133,130,139,145,141],borderColor:'#059669',tension:0.4}]);
+      mkDoughnut('supDonut',['Active','Late','Absent','Off'],[38,2,1,1],['#059669','#d97706','#dc2626','#94a3b8'],130);
     },50);
     return;
   }
@@ -1388,12 +1498,14 @@ function renderContent(role,section,title){
 
   // ---- COD VIEW & LIST ----
   if(section==='cod-list'){
+    const isSup=(role==='supervisor'||role==='account-mgr');
     el.innerHTML=`
+      ${isSup?`<div class="restricted">👁️ You have read-only access to COD entries for your platform. To submit or approve, contact Finance.</div>`:''}
       <div class="sec-header"><div><div class="sec-title">COD View & List</div><div class="sec-sub">Click any entry to view details</div></div>
         <div style="display:flex;gap:8px">
           <input class="search-input" placeholder="🔍 Search driver, ID, amount...">
           <select class="sel"><option>All Platforms</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select>
-          <button class="btn btn-primary" onclick="openForm('add-cod')">+ Submit COD</button>
+          ${!isSup?`<button class="btn btn-primary" onclick="openForm('add-cod')">+ Submit COD</button>`:''}
         </div>
       </div>
       <div class="g2">
@@ -2009,32 +2121,147 @@ function showCODDetail(name,amount,platform,status){
 }
 
 function showDriverDetail(name,platform,platColor,status){
+  const platC={'Keeta':'var(--keeta)','Ninja':'var(--ninja)','Jahez':'var(--jahez)','Noon':'var(--noon)'}[platform]||'var(--blue)';
+  const initials=name.split(' ').map(x=>x[0]).join('').slice(0,2);
+  const sc=status==='Active'?'bg':status==='Suspended'?'br':'ba';
   openDetail(`
-    <div class="form-header"><div class="form-title">🚗 Driver — ${name}</div><div class="form-close" onclick="closeDetail()">✕</div></div>
-    <div style="padding:20px">
-      <div style="display:flex;gap:14px;align-items:center;margin-bottom:16px">
-        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:white">${name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
-        <div><div style="font-size:1rem;font-weight:700">${name}</div><div style="font-size:0.75rem;color:var(--text3);margin-top:3px">${platform} · Offshore</div></div>
-        <span class="b bg" style="margin-left:auto">${status}</span>
+    <div class="form-header" style="padding:16px 20px;"><div class="form-title">🚗 ${name}</div><div class="form-close" onclick="closeDetail()">✕</div></div>
+    <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface2);">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,${platC},var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:white;flex-shrink:0;">${initials}</div>
+      <div style="flex:1;">
+        <div style="font-size:1rem;font-weight:700;">${name}</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:3px;">DRV-0041 · <span style="color:${platC};font-weight:600;">${platform}</span> · Local · Supervisor Ahmed</div>
       </div>
-      <div class="info-grid">
-        <div class="ig-item"><div class="ig-label">Driver ID</div><div class="ig-val mono">DRV-0041</div></div>
-        <div class="ig-item"><div class="ig-label">Supervisor</div><div class="ig-val">Ahmed Hassan</div></div>
-        <div class="ig-item"><div class="ig-label">Orders Today</div><div class="ig-val" style="color:var(--blue)">28</div></div>
-        <div class="ig-item"><div class="ig-label">COD Today</div><div class="ig-val">BD 124.500</div></div>
-        <div class="ig-item"><div class="ig-label">Passport</div><div class="ig-val"><span class="b bg">✓ Valid</span></div></div>
-        <div class="ig-item"><div class="ig-label">Visa</div><div class="ig-val"><span class="b ba">⚠ 7 days</span></div></div>
-      </div>
-      <div style="margin-top:14px">
-        <div style="font-size:0.8rem;font-weight:700;margin-bottom:8px">Performance — This Month</div>
-        ${[['Orders Completed',156,180],['On-Time Rate','94%',100],['COD Accuracy','98%',100]].map(p=>`<div class="perf-bar"><div class="pb-label">${p[0]}</div><div class="pb-track"><div class="pb-fill" style="width:${typeof p[1]==='number'&&p[2]===180?Math.round(p[1]/p[2]*100):parseInt(p[1])}%"></div></div><div class="pb-val">${p[1]}</div></div>`).join('')}
-      </div>
-      <div style="display:flex;gap:8px;margin-top:14px">
-        <button class="btn btn-primary" style="flex:1">Edit Driver</button>
-        <button class="btn btn-ghost" onclick="openForm('add-cod');closeDetail()">Submit COD</button>
-        <button class="btn btn-ghost" onclick="closeDetail()">Close</button>
-      </div>
-    </div>`);
+      <span class="b ${sc}">${status}</span>
+    </div>
+    <div class="drv-tabs" id="drvTabs">
+      <div class="drv-tab active" onclick="switchDrvTab(this,'overview')">📊 Overview</div>
+      <div class="drv-tab" onclick="switchDrvTab(this,'docs')">📄 Documents</div>
+      <div class="drv-tab" onclick="switchDrvTab(this,'bike')">🏍️ Bike</div>
+      <div class="drv-tab" onclick="switchDrvTab(this,'perf')">🏆 Performance</div>
+      <div class="drv-tab" onclick="switchDrvTab(this,'cod')">💰 COD</div>
+      <div class="drv-tab" onclick="switchDrvTab(this,'payroll')">💵 Payroll</div>
+    </div>
+    <div id="drvBody" style="padding:16px 20px;max-height:420px;overflow-y:auto;">${drvOverviewHTML()}</div>
+    <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;">
+      <button class="btn btn-primary btn-sm">Edit Driver</button>
+      <button class="btn btn-ghost btn-sm" onclick="openForm('add-cod');closeDetail()">Submit COD</button>
+      <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="closeDetail()">Close</button>
+    </div>
+  `);
+}
+function switchDrvTab(el,tab){
+  document.querySelectorAll('#drvTabs .drv-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const body=document.getElementById('drvBody');
+  if(tab==='overview')body.innerHTML=drvOverviewHTML();
+  else if(tab==='docs')body.innerHTML=drvDocsHTML();
+  else if(tab==='bike')body.innerHTML=drvBikeHTML();
+  else if(tab==='perf')body.innerHTML=drvPerfHTML();
+  else if(tab==='cod')body.innerHTML=drvCodHTML();
+  else if(tab==='payroll')body.innerHTML=drvPayrollHTML();
+}
+function drvOverviewHTML(){
+  return`<div class="info-grid" style="margin-bottom:14px;">
+    <div class="ig-item"><div class="ig-label">Driver ID</div><div class="ig-val mono">DRV-0041</div></div>
+    <div class="ig-item"><div class="ig-label">Nationality</div><div class="ig-val">Bahraini</div></div>
+    <div class="ig-item"><div class="ig-label">Phone</div><div class="ig-val">+973 3300 1122</div></div>
+    <div class="ig-item"><div class="ig-label">Contract Type</div><div class="ig-val">Local</div></div>
+    <div class="ig-item"><div class="ig-label">Orders Today</div><div class="ig-val" style="color:var(--blue);font-size:1rem;">28</div></div>
+    <div class="ig-item"><div class="ig-label">COD Today</div><div class="ig-val" style="color:var(--green);">BD 124.500</div></div>
+    <div class="ig-item"><div class="ig-label">Joined</div><div class="ig-val">1 Jan 2025</div></div>
+    <div class="ig-item"><div class="ig-label">Shift</div><div class="ig-val">AM 06:00–14:00</div></div>
+  </div>
+  <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Document Status Summary</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+    <span class="b bg">✓ Passport</span>
+    <span class="b ba">⚠ Visa (7d)</span>
+    <span class="b bg">✓ CPR</span>
+    <span class="b bg">✓ License</span>
+    <span class="b bg">✓ Insurance</span>
+    <span class="b bg">✓ Contract</span>
+  </div>`;
+}
+function drvDocsHTML(){
+  const docs=[
+    {name:'Passport',num:'BH12345678',expiry:'15 Oct 2028',days:null,sc:'bg',s:'✓ Valid'},
+    {name:'Visa',num:'VZ-2024-0041',expiry:'15 Mar 2026',days:7,sc:'br',s:'⚠ Expires in 7 days'},
+    {name:'CPR / National ID',num:'841022-1234',expiry:'20 Jun 2027',days:null,sc:'bg',s:'✓ Valid'},
+    {name:'Driving License',num:'DL-BH-90012',expiry:'5 Aug 2026',days:null,sc:'bg',s:'✓ Valid'},
+    {name:'Vehicle Insurance',num:'INS-2025-4411',expiry:'1 Jan 2027',days:null,sc:'bg',s:'✓ Valid'},
+    {name:'Employment Contract',num:'CTR-2025-0041',expiry:'31 Dec 2026',days:null,sc:'bg',s:'✓ Valid'},
+  ];
+  return`<div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Driver Documents</div>
+  ${docs.map(d=>`<div class="doc-row">
+    <div class="doc-icon">${d.sc==='bg'?'✅':d.sc==='br'?'❌':'⚠️'}</div>
+    <div class="doc-info">
+      <div class="doc-name">${d.name}</div>
+      <div class="doc-expiry">${d.num} · Expires: ${d.expiry}${d.days?` <span style="color:var(--red);font-weight:700;">(${d.days} days left)</span>`:''}</div>
+    </div>
+    <div class="doc-actions">
+      <span class="b ${d.sc}" style="font-size:0.6rem;">${d.s}</span>
+      <button class="btn btn-ghost btn-sm">Update</button>
+    </div>
+  </div>`).join('')}`;
+}
+function drvBikeHTML(){
+  return`<div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Bike Details</div>
+  <div class="info-grid" style="margin-bottom:14px;">
+    <div class="ig-item"><div class="ig-label">Bike Model</div><div class="ig-val">Honda CB200</div></div>
+    <div class="ig-item"><div class="ig-label">Plate Number</div><div class="ig-val mono">BH 4421 A</div></div>
+    <div class="ig-item"><div class="ig-label">Bike Type</div><div class="ig-val">Lease-to-Own</div></div>
+    <div class="ig-item"><div class="ig-label">Year</div><div class="ig-val">2024</div></div>
+    <div class="ig-item"><div class="ig-label">Color</div><div class="ig-val">Black / Red</div></div>
+    <div class="ig-item"><div class="ig-label">Engine CC</div><div class="ig-val">200cc</div></div>
+  </div>
+  <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Bike Documents</div>
+  ${[
+    {name:'Registration Card',expiry:'20 Dec 2026',sc:'bg',s:'✓ Valid'},
+    {name:'Insurance Certificate',expiry:'1 Jan 2027',sc:'bg',s:'✓ Valid'},
+    {name:'Vehicle Inspection',expiry:'5 Apr 2026',sc:'ba',s:'⚠ Due soon'},
+  ].map(d=>`<div class="doc-row">
+    <div class="doc-icon">${d.sc==='bg'?'✅':'⚠️'}</div>
+    <div class="doc-info"><div class="doc-name">${d.name}</div><div class="doc-expiry">Expires: ${d.expiry}</div></div>
+    <div class="doc-actions"><span class="b ${d.sc}">${d.s}</span><button class="btn btn-ghost btn-sm">Update</button></div>
+  </div>`).join('')}`;
+}
+function drvPerfHTML(){
+  return`<div class="info-grid" style="margin-bottom:14px;">
+    <div class="ig-item"><div class="ig-label">Orders This Month</div><div class="ig-val" style="font-size:1.2rem;color:var(--blue);">156</div></div>
+    <div class="ig-item"><div class="ig-label">On-Time Rate</div><div class="ig-val" style="font-size:1.2rem;color:var(--green);">94%</div></div>
+    <div class="ig-item"><div class="ig-label">COD Accuracy</div><div class="ig-val" style="color:var(--green);">98%</div></div>
+    <div class="ig-item"><div class="ig-label">Incidents</div><div class="ig-val" style="color:var(--red);">1</div></div>
+    <div class="ig-item"><div class="ig-label">Customer Rating</div><div class="ig-val">4.8 ⭐</div></div>
+    <div class="ig-item"><div class="ig-label">Platform Rank</div><div class="ig-val" style="color:var(--amber);">#1 Keeta</div></div>
+  </div>
+  <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">7-Day Performance</div>
+  ${[['Mon',22],['Tue',28],['Wed',24],['Thu',30],['Fri',26],['Sat',18],['Sun',8]].map(d=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="width:30px;font-size:0.7rem;color:var(--text3);">${d[0]}</span><div style="flex:1;height:10px;background:var(--surface3);border-radius:4px;overflow:hidden;"><div style="height:100%;background:var(--blue);border-radius:4px;width:${Math.round(d[1]/30*100)}%;"></div></div><span style="width:28px;font-size:0.7rem;font-weight:700;font-family:'JetBrains Mono';">${d[1]}</span></div>`).join('')}`;
+}
+function drvCodHTML(){
+  const entries=[
+    {date:'08 Mar',amt:'BD 124.500',plat:'Keeta',sc:'bg',s:'Approved'},
+    {date:'07 Mar',amt:'BD 98.000',plat:'Keeta',sc:'bg',s:'Settled'},
+    {date:'06 Mar',amt:'BD 142.000',plat:'Keeta',sc:'bg',s:'Settled'},
+    {date:'05 Mar',amt:'BD 87.500',plat:'Keeta',sc:'ba',s:'Pending'},
+    {date:'04 Mar',amt:'BD 110.000',plat:'Keeta',sc:'bg',s:'Settled'},
+  ];
+  const total=entries.reduce((a,e)=>a+parseFloat(e.amt.replace('BD ','')),0);
+  return`<div style="background:var(--surface2);border-radius:var(--r-sm);padding:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+    <div><div style="font-size:0.68rem;color:var(--text3);">Total COD — March 2026</div><div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--green);">BD ${total.toFixed(3)}</div></div>
+    <button class="btn btn-primary btn-sm" onclick="openForm('add-cod');closeDetail()">+ Submit COD</button>
+  </div>
+  <table class="tbl"><thead><tr><th>Date</th><th>Amount</th><th>Platform</th><th>Status</th></tr></thead>
+  <tbody>${entries.map(e=>`<tr><td>${e.date}</td><td class="mono" style="font-weight:700;">${e.amt}</td><td style="color:var(--keeta);font-weight:600;">${e.plat}</td><td><span class="b ${e.sc}">${e.s}</span></td></tr>`).join('')}</tbody></table>`;
+}
+function drvPayrollHTML(){
+  return`<div style="background:var(--surface2);border-radius:var(--r-sm);padding:12px;margin-bottom:14px;text-align:center;">
+    <div style="font-size:0.68rem;color:var(--text3);">Net Earnings — March 2026</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--green);">BD 820.000</div>
+    <span class="b ba">⏳ Processing</span>
+  </div>
+  ${[['Platform Base Pay','BD 600.000',''],['COD Commission (2%)','BD 248.000',''],['Bike Deduction','- BD 28.000','negative']].map(r=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="font-size:0.78rem;">${r[0]}</span><span style="font-family:'JetBrains Mono';font-weight:700;color:${r[2]==='negative'?'var(--red)':'var(--text)'};">${r[1]}</span></div>`).join('')}
+  <div style="margin-top:12px;font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Previous Months</div>
+  ${[['February 2026','BD 790.000','bg','Paid'],['January 2026','BD 840.000','bg','Paid']].map(m=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);"><span style="flex:1;font-size:0.75rem;">${m[0]}</span><span style="font-family:'JetBrains Mono';font-size:0.75rem;font-weight:600;">${m[1]}</span><span class="b ${m[2]}">${m[3]}</span></div>`).join('')}`;
 }
 
 // ===================== PLATFORM FILTER =====================
