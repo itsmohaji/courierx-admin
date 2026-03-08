@@ -662,55 +662,7 @@ const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const HRS=['08','09','10','11','12','13','14','15'];
 let currentRole='ceo';
 let currentSection='dashboard';
-let currentPlatform='all';
 let chartInstances={};
-
-const PD={
-  keeta:{name:'Keeta',emoji:'🔶',color:'#ea580c',
-    supervisors:[{name:'Ahmed Hassan',id:'SUP-001',initials:'AH',drivers:42,active:38,orders:1240,cod:'BD 18,420',rating:4.8},{name:'Mohammed Al-Fardan',id:'SUP-002',initials:'MF',drivers:38,active:35,orders:1100,cod:'BD 16,200',rating:4.7}],
-    drivers:[{name:'Ahmed Al-Rashidi',id:'DRV-0041',sup:'Ahmed Hassan',type:'Local',status:'Active',sc:'bg',orders:28,cod:'BD 124.500',docs:'bg'},{name:'Khalid Hassan',id:'DRV-0048',sup:'Ahmed Hassan',type:'Local',status:'Active',sc:'bg',orders:22,cod:'BD 98.000',docs:'bg'},{name:'Ali Al-Sayed',id:'DRV-0071',sup:'Mohammed Al-Fardan',type:'Local',status:'Active',sc:'bg',orders:19,cod:'BD 87.000',docs:'ba'},{name:'Yousef Mansour',id:'DRV-0082',sup:'Mohammed Al-Fardan',type:'Offshore',status:'Suspended',sc:'br',orders:0,cod:'BD 0',docs:'br'}],
-    cod:{pending:64,approved:180,flagged:8,total:'BD 18,420',week:'BD 86,400'},
-    perf:{orders:6420,ontime:'87%',accuracy:'96%',rating:4.7},
-    reports:[{title:'Keeta Weekly Summary',date:'Mar 2026',icon:'📊'},{title:'Keeta COD Report',date:'Feb 2026',icon:'💰'},{title:'Driver Performance',date:'Q1 2026',icon:'🏆'}],
-    docAlerts:[{name:'Ali Al-Sayed',doc:'Visa',days:'7 days',sc:'br'}],
-    kpis:{drivers:340,alerts:12},od:[3200,4100,3800,5200,4700,6100,4230],cd:[12400,16800,15200,18900,17400,22100,18420]},
-  jahez:{name:'Jahez',emoji:'🟣',color:'#7c3aed',
-    supervisors:[{name:'Sara Khalid',id:'SUP-003',initials:'SK',drivers:51,active:48,orders:1580,cod:'BD 24,600',rating:4.9},{name:'Hassan Al-Mutairi',id:'SUP-004',initials:'HM',drivers:46,active:44,orders:1420,cod:'BD 22,100',rating:4.8}],
-    drivers:[{name:'Faris Ghamdi',id:'DRV-0089',sup:'Sara Khalid',type:'Local',status:'Active',sc:'bg',orders:31,cod:'BD 156.000',docs:'bg'},{name:'Mohammed Al-Zahra',id:'DRV-0621',sup:'Sara Khalid',type:'Offshore',status:'Active',sc:'bg',orders:26,cod:'BD 118.000',docs:'br'},{name:'Tariq Al-Dosari',id:'DRV-0210',sup:'Hassan Al-Mutairi',type:'Local',status:'Active',sc:'bg',orders:29,cod:'BD 134.000',docs:'bg'}],
-    cod:{pending:91,approved:240,flagged:11,total:'BD 24,600',week:'BD 112,000'},
-    perf:{orders:8420,ontime:'91%',accuracy:'97%',rating:4.8},
-    reports:[{title:'Jahez Weekly Summary',date:'Mar 2026',icon:'📊'},{title:'Jahez COD Report',date:'Feb 2026',icon:'💰'}],
-    docAlerts:[{name:'Mohammed Al-Zahra',doc:'Visa',days:'7 days',sc:'br'}],
-    kpis:{drivers:512,alerts:8},od:[4800,5200,6100,5800,7200,6400,6870],cd:[19200,21400,24600,22800,27100,25600,24600]},
-  ninja:{name:'Ninja',emoji:'🔵',color:'#0891b2',
-    supervisors:[{name:'Hassan Mohammed',id:'SUP-005',initials:'HM',drivers:30,active:28,orders:820,cod:'BD 9,800',rating:4.6}],
-    drivers:[{name:'Raj Kumar Singh',id:'DRV-0156',sup:'Hassan Mohammed',type:'Offshore',status:'Active',sc:'bg',orders:20,cod:'BD 87.000',docs:'ba'},{name:'Priya Nair',id:'DRV-0312',sup:'Hassan Mohammed',type:'Offshore',status:'Active',sc:'bg',orders:18,cod:'BD 63.500',docs:'bg'}],
-    cod:{pending:42,approved:148,flagged:5,total:'BD 9,800',week:'BD 44,200'},
-    perf:{orders:3640,ontime:'88%',accuracy:'95%',rating:4.6},
-    reports:[{title:'Ninja Weekly Summary',date:'Mar 2026',icon:'📊'},{title:'Ninja COD Report',date:'Feb 2026',icon:'💰'}],
-    docAlerts:[{name:'Raj Kumar Singh',doc:'License',days:'10 days',sc:'br'}],
-    kpis:{drivers:218,alerts:7},od:[1800,2100,2400,2200,3100,2800,2940],cd:[7200,8600,9200,8800,11400,10200,9800]},
-  noon:{name:'Noon',emoji:'🟡',color:'#ca8a04',
-    supervisors:[{name:'Omar Ali',id:'SUP-006',initials:'OA',drivers:28,active:25,orders:680,cod:'BD 7,180',rating:4.5}],
-    drivers:[{name:'Faisal Al-Mutairi',id:'DRV-0847',sup:'Omar Ali',type:'Local',status:'Active',sc:'bg',orders:16,cod:'BD 72.000',docs:'br'},{name:'Ahmed Al-Nouri',id:'DRV-0512',sup:'Omar Ali',type:'Local',status:'Active',sc:'bg',orders:21,cod:'BD 91.000',docs:'bg'}],
-    cod:{pending:38,approved:118,flagged:4,total:'BD 7,180',week:'BD 32,600'},
-    perf:{orders:2610,ontime:'81%',accuracy:'93%',rating:4.5},
-    reports:[{title:'Noon Weekly Summary',date:'Mar 2026',icon:'📊'},{title:'Noon COD Report',date:'Feb 2026',icon:'💰'}],
-    docAlerts:[{name:'Faisal Al-Mutairi',doc:'CPR',days:'Expired',sc:'br'}],
-    kpis:{drivers:177,alerts:7},od:[1400,1700,1900,2100,1800,2300,2110],cd:[5600,6800,7400,8200,7100,8900,7180]},
-};
-function getPlats(){return currentPlatform==='all'?Object.values(PD):[PD[currentPlatform]];}
-function getSPD(){return currentPlatform==='all'?null:PD[currentPlatform];}
-function platTabs(ap){
-  let h='<div class="ptabs">';
-  h+='<div class="ptab'+(ap==='all'?' active':'')+'" onclick="switchPlat(\'all\')">🏢 All</div>';
-  Object.entries(PD).forEach(([k,p])=>{
-    h+='<div class="ptab'+(ap===k?' active':'')+'" onclick="switchPlat(\''+k+'\')">'+ p.emoji+' '+p.name+'</div>';
-  });
-  h+='</div>';
-  return h;
-}
-function switchPlat(plat){currentPlatform=plat;renderContent(currentRole,currentSection,document.getElementById('pageTitle').textContent);}
 let calendarDate=new Date(2026,2,1); // March 2026
 let calendarEvents={
   '2026-3-8':[{t:'Morning Shift',type:'shift'},{t:'Sara Leave',type:'holiday'}],
@@ -920,7 +872,6 @@ function renderSidebar(roleKey){
 function selectRole(roleKey, el){
   closeRoleDropdown();
   currentRole=roleKey;
-  currentPlatform='all';
   currentSection='dashboard';
   document.querySelectorAll('.rd-item').forEach(i=>i.classList.remove('active'));
   if(el)el.classList.add('active');
@@ -1229,15 +1180,20 @@ function renderContent(role,section,title){
 
   // ---- DASHBOARDS ----
   if(section==='dashboard'&&(role==='ceo'||role==='gm')){
-    el.innerHTML=platTabs(currentPlatform)+
-      (getSPD()?`<div style="background:#fff7ed;border:1px solid ${getSPD().color}33;border-radius:var(--r-sm);padding:10px 16px;font-size:0.78rem;color:${getSPD().color};margin-bottom:12px;">${getSPD().emoji} <strong>${getSPD().name}</strong> — ${getSPD().kpis.drivers} drivers · ${getSPD().supervisors.length} supervisors</div>`:'')+`
-      <div class="g4">
-        ${kpiHTML('Active Drivers',getPlats().reduce((s,p)=>s+p.kpis.drivers,0).toLocaleString(),'<span class="up">↑ 23</span> from yesterday','#2563eb',[50,55,60,65,70,75,80])}
-        ${kpiHTML('COD Today','BD '+getPlats().reduce((s,p)=>s+parseFloat(p.cod.total.replace('BD ','')),0).toLocaleString(),'collected today','#059669',[80,70,75,85,80,90,88])}
-        ${kpiHTML('Doc Alerts',getPlats().reduce((s,p)=>s+p.kpis.alerts,0)+'','<span class="dn">need action</span>','#dc2626',[20,25,28,30,32,33,34])}
-        ${kpiHTML('Avg On-Time',Math.round(getPlats().reduce((s,p)=>s+parseInt(p.perf.ontime),0)/getPlats().length)+'%','<span class="up">↑ 3%</span> vs last week','#d97706',[70,72,75,76,79,80,82])}
+    el.innerHTML=`
+      <div class="ptabs">
+        <div class="ptab active" onclick="filterPtab(this,'all')">🏢 All Platforms</div>
+        <div class="ptab" onclick="filterPtab(this,'keeta')">🔶 Keeta</div>
+        <div class="ptab" onclick="filterPtab(this,'jahez')">🟣 Jahez</div>
+        <div class="ptab" onclick="filterPtab(this,'ninja')">🔵 Ninja</div>
+        <div class="ptab" onclick="filterPtab(this,'noon')">🟡 Noon</div>
       </div>
-      ${currentPlatform==='all'?`<div class="g4" style="margin-bottom:0;">${Object.entries(PD).map(([k,p])=>`<div class="panel" style="cursor:pointer;border-top:3px solid ${p.color};" onclick="switchPlat('${k}')"><div class="ph"><div class="ph-title">${p.emoji} ${p.name}</div><span style="font-weight:700;color:${p.color};">${p.perf.ontime}</span></div><div class="pb" style="padding-top:0;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><div style="background:var(--surface2);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:${p.color};">${p.kpis.drivers}</div><div style="font-size:0.6rem;color:var(--text3);">Drivers</div></div><div style="background:var(--surface2);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:0.78rem;font-weight:700;color:var(--green);">${p.cod.total}</div><div style="font-size:0.6rem;color:var(--text3);">COD</div></div></div><div style="margin-top:6px;font-size:0.68rem;color:${p.color};text-align:right;">Tap to drill in →</div></div></div>`).join('')}</div>`:''}
+      <div class="g4">
+        ${kpiHTML('Active Drivers','1,247','<span class="up">↑ 23</span> from yesterday','#2563eb',[50,55,60,65,70,75,80])}
+        ${kpiHTML('COD Outstanding','BD 18.4K','<span class="dn">BD 2.1K</span> unsettled','#d97706',[80,70,75,85,80,90,88])}
+        ${kpiHTML('Compliance Alerts','34','<span class="dn">7</span> expiring this week','#dc2626',[20,25,28,30,32,33,34])}
+        ${kpiHTML('Avg Performance','82%','<span class="up">↑ 3%</span> vs last week','#059669',[70,72,75,76,79,80,82])}
+      </div>
       <div class="g2-1">
         <div class="panel"><div class="ph"><div class="ph-title">📈 COD Revenue — Last 7 Days</div><div class="ph-link">Export</div></div><div class="pb"><div class="chart-wrap"><canvas id="mainLine"></canvas></div></div></div>
         <div class="panel"><div class="ph"><div class="ph-title">🍩 Drivers by Platform</div></div><div class="pb"><div class="chart-wrap"><canvas id="mainDonut"></canvas></div></div></div>
@@ -1253,18 +1209,16 @@ function renderContent(role,section,title){
         <div class="panel"><div class="ph"><div class="ph-title">🕐 Hourly Orders</div></div><div class="pb"><div class="chart-wrap"><canvas id="hourlyArea"></canvas></div></div></div>
       </div>`;
     setTimeout(()=>{
-      if(currentPlatform==='all'){
-        mkLine('mainLine',DAYS,[{label:'Keeta',data:PD.keeta.od,borderColor:'#ea580c',tension:0.4,fill:false},{label:'Jahez',data:PD.jahez.od,borderColor:'#7c3aed',tension:0.4,fill:false},{label:'Ninja',data:PD.ninja.od,borderColor:'#0891b2',tension:0.4},{label:'Noon',data:PD.noon.od,borderColor:'#ca8a04',tension:0.4}],170);
-        mkDoughnut('mainDonut',['Keeta','Jahez','Ninja','Noon'],[340,512,218,177],['#ea580c','#7c3aed','#0891b2','#ca8a04'],160);
-      } else {
-        const _p=PD[currentPlatform];
-        mkLine('mainLine',DAYS,[{label:'Orders',data:_p.od,borderColor:_p.color,backgroundColor:_p.color+'18',tension:0.4,fill:true}],170);
-        mkDoughnut('mainDonut',['Active','Onboarding','Suspended'],[Math.round(_p.kpis.drivers*0.88),Math.round(_p.kpis.drivers*0.08),Math.round(_p.kpis.drivers*0.04)],['#059669','#2563eb','#dc2626'],160);
-      }
-      if(role==='ceo'){
-        mkBar('perfBar',Object.values(PD).map(p=>p.name),[{label:'On-Time %',data:Object.values(PD).map(p=>parseInt(p.perf.ontime)),backgroundColor:Object.values(PD).map(p=>p.color+'b3'),borderRadius:6}],160);
-        mkDoughnut('statusDonut',['Active','Warning','Suspended','Onboarding'],[1141,63,18,25],['#059669','#d97706','#dc2626','#2563eb'],160);
-      }
+      mkLine('mainLine',DAYS,[
+        {label:'Keeta',data:[3200,4100,3800,5200,4700,6100,4230],borderColor:'#ea580c',tension:0.4,backgroundColor:'rgba(234,88,12,0.05)',fill:true},
+        {label:'Jahez',data:[4800,5200,6100,5800,7200,6400,6870],borderColor:'#7c3aed',tension:0.4,backgroundColor:'rgba(124,58,237,0.05)',fill:true},
+        {label:'Ninja',data:[1800,2100,2400,2200,3100,2800,2940],borderColor:'#0891b2',tension:0.4},
+        {label:'Noon',data:[1400,1700,1900,2100,1800,2300,2110],borderColor:'#ca8a04',tension:0.4},
+      ],170);
+      mkDoughnut('mainDonut',['Keeta','Jahez','Ninja','Noon'],[340,512,218,177],['#ea580c','#7c3aed','#0891b2','#ca8a04'],160);
+      mkBar('perfBar',['Keeta','Jahez','Ninja','Noon'],[{label:'Performance %',data:[84,79,88,81],backgroundColor:['rgba(234,88,12,0.7)','rgba(124,58,237,0.7)','rgba(8,145,178,0.7)','rgba(202,138,4,0.7)'],borderRadius:6}],160);
+      mkDoughnut('statusDonut',['Active','Warning','Suspended','Onboarding'],[1141,63,18,25],['#059669','#d97706','#dc2626','#2563eb'],160);
+      mkLine('hourlyArea',HRS,[{label:'Orders',data:[12,45,89,142,168,201,189,178],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,0.06)',tension:0.4,fill:true}],160);
     },50);
     return;
   }
@@ -1562,8 +1516,7 @@ function renderContent(role,section,title){
 
   // ---- COD REVIEW QUEUE ----
   if(section==='cod-queue'){
-    el.innerHTML=platTabs(currentPlatform)+`
-
+    el.innerHTML=`
       <div class="sec-header"><div><div class="sec-title">COD Review Queue</div><div class="sec-sub">147 entries pending · Sorted by submission time</div></div>
         <div style="display:flex;gap:8px">
           <select class="sel"><option>All Platforms</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select>
@@ -1653,8 +1606,7 @@ function renderContent(role,section,title){
 
   // ---- FINANCIAL REPORTS ----
   if(section==='fin-reports'){
-    el.innerHTML=platTabs(currentPlatform)+`
-
+    el.innerHTML=`
       <div class="sec-header"><div><div class="sec-title">Financial Reports</div></div>
         <button class="btn btn-primary">📥 Export All</button>
       </div>
@@ -2008,8 +1960,7 @@ function renderContent(role,section,title){
   // ---- DRIVERS ----
   if(section==='drivers'){
     const isRestricted=(role==='supervisor'||role==='account-mgr');
-    el.innerHTML=platTabs(currentPlatform)+`
-
+    el.innerHTML=`
       ${isRestricted?`<div class="restricted">🔒 You are viewing assigned drivers only (Keeta · ${ROLES[role].name}). Other platforms are not visible.</div>`:''}
       <div class="sec-header"><div><div class="sec-title">Driver Management</div><div class="sec-sub">${isRestricted?'Keeta · 42 drivers':'All platforms · 1,247 total drivers'}</div></div>
         <div style="display:flex;gap:8px">
@@ -2042,8 +1993,7 @@ function renderContent(role,section,title){
 
   // ---- PERFORMANCE ----
   if(section==='performance'){
-    el.innerHTML=platTabs(currentPlatform)+`
-
+    el.innerHTML=`
       <div class="sec-header"><div><div class="sec-title">Performance</div><div class="sec-sub">Platform performance metrics · This month</div></div>
         <select class="sel"><option>All Platforms</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select>
       </div>
@@ -2089,8 +2039,7 @@ function renderContent(role,section,title){
 
   // ---- SUPERVISORS ----
   if(section==='supervisors'){
-    el.innerHTML=platTabs(currentPlatform)+`
-
+    el.innerHTML=`
       <div class="sec-header"><div><div class="sec-title">Supervisors</div><div class="sec-sub">Field supervisors across all platforms</div></div>
         <button class="btn btn-primary" onclick="openForm('add-employee')">+ Add Supervisor</button>
       </div>
@@ -2748,7 +2697,8 @@ function drvPayrollHTML(){
 
 // ===================== PLATFORM FILTER =====================
 function filterPtab(el,plat){
-  switchPlat(plat);
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
 }
 
 // ===================== CLOCK =====================
