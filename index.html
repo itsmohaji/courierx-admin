@@ -4,212 +4,347 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CourierX — Operations System</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>CourierX — Enterprise Operations Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-:root {
-  --bg:#070910;--surface:#0d1017;--surface2:#131720;--surface3:#1a2030;
-  --border:#1e2535;--border2:#252d3d;
-  --blue:#1e6fff;--blue-dim:rgba(30,111,255,0.12);
-  --green:#00d68f;--green-dim:rgba(0,214,143,0.1);
-  --yellow:#ffb547;--yellow-dim:rgba(255,181,71,0.1);
-  --red:#ff4d6a;--red-dim:rgba(255,77,106,0.1);
-  --text:#e8edf5;--text2:#8892a4;--text3:#4a5568;
-  --keeta:#ff6b35;--keeta-dim:rgba(255,107,53,0.12);
+:root{
+  --bg:#080c14;
+  --surface:#0c1220;
+  --surface2:#101828;
+  --surface3:#141e30;
+  --surface4:#1a2540;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.1);
+  --blue:#3b82f6;
+  --blue2:#2563eb;
+  --blue-glow:rgba(59,130,246,0.15);
+  --green:#10b981;
+  --green-dim:rgba(16,185,129,0.1);
+  --amber:#f59e0b;
+  --amber-dim:rgba(245,158,11,0.1);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,0.1);
+  --purple:#8b5cf6;
+  --text:#f1f5f9;
+  --text2:#94a3b8;
+  --text3:#475569;
+  --keeta:#f97316;--keeta-dim:rgba(249,115,22,0.12);
   --jahez:#8b5cf6;--jahez-dim:rgba(139,92,246,0.12);
   --ninja:#06b6d4;--ninja-dim:rgba(6,182,212,0.12);
-  --noon:#f59e0b;--noon-dim:rgba(245,158,11,0.12);
+  --noon:#eab308;--noon-dim:rgba(234,179,8,0.12);
+  --r:12px;--r-sm:8px;--r-lg:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;display:flex;height:100vh;overflow:hidden;font-size:13px;}
-::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;display:flex;flex-direction:column;}
+
+/* ROLE SWITCHER BAR */
+.role-bar{background:var(–surface);border-bottom:1px solid var(–border);padding:0 20px;height:44px;display:flex;align-items:center;gap:6px;flex-shrink:0;overflow-x:auto;}
+.role-bar::-webkit-scrollbar{display:none;}
+.role-bar-label{font-size:0.65rem;color:var(–text3);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-right:6px;white-space:nowrap;}
+.role-pill{display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:0.72rem;color:var(–text2);transition:all 0.2s;white-space:nowrap;border:1px solid transparent;font-weight:500;}
+.role-pill:hover{background:var(–surface3);color:var(–text);}
+.role-pill.active{background:var(–blue2);color:white;border-color:rgba(59,130,246,0.3);box-shadow:0 0 12px rgba(37,99,235,0.3);}
+.role-pill .rp-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0.7;}
+
+/* MAIN LAYOUT */
+.app{display:flex;flex:1;overflow:hidden;}
 
 /* SIDEBAR */
-.sidebar{width:220px;background:var(–surface);border-right:1px solid var(–border);display:flex;flex-direction:column;flex-shrink:0;}
-.logo{padding:18px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:10px;}
-.logo-icon{width:32px;height:32px;background:var(–blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:‘Syne’,sans-serif;font-weight:800;font-size:14px;color:white;}
-.logo-text{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1rem;color:var(–text);}
-.logo-sub{font-size:0.6rem;color:var(–text2);}
-.role-badge{margin:10px;background:var(–blue-dim);border:1px solid rgba(30,111,255,0.2);border-radius:8px;padding:9px 12px;}
-.role-name{font-weight:600;font-size:0.78rem;color:var(–blue);}
-.role-title{font-size:0.65rem;color:var(–text2);margin-top:2px;}
+.sidebar{width:230px;background:var(–surface);border-right:1px solid var(–border);display:flex;flex-direction:column;flex-shrink:0;transition:all 0.3s;}
+.sidebar-logo{padding:16px 18px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:10px;}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(–blue2),var(–blue));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:‘Syne’,sans-serif;font-weight:800;font-size:13px;color:white;box-shadow:0 4px 12px rgba(37,99,235,0.3);}
+.logo-text{font-family:‘Syne’,sans-serif;font-weight:800;font-size:0.95rem;}
+.logo-sub{font-size:0.6rem;color:var(–text3);margin-top:1px;}
+.sidebar-role{margin:10px;padding:10px 12px;background:var(–surface3);border:1px solid var(–border2);border-radius:var(–r-sm);}
+.sr-level{font-size:0.58rem;color:var(–text3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;}
+.sr-name{font-size:0.82rem;font-weight:600;color:var(–text);margin-top:2px;}
+.sr-access{font-size:0.65rem;color:var(–blue);margin-top:2px;}
 .nav{flex:1;padding:8px;overflow-y:auto;}
-.nav-section{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(–text3);padding:12px 8px 5px;font-weight:600;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;color:var(–text2);transition:all 0.15s;margin-bottom:1px;font-size:0.79rem;border:1px solid transparent;}
-.nav-item:hover{background:var(–surface2);color:var(–text);}
-.nav-item.active{background:var(–blue-dim);color:var(–blue);border-color:rgba(30,111,255,0.15);}
-.nav-item .icon{font-size:0.85rem;width:16px;text-align:center;}
+.nav::-webkit-scrollbar{width:3px;}
+.nav::-webkit-scrollbar-thumb{background:var(–border2);border-radius:3px;}
+.nav-group{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(–text3);padding:12px 10px 5px;font-weight:700;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(–r-sm);cursor:pointer;color:var(–text2);transition:all 0.15s;margin-bottom:1px;font-size:0.8rem;border:1px solid transparent;position:relative;}
+.nav-item:hover{background:var(–surface3);color:var(–text);}
+.nav-item.active{background:var(–blue-glow);color:var(–blue);border-color:rgba(59,130,246,0.12);}
+.nav-item .ni{font-size:0.85rem;width:18px;text-align:center;flex-shrink:0;}
 .nav-badge{margin-left:auto;background:var(–red);color:white;border-radius:10px;padding:1px 6px;font-size:0.58rem;font-weight:700;}
-.sidebar-bottom{padding:12px;border-top:1px solid var(–border);}
-.user-row{display:flex;align-items:center;gap:8px;}
-.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(–blue),#6366f1);display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;color:white;flex-shrink:0;}
-.user-info .name{font-size:0.76rem;font-weight:600;color:var(–text);}
-.user-info .role{font-size:0.62rem;color:var(–text2);}
+.nav-lock{margin-left:auto;font-size:0.7rem;opacity:0.4;}
+.sidebar-user{padding:12px;border-top:1px solid var(–border);}
+.su-row{display:flex;align-items:center;gap:9px;}
+.su-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(–blue2),var(–purple));display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;color:white;flex-shrink:0;}
+.su-name{font-size:0.78rem;font-weight:600;}
+.su-role{font-size:0.62rem;color:var(–text3);}
 
-/* MAIN */
+/* TOPBAR */
+.topbar{background:var(–surface);border-bottom:1px solid var(–border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.tb-left{display:flex;align-items:center;gap:12px;}
+.tb-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.95rem;}
+.tb-breadcrumb{font-size:0.72rem;color:var(–text3);}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.tb-clock{font-family:‘JetBrains Mono’,monospace;font-size:0.72rem;color:var(–text3);}
+.tb-live{display:flex;align-items:center;gap:5px;font-size:0.65rem;color:var(–green);font-weight:600;}
+.live-dot{width:6px;height:6px;background:var(–green);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
+.tb-btn{background:var(–surface3);border:1px solid var(–border2);border-radius:var(–r-sm);padding:6px 12px;cursor:pointer;font-size:0.75rem;color:var(–text2);display:flex;align-items:center;gap:5px;transition:all 0.15s;font-family:‘DM Sans’,sans-serif;}
+.tb-btn:hover{background:var(–surface4);color:var(–text);}
+.tb-btn.primary{background:var(–blue2);color:white;border-color:transparent;}
+.tb-btn.primary:hover{background:var(–blue);}
+.notif-btn{position:relative;background:var(–surface3);border:1px solid var(–border);border-radius:var(–r-sm);padding:7px 10px;cursor:pointer;font-size:0.85rem;}
+.notif-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;background:var(–red);border-radius:50%;}
+
+/* CONTENT */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.topbar{background:var(–surface);border-bottom:1px solid var(–border);padding:0 24px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.page-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.95rem;color:var(–text);}
-.topbar-right{display:flex;align-items:center;gap:10px;}
-.time-display{font-family:‘IBM Plex Mono’,monospace;font-size:0.72rem;color:var(–text2);}
-.alert-btn{position:relative;background:var(–surface2);border:1px solid var(–border);border-radius:7px;padding:5px 10px;cursor:pointer;color:var(–text2);font-size:0.82rem;}
-.alert-dot{position:absolute;top:4px;right:4px;width:6px;height:6px;background:var(–red);border-radius:50%;}
-.content{flex:1;overflow-y:auto;padding:16px 20px;}
+.content{flex:1;overflow-y:auto;padding:20px 24px;}
+.content::-webkit-scrollbar{width:4px;}
+.content::-webkit-scrollbar-thumb{background:var(–border2);border-radius:4px;}
 
-/* PLATFORM TABS */
-.platform-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(–surface);border:1px solid var(–border);border-radius:10px;padding:4px;width:fit-content;}
-.ptab{display:flex;align-items:center;gap:6px;padding:6px 16px;border-radius:7px;cursor:pointer;font-size:0.78rem;color:var(–text2);transition:all 0.15s;font-weight:500;border:1px solid transparent;}
-.ptab:hover{background:var(–surface2);color:var(–text);}
-.ptab.active{color:white;font-weight:600;}
-.ptab[data-p=“all”].active{background:var(–blue);border-color:rgba(30,111,255,0.3);}
-.ptab[data-p=“keeta”].active{background:var(–keeta);border-color:rgba(255,107,53,0.3);}
-.ptab[data-p=“jahez”].active{background:var(–jahez);border-color:rgba(139,92,246,0.3);}
-.ptab[data-p=“ninja”].active{background:var(–ninja);border-color:rgba(6,182,212,0.3);}
-.ptab[data-p=“noon”].active{background:var(–noon);border-color:rgba(245,158,11,0.3);}
+/* ACCESS DENIED */
+.access-denied{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;opacity:0.5;}
+.ad-icon{font-size:3rem;}
+.ad-title{font-family:‘Syne’,sans-serif;font-size:1.2rem;font-weight:700;}
+.ad-sub{font-size:0.82rem;color:var(–text2);}
 
-/* KPI */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
-.kpi-card{background:var(–surface);border:1px solid var(–border);border-radius:12px;padding:14px;position:relative;overflow:hidden;}
-.kpi-card::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:var(–ac,var(–blue));}
-.kpi-label{font-size:0.62rem;color:var(–text2);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;}
-.kpi-value{font-family:‘Syne’,sans-serif;font-size:1.6rem;font-weight:800;color:var(–text);margin:5px 0 3px;line-height:1;}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
+.g2-1{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;}
+.g1-2{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:14px;}
+.g3-1{display:grid;grid-template-columns:3fr 1fr;gap:14px;margin-bottom:14px;}
+
+/* KPI CARD */
+.kpi{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:16px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.kpi:hover{border-color:var(–border2);}
+.kpi::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:var(–kc,var(–blue));}
+.kpi-label{font-size:0.62rem;color:var(–text2);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;}
+.kpi-val{font-family:‘Syne’,sans-serif;font-size:1.7rem;font-weight:800;color:var(–text);margin:6px 0 4px;line-height:1;}
 .kpi-sub{font-size:0.65rem;color:var(–text2);display:flex;align-items:center;gap:4px;}
-.up{color:var(–green);}.down{color:var(–red);}
-
-/* GRID LAYOUTS */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px;}
-.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px;}
-.grid-1-2{display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:12px;}
+.up{color:var(–green);}.dn{color:var(–red);}
+.kpi-spark{margin-top:10px;height:28px;display:flex;align-items:flex-end;gap:2px;}
+.ks-bar{flex:1;border-radius:2px;background:rgba(255,255,255,0.06);min-height:3px;}
 
 /* PANEL */
-.panel{background:var(–surface);border:1px solid var(–border);border-radius:12px;overflow:hidden;height:100%;}
-.panel-header{padding:12px 16px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;}
-.panel-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.8rem;color:var(–text);}
-.panel-action{font-size:0.68rem;color:var(–blue);cursor:pointer;}
-.panel-body{padding:12px 16px;}
-
-/* CHART CONTAINERS */
-.chart-wrap{position:relative;width:100%;}
-.chart-wrap canvas{width:100%!important;}
+.panel{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);overflow:hidden;}
+.ph{padding:14px 18px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;}
+.ph-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.82rem;display:flex;align-items:center;gap:7px;}
+.ph-actions{display:flex;align-items:center;gap:8px;}
+.ph-link{font-size:0.7rem;color:var(–blue);cursor:pointer;}
+.pb{padding:16px 18px;}
 
 /* TABLE */
-.data-table{width:100%;border-collapse:collapse;}
-.data-table th{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(–text3);padding:7px 10px;text-align:left;border-bottom:1px solid var(–border);font-weight:600;}
-.data-table td{padding:9px 10px;border-bottom:1px solid var(–border);font-size:0.76rem;color:var(–text);vertical-align:middle;}
-.data-table tr:last-child td{border-bottom:none;}
-.data-table tr:hover td{background:var(–surface2);}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(–text3);padding:8px 12px;text-align:left;border-bottom:1px solid var(–border);font-weight:700;background:rgba(255,255,255,0.01);}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(–border);font-size:0.78rem;vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,0.015);}
+.tbl td.mono{font-family:‘JetBrains Mono’,monospace;font-size:0.72rem;}
 
-/* BADGES */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:0.62rem;font-weight:600;}
-.bg{background:var(–green-dim);color:var(–green);border:1px solid rgba(0,214,143,0.2);}
-.by{background:var(–yellow-dim);color:var(–yellow);border:1px solid rgba(255,181,71,0.2);}
-.br{background:var(–red-dim);color:var(–red);border:1px solid rgba(255,77,106,0.2);}
-.bb{background:var(–blue-dim);color:var(–blue);border:1px solid rgba(30,111,255,0.2);}
+/* BADGE */
+.b{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:0.62rem;font-weight:600;white-space:nowrap;}
+.bg{background:var(–green-dim);color:var(–green);border:1px solid rgba(16,185,129,0.2);}
+.ba{background:var(–amber-dim);color:var(–amber);border:1px solid rgba(245,158,11,0.2);}
+.br{background:var(–red-dim);color:var(–red);border:1px solid rgba(239,68,68,0.2);}
+.bb{background:var(–blue-glow);color:var(–blue);border:1px solid rgba(59,130,246,0.2);}
+.bp{background:rgba(139,92,246,0.1);color:var(–purple);border:1px solid rgba(139,92,246,0.2);}
 
 /* SCORE */
-.score-wrap{display:flex;align-items:center;gap:6px;}
-.score-bar{flex:1;height:4px;background:var(–border);border-radius:4px;overflow:hidden;}
+.score{display:flex;align-items:center;gap:7px;}
+.score-track{flex:1;height:4px;background:var(–border);border-radius:4px;overflow:hidden;}
 .score-fill{height:100%;border-radius:4px;}
-.score-num{font-family:‘IBM Plex Mono’,monospace;font-size:0.68rem;color:var(–text2);width:28px;text-align:right;}
+.score-label{font-family:‘JetBrains Mono’,monospace;font-size:0.68rem;color:var(–text2);width:30px;text-align:right;}
 
-/* LIVE */
-.live{display:inline-flex;align-items:center;gap:5px;font-size:0.62rem;color:var(–green);font-weight:600;}
-.live-dot{width:6px;height:6px;background:var(–green);border-radius:50%;animation:livep 2s infinite;}
-@keyframes livep{0%,100%{opacity:1}50%{opacity:0.3}}
+/* SECTION */
+.sec{display:none;animation:fadeIn 0.2s ease;}
+.sec.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
-/* SUPERVISOR CARD */
-.sup-card{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(–border);}
-.sup-card:last-child{border-bottom:none;}
-.sup-rank{font-family:‘IBM Plex Mono’,monospace;font-size:0.68rem;color:var(–text3);width:16px;text-align:center;}
-.sup-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:white;flex-shrink:0;}
-.sup-info{flex:1;}
-.sup-name{font-size:0.76rem;font-weight:600;color:var(–text);}
-.sup-meta{font-size:0.62rem;color:var(–text2);}
-.sup-score{font-family:‘IBM Plex Mono’,monospace;font-size:0.8rem;font-weight:700;}
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–r-sm);padding:3px;width:fit-content;margin-bottom:16px;}
+.tab{padding:6px 16px;border-radius:6px;cursor:pointer;font-size:0.78rem;color:var(–text2);transition:all 0.15s;font-weight:500;}
+.tab.active{background:var(–surface4);color:var(–text);box-shadow:0 1px 3px rgba(0,0,0,0.3);}
 
-/* DRIVER CARD */
-.drv-card{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(–border);}
-.drv-card:last-child{border-bottom:none;}
-.drv-num{font-family:‘IBM Plex Mono’,monospace;font-size:0.68rem;color:var(–text3);width:16px;}
-.drv-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:white;flex-shrink:0;}
-.drv-info{flex:1;}
-.drv-name{font-size:0.73rem;font-weight:600;color:var(–text);}
-.drv-sub{font-size:0.6rem;color:var(–text2);}
+/* PLATFORM TABS */
+.ptabs{display:flex;gap:4px;margin-bottom:16px;}
+.ptab{padding:6px 16px;border-radius:20px;cursor:pointer;font-size:0.75rem;color:var(–text2);transition:all 0.15s;font-weight:500;border:1px solid var(–border);background:var(–surface);}
+.ptab:hover{border-color:var(–border2);}
+.ptab[data-p=all].active{background:rgba(59,130,246,0.15);color:var(–blue);border-color:rgba(59,130,246,0.3);}
+.ptab[data-p=keeta].active{background:var(–keeta-dim);color:var(–keeta);border-color:rgba(249,115,22,0.3);}
+.ptab[data-p=jahez].active{background:var(–jahez-dim);color:var(–jahez);border-color:rgba(139,92,246,0.3);}
+.ptab[data-p=ninja].active{background:var(–ninja-dim);color:var(–ninja);border-color:rgba(6,182,212,0.3);}
+.ptab[data-p=noon].active{background:var(–noon-dim);color:var(–noon);border-color:rgba(234,179,8,0.3);}
 
-/* COD FLOW */
-.cod-stages{display:flex;gap:8px;margin-bottom:12px;}
-.cod-stage{flex:1;background:var(–surface2);border:1px solid var(–border);border-radius:8px;padding:10px;text-align:center;}
-.cod-num{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.3rem;}
-.cod-lbl{font-size:0.6rem;color:var(–text2);margin-top:2px;}
+/* PROFILE HERO */
+.profile-hero{background:linear-gradient(135deg,var(–surface2) 0%,var(–surface3) 100%);border:1px solid var(–border2);border-radius:var(–r-lg);padding:24px;margin-bottom:16px;display:flex;align-items:flex-start;gap:20px;position:relative;overflow:hidden;}
+.profile-hero::before{content:’’;position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:var(–profile-color,var(–blue));opacity:0.04;pointer-events:none;}
+.ph-avatar{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.4rem;color:white;flex-shrink:0;box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+.ph-info{flex:1;}
+.ph-name{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.2rem;line-height:1.2;}
+.ph-role{font-size:0.78rem;color:var(–text2);margin-top:4px;}
+.ph-badges{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.ph-stats{display:flex;gap:24px;margin-top:16px;}
+.phs-item{text-align:center;}
+.phs-val{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1.1rem;}
+.phs-lbl{font-size:0.62rem;color:var(–text3);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;}
+.ph-actions-row{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.ig-item{padding:12px 0;border-bottom:1px solid var(–border);}
+.ig-item:nth-last-child(-n+2){border-bottom:none;}
+.ig-label{font-size:0.62rem;color:var(–text3);text-transform:uppercase;letter-spacing:0.06em;font-weight:700;margin-bottom:4px;}
+.ig-val{font-size:0.82rem;color:var(–text);font-weight:500;}
+
+/* DOC ITEM */
+.doc-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(–border);}
+.doc-row:last-child{border-bottom:none;}
+.doc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;}
+.doc-info{flex:1;}
+.doc-name{font-size:0.8rem;font-weight:600;}
+.doc-expiry{font-size:0.65rem;color:var(–text2);margin-top:2px;}
+.doc-actions{display:flex;gap:6px;}
+.doc-btn{background:var(–surface3);border:1px solid var(–border);border-radius:6px;padding:4px 10px;font-size:0.65rem;cursor:pointer;color:var(–text2);font-family:‘DM Sans’,sans-serif;transition:all 0.15s;}
+.doc-btn:hover{color:var(–text);border-color:var(–border2);}
+
+/* FORM */
+.form-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;}
+.form-card{background:var(–surface);border:1px solid var(–border2);border-radius:var(–r-lg);width:640px;max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.5);}
+.form-card::-webkit-scrollbar{width:3px;}
+.form-card::-webkit-scrollbar-thumb{background:var(–border2);border-radius:3px;}
+.form-header{padding:20px 24px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(–surface);z-index:1;}
+.form-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1rem;}
+.form-close{background:var(–surface2);border:1px solid var(–border);border-radius:7px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;color:var(–text2);}
+.form-steps{display:flex;gap:0;padding:16px 24px;border-bottom:1px solid var(–border);}
+.fstep{flex:1;display:flex;align-items:center;gap:8px;}
+.fstep-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;flex-shrink:0;transition:all 0.3s;}
+.fstep-num.done{background:var(–green);color:white;}
+.fstep-num.active{background:var(–blue2);color:white;box-shadow:0 0 10px rgba(37,99,235,0.4);}
+.fstep-num.pending{background:var(–surface3);color:var(–text3);border:1px solid var(–border);}
+.fstep-label{font-size:0.7rem;font-weight:500;transition:color 0.3s;}
+.fstep-label.active{color:var(–text);}
+.fstep-label.pending{color:var(–text3);}
+.fstep-line{flex:1;height:1px;background:var(–border);margin:0 8px;}
+.fstep-line.done{background:var(–green);}
+.form-body{padding:20px 24px;}
+.form-section-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(–text3);font-weight:700;margin-bottom:14px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-row.single{grid-template-columns:1fr;}
+.form-row.triple{grid-template-columns:1fr 1fr 1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:0.68rem;color:var(–text2);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
+.field input,.field select,.field textarea{background:var(–surface2);border:1px solid var(–border2);border-radius:var(–r-sm);padding:9px 12px;font-size:0.82rem;color:var(–text);font-family:‘DM Sans’,sans-serif;outline:none;transition:border-color 0.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(–blue);box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
+.field select option{background:var(–surface2);}
+.field textarea{resize:none;}
+.field.required label::after{content:’ *’;color:var(–red);}
+.form-footer{padding:16px 24px;border-top:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;position:sticky;bottom:0;background:var(–surface);}
+.btn{padding:8px 20px;border-radius:var(–r-sm);font-size:0.8rem;font-weight:600;cursor:pointer;border:1px solid transparent;font-family:‘DM Sans’,sans-serif;transition:all 0.15s;}
+.btn-ghost{background:transparent;border-color:var(–border2);color:var(–text2);}
+.btn-ghost:hover{background:var(–surface3);}
+.btn-primary{background:var(–blue2);color:white;}
+.btn-primary:hover{background:var(–blue);}
+.btn-success{background:var(–green);color:white;}
+.btn-danger{background:var(–red);color:white;}
+
+/* SUCCESS FLASH */
+.success-card{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(16,185,129,0.05));border:1px solid rgba(16,185,129,0.25);border-radius:var(–r);padding:20px;display:flex;align-items:center;gap:16px;animation:slideIn 0.4s ease;margin-bottom:16px;}
+@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.sc-icon{font-size:2rem;}
+.sc-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.95rem;color:var(–green);}
+.sc-sub{font-size:0.75rem;color:var(–text2);margin-top:3px;}
+
+/* COD TIMELINE */
+.cod-timeline{display:flex;gap:0;margin-bottom:16px;}
+.ct-stage{flex:1;text-align:center;position:relative;}
+.ct-stage::after{content:’’;position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(–border);}
+.ct-stage:last-child::after{display:none;}
+.ct-stage.done::after{background:var(–green);}
+.ct-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(–border);background:var(–surface2);display:flex;align-items:center;justify-content:center;font-size:0.7rem;margin:0 auto 6px;position:relative;z-index:1;}
+.ct-stage.done .ct-dot{background:var(–green);border-color:var(–green);color:white;}
+.ct-stage.active .ct-dot{background:var(–blue2);border-color:var(–blue);color:white;box-shadow:0 0 10px rgba(37,99,235,0.4);}
+.ct-lbl{font-size:0.65rem;color:var(–text2);}
+.ct-count{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1.1rem;margin-top:4px;}
 
 /* ALERT ITEMS */
-.alert-row{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(–border);}
-.alert-row:last-child{border-bottom:none;}
-.alert-ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;}
-.alert-txt{font-size:0.72rem;color:var(–text);line-height:1.4;}
-.alert-time{font-size:0.62rem;color:var(–text2);margin-top:2px;}
+.alert-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(–border);}
+.alert-item:last-child{border-bottom:none;}
+.ai-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
+.ai-text{font-size:0.75rem;line-height:1.4;}
+.ai-time{font-size:0.62rem;color:var(–text3);margin-top:3px;}
 
-/* SECTION SYSTEM */
-.section{display:none;}
-.section.active{display:block;}
+/* TOP LIST */
+.top-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(–border);}
+.top-item:last-child{border-bottom:none;}
+.ti-rank{font-family:‘JetBrains Mono’,monospace;font-size:0.68rem;color:var(–text3);width:16px;}
+.ti-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:white;flex-shrink:0;}
+.ti-info{flex:1;}
+.ti-name{font-size:0.76rem;font-weight:600;}
+.ti-sub{font-size:0.62rem;color:var(–text2);}
+.ti-val{font-family:‘JetBrains Mono’,monospace;font-size:0.8rem;font-weight:600;}
 
-/* PLATFORM HEADER BANNER */
-.platform-banner{border-radius:12px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
-.pb-left h2{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.2rem;}
-.pb-left p{font-size:0.72rem;opacity:0.7;margin-top:3px;}
-.pb-right{text-align:right;}
-.pb-right .big{font-family:‘Syne’,sans-serif;font-weight:800;font-size:2rem;line-height:1;}
-.pb-right .sub{font-size:0.68rem;opacity:0.7;margin-top:3px;}
+/* CHART */
+.chart-wrap{position:relative;width:100%;}
 
-/* DONUT LEGEND */
-.donut-legend{display:flex;flex-direction:column;gap:8px;justify-content:center;}
-.dl-item{display:flex;align-items:center;gap:8px;}
-.dl-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-.dl-label{font-size:0.72rem;color:var(–text2);}
-.dl-val{margin-left:auto;font-family:‘IBM Plex Mono’,monospace;font-size:0.72rem;font-weight:600;color:var(–text);}
+/* PLATFORM BANNER */
+.platform-banner{border-radius:var(–r);padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;border:1px solid;}
+.pb-l h2{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.1rem;}
+.pb-l p{font-size:0.72rem;margin-top:3px;opacity:0.65;}
+.pb-r{text-align:right;}
+.pb-r .big{font-family:‘Syne’,sans-serif;font-weight:800;font-size:2rem;line-height:1;}
+.pb-r .small{font-size:0.65rem;opacity:0.6;margin-top:3px;}
+
+/* SECTION HEADER */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sec-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1rem;}
+.sec-sub{font-size:0.75rem;color:var(–text3);margin-top:2px;}
+
+/* RESTRICTED NOTICE */
+.restricted{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:var(–r-sm);padding:10px 14px;font-size:0.75rem;color:var(–text2);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
 </style>
 
 </head>
 <body>
 
+<!-- ROLE SWITCHER -->
+
+<div class="role-bar">
+  <span class="role-bar-label">Switch Role:</span>
+  <div class="role-pill active" onclick="setRole('ceo',this)"><span class="rp-dot"></span>CEO / Owner</div>
+  <div class="role-pill" onclick="setRole('gm',this)"><span class="rp-dot"></span>General Manager</div>
+  <div class="role-pill" onclick="setRole('finance-ctrl',this)"><span class="rp-dot"></span>Finance Controller</div>
+  <div class="role-pill" onclick="setRole('cod-officer',this)"><span class="rp-dot"></span>COD Officer</div>
+  <div class="role-pill" onclick="setRole('hr-lead',this)"><span class="rp-dot"></span>HR Lead</div>
+  <div class="role-pill" onclick="setRole('hr-officer',this)"><span class="rp-dot"></span>HR Officer</div>
+  <div class="role-pill" onclick="setRole('hr-recruitment',this)"><span class="rp-dot"></span>HR Recruitment</div>
+  <div class="role-pill" onclick="setRole('head-ops',this)"><span class="rp-dot"></span>Head of Operations</div>
+  <div class="role-pill" onclick="setRole('account-mgr',this)"><span class="rp-dot"></span>Account Mgr (Keeta)</div>
+  <div class="role-pill" onclick="setRole('supervisor',this)"><span class="rp-dot"></span>Supervisor</div>
+  <div class="role-pill" onclick="setRole('oct-lead',this)"><span class="rp-dot"></span>OCT Lead</div>
+  <div class="role-pill" onclick="setRole('legal',this)"><span class="rp-dot"></span>Legal & Gov Affairs</div>
+</div>
+
+<!-- APP -->
+
+<div class="app">
+
 <!-- SIDEBAR -->
 
 <div class="sidebar">
-  <div class="logo">
-    <div class="logo-icon">CX</div>
-    <div><div class="logo-text">CourierX</div><div class="logo-sub">Operations System</div></div>
+  <div class="sidebar-logo">
+    <div class="logo-mark">CX</div>
+    <div><div class="logo-text">CourierX</div><div class="logo-sub">Operations Platform</div></div>
   </div>
-  <div class="role-badge">
-    <div class="role-name">CEO / Owner</div>
-    <div class="role-title">Full System Access</div>
+  <div class="sidebar-role">
+    <div class="sr-level" id="srLevel">Level 1</div>
+    <div class="sr-name" id="srName">CEO / Owner</div>
+    <div class="sr-access" id="srAccess">Full System Access</div>
   </div>
-  <nav class="nav">
-    <div class="nav-section">Overview</div>
-    <div class="nav-item active" onclick="nav(this,'dashboard','CEO Dashboard')"><span class="icon">⬛</span> Dashboard</div>
-    <div class="nav-item" onclick="nav(this,'operations','Live Operations')"><span class="icon">🚴</span> Operations</div>
-    <div class="nav-section">Management</div>
-    <div class="nav-item" onclick="nav(this,'drivers','Driver Management')"><span class="icon">👥</span> Drivers</div>
-    <div class="nav-item" onclick="nav(this,'hr','HR & Compliance')"><span class="icon">📋</span> HR & Compliance<span class="nav-badge">7</span></div>
-    <div class="nav-item" onclick="nav(this,'finance','Finance & COD')"><span class="icon">💰</span> Finance & COD<span class="nav-badge">3</span></div>
-    <div class="nav-item" onclick="nav(this,'crm','CRM & Tickets')"><span class="icon">💬</span> CRM & Tickets</div>
-    <div class="nav-section">Platforms</div>
-    <div class="nav-item" onclick="nav(this,'keeta','Keeta Platform')" style="color:var(--keeta)"><span class="icon">🔶</span> Keeta</div>
-    <div class="nav-item" onclick="nav(this,'jahez','Jahez Platform')" style="color:var(--jahez)"><span class="icon">🟣</span> Jahez</div>
-    <div class="nav-item" onclick="nav(this,'ninja','Ninja Platform')" style="color:var(--ninja)"><span class="icon">🔵</span> Ninja</div>
-    <div class="nav-item" onclick="nav(this,'noon','Noon Platform')" style="color:var(--noon)"><span class="icon">🟡</span> Noon</div>
-    <div class="nav-section">System</div>
-    <div class="nav-item"><span class="icon">📊</span> Reports</div>
-    <div class="nav-item"><span class="icon">🔒</span> Security Logs</div>
-  </nav>
-  <div class="sidebar-bottom">
-    <div class="user-row">
-      <div class="avatar">MK</div>
-      <div class="user-info"><div class="name">Mohammed K.</div><div class="role">Owner / CEO</div></div>
+  <nav class="nav" id="sidebarNav"></nav>
+  <div class="sidebar-user">
+    <div class="su-row">
+      <div class="su-av" id="userAv">MK</div>
+      <div><div class="su-name" id="userName">Mohammed K.</div><div class="su-role" id="userRole">CEO / Owner</div></div>
     </div>
   </div>
 </div>
@@ -218,622 +353,986 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 
 <div class="main">
   <div class="topbar">
-    <div class="page-title" id="pageTitle">CEO Dashboard</div>
-    <div class="topbar-right">
-      <span class="live"><span class="live-dot"></span>Live</span>
-      <span class="time-display" id="clock"></span>
-      <div class="alert-btn">🔔<div class="alert-dot"></div></div>
+    <div class="tb-left">
+      <div class="tb-title" id="pageTitle">CEO Dashboard</div>
+    </div>
+    <div class="tb-right">
+      <span class="tb-live"><span class="live-dot"></span>Live</span>
+      <span class="tb-clock" id="clock"></span>
+      <button class="tb-btn primary" onclick="openForm(currentRole)" id="addBtn">+ Add Driver</button>
+      <div class="notif-btn">🔔<div class="notif-dot"></div></div>
     </div>
   </div>
 
-  <div class="content">
-
-  <!-- ═══════════════════════════════════════════════ CEO DASHBOARD ══ -->
-
-  <div class="section active" id="sec-dashboard">
-
-```
-<!-- Platform filter tabs -->
-<div class="platform-tabs">
-  <div class="ptab active" data-p="all" onclick="filterDash(this,'all')">🏢 All Platforms</div>
-  <div class="ptab" data-p="keeta" onclick="filterDash(this,'keeta')">🔶 Keeta</div>
-  <div class="ptab" data-p="jahez" onclick="filterDash(this,'jahez')">🟣 Jahez</div>
-  <div class="ptab" data-p="ninja" onclick="filterDash(this,'ninja')">🔵 Ninja</div>
-  <div class="ptab" data-p="noon" onclick="filterDash(this,'noon')">🟡 Noon</div>
+  <div class="content" id="mainContent"></div>
+</div>
 </div>
 
-<!-- KPIs -->
-<div class="kpi-grid" id="dashKpis">
-  <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Active Drivers</div><div class="kpi-value" id="kpiDrivers">1,247</div><div class="kpi-sub"><span class="up">↑ 23</span> from yesterday</div></div>
-  <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">COD Outstanding</div><div class="kpi-value" id="kpiCod">BD 18.4K</div><div class="kpi-sub"><span class="down">↑ BD 2.1K</span> unsettled</div></div>
-  <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Compliance Alerts</div><div class="kpi-value" id="kpiAlerts">34</div><div class="kpi-sub"><span class="down">7</span> expiring this week</div></div>
-  <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">Avg Performance</div><div class="kpi-value" id="kpiPerf">82%</div><div class="kpi-sub"><span class="up">↑ 3%</span> vs last week</div></div>
+<!-- FORM OVERLAY -->
+
+<div class="form-overlay" id="formOverlay" style="display:none" onclick="if(event.target===this)closeForm()">
+  <div class="form-card" id="formCard"></div>
 </div>
-
-<!-- Charts row 1 -->
-<div class="grid-2-1">
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">📈 COD Revenue — Last 7 Days</div><div class="panel-action">Export</div></div>
-    <div class="panel-body"><div class="chart-wrap" style="height:180px"><canvas id="lineChart"></canvas></div></div>
-  </div>
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">🍩 Drivers by Platform</div></div>
-    <div class="panel-body" style="display:flex;align-items:center;gap:16px;">
-      <div class="chart-wrap" style="height:150px;width:150px;flex-shrink:0"><canvas id="donutChart"></canvas></div>
-      <div class="donut-legend">
-        <div class="dl-item"><div class="dl-dot" style="background:var(--keeta)"></div><div class="dl-label">Keeta</div><div class="dl-val">340</div></div>
-        <div class="dl-item"><div class="dl-dot" style="background:var(--jahez)"></div><div class="dl-label">Jahez</div><div class="dl-val">512</div></div>
-        <div class="dl-item"><div class="dl-dot" style="background:var(--ninja)"></div><div class="dl-label">Ninja</div><div class="dl-val">218</div></div>
-        <div class="dl-item"><div class="dl-dot" style="background:var(--noon)"></div><div class="dl-label">Noon</div><div class="dl-val">177</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Charts row 2 -->
-<div class="grid-3">
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">⚡ Performance by Platform</div></div>
-    <div class="panel-body"><div class="chart-wrap" style="height:160px"><canvas id="barChart"></canvas></div></div>
-  </div>
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">📊 Driver Status Distribution</div></div>
-    <div class="panel-body"><div class="chart-wrap" style="height:160px"><canvas id="statusChart"></canvas></div></div>
-  </div>
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">🕐 Hourly Order Volume</div></div>
-    <div class="panel-body"><div class="chart-wrap" style="height:160px"><canvas id="areaChart"></canvas></div></div>
-  </div>
-</div>
-
-<!-- Top Supervisors + Top Drivers + Alerts -->
-<div class="grid-3">
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">🏆 Top Supervisors</div><div class="panel-action">All platforms</div></div>
-    <div class="panel-body">
-      <div class="sup-card">
-        <div class="sup-rank">1</div>
-        <div class="sup-avatar" style="background:linear-gradient(135deg,var(--keeta),#ff9a6b)">SA</div>
-        <div class="sup-info"><div class="sup-name">Supervisor Ahmed</div><div class="sup-meta">Keeta · 120 drivers</div></div>
-        <div class="sup-score" style="color:var(--green)">94%</div>
-      </div>
-      <div class="sup-card">
-        <div class="sup-rank">2</div>
-        <div class="sup-avatar" style="background:linear-gradient(135deg,var(--ninja),#38bdf8)">SK</div>
-        <div class="sup-info"><div class="sup-name">Supervisor Khalid</div><div class="sup-meta">Ninja · 118 drivers</div></div>
-        <div class="sup-score" style="color:var(--green)">91%</div>
-      </div>
-      <div class="sup-card">
-        <div class="sup-rank">3</div>
-        <div class="sup-avatar" style="background:linear-gradient(135deg,var(--jahez),#a78bfa)">SM</div>
-        <div class="sup-info"><div class="sup-name">Supervisor Mohammed</div><div class="sup-meta">Jahez · 122 drivers</div></div>
-        <div class="sup-score" style="color:var(--green)">89%</div>
-      </div>
-      <div class="sup-card">
-        <div class="sup-rank">4</div>
-        <div class="sup-avatar" style="background:linear-gradient(135deg,var(--noon),#fbbf24)">SF</div>
-        <div class="sup-info"><div class="sup-name">Supervisor Fahad</div><div class="sup-meta">Noon · 115 drivers</div></div>
-        <div class="sup-score" style="color:var(--yellow)">78%</div>
-      </div>
-      <div class="sup-card">
-        <div class="sup-rank">5</div>
-        <div class="sup-avatar" style="background:linear-gradient(135deg,#64748b,#94a3b8)">SO</div>
-        <div class="sup-info"><div class="sup-name">Supervisor Omar</div><div class="sup-meta">Jahez · 119 drivers</div></div>
-        <div class="sup-score" style="color:var(--yellow)">74%</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">⭐ Top Drivers</div><div class="panel-action">This month</div></div>
-    <div class="panel-body">
-      <div class="drv-card">
-        <div class="drv-num">1</div>
-        <div class="drv-av" style="background:linear-gradient(135deg,var(--ninja),#38bdf8)">RK</div>
-        <div class="drv-info"><div class="drv-name">Raj Kumar Singh</div><div class="drv-sub">Ninja · DRV-0156</div></div>
-        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--green)">91%</div><div style="font-size:0.6rem;color:var(--text2)">218 orders</div></div>
-      </div>
-      <div class="drv-card">
-        <div class="drv-num">2</div>
-        <div class="drv-av" style="background:linear-gradient(135deg,var(--keeta),#ff9a6b)">AA</div>
-        <div class="drv-info"><div class="drv-name">Ahmed Al-Rashidi</div><div class="drv-sub">Keeta · DRV-0041</div></div>
-        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--green)">87%</div><div style="font-size:0.6rem;color:var(--text2)">204 orders</div></div>
-      </div>
-      <div class="drv-card">
-        <div class="drv-num">3</div>
-        <div class="drv-av" style="background:linear-gradient(135deg,var(--noon),#fbbf24)">FA</div>
-        <div class="drv-info"><div class="drv-name">Faisal Al-Ahmad</div><div class="drv-sub">Noon · DRV-0089</div></div>
-        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--green)">85%</div><div style="font-size:0.6rem;color:var(--text2)">197 orders</div></div>
-      </div>
-      <div class="drv-card">
-        <div class="drv-num">4</div>
-        <div class="drv-av" style="background:linear-gradient(135deg,var(--jahez),#a78bfa)">MA</div>
-        <div class="drv-info"><div class="drv-name">Mohammed Al-Ali</div><div class="drv-sub">Jahez · DRV-0203</div></div>
-        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--green)">83%</div><div style="font-size:0.6rem;color:var(--text2)">189 orders</div></div>
-      </div>
-      <div class="drv-card">
-        <div class="drv-num">5</div>
-        <div class="drv-av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">PN</div>
-        <div class="drv-info"><div class="drv-name">Priya Nair</div><div class="drv-sub">Ninja · DRV-0312</div></div>
-        <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:0.78rem;font-weight:700;color:var(--yellow)">79%</div><div style="font-size:0.6rem;color:var(--text2)">176 orders</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">🚨 Live Alerts</div><div class="panel-action">View all</div></div>
-    <div class="panel-body">
-      <div class="alert-row">
-        <div class="alert-ic" style="background:var(--red-dim)">🔴</div>
-        <div><div class="alert-txt">Ahmed K. (Jahez) — 3rd warning. Suspension recommended.</div><div class="alert-time">2 mins ago</div></div>
-      </div>
-      <div class="alert-row">
-        <div class="alert-ic" style="background:var(--yellow-dim)">🟡</div>
-        <div><div class="alert-txt">COD mismatch — Keeta · BD 240 vs BD 190 screenshot</div><div class="alert-time">14 mins ago</div></div>
-      </div>
-      <div class="alert-row">
-        <div class="alert-ic" style="background:var(--red-dim)">📄</div>
-        <div><div class="alert-txt">7 driver visas expiring within 14 days</div><div class="alert-time">1 hour ago</div></div>
-      </div>
-      <div class="alert-row">
-        <div class="alert-ic" style="background:var(--yellow-dim)">⚡</div>
-        <div><div class="alert-txt">Jahez Supervisor B — 89/120 drivers active (low)</div><div class="alert-time">2 hours ago</div></div>
-      </div>
-      <div class="alert-row">
-        <div class="alert-ic" style="background:var(--blue-dim)">💬</div>
-        <div><div class="alert-txt">12 unresolved CRM tickets older than 24h</div><div class="alert-time">3 hours ago</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-```
-
-  </div>
-
-  <!-- ═══════════════════════════════════════════════ PLATFORM PAGES ══ -->
-
-  <!-- KEETA -->
-
-  <div class="section" id="sec-keeta">
-    <div class="platform-banner" style="background:linear-gradient(135deg,rgba(255,107,53,0.15),rgba(255,107,53,0.05));border:1px solid rgba(255,107,53,0.2);">
-      <div class="pb-left"><h2 style="color:var(--keeta)">🔶 Keeta Platform</h2><p style="color:var(--text2)">Account Manager: Ali Mohammed · 3 Supervisors</p></div>
-      <div class="pb-right" style="color:var(--keeta)"><div class="big">340</div><div class="sub">Active Drivers</div></div>
-    </div>
-    <div class="kpi-grid">
-      <div class="kpi-card" style="--ac:var(--keeta)"><div class="kpi-label">Active Drivers</div><div class="kpi-value">340</div><div class="kpi-sub"><span class="up">↑ 8</span> today</div></div>
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">COD Today</div><div class="kpi-value">BD 4.2K</div><div class="kpi-sub"><span class="up">↑ 12%</span> vs yesterday</div></div>
-      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Performance</div><div class="kpi-value">84%</div><div class="kpi-sub"><span class="up">↑ 2%</span> this week</div></div>
-      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Open Alerts</div><div class="kpi-value">6</div><div class="kpi-sub"><span class="down">2</span> critical</div></div>
-    </div>
-    <div class="grid-2">
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">📈 Keeta COD — This Week</div></div>
-        <div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="keetaLine"></canvas></div></div>
-      </div>
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">👥 Supervisors — Keeta</div></div>
-        <div class="panel-body">
-          <div class="sup-card">
-            <div class="sup-rank">1</div>
-            <div class="sup-avatar" style="background:linear-gradient(135deg,var(--keeta),#ff9a6b)">SA</div>
-            <div class="sup-info"><div class="sup-name">Supervisor Ahmed</div><div class="sup-meta">120 drivers · 114 active</div></div>
-            <div><div class="sup-score" style="color:var(--green)">94%</div><div style="font-size:0.6rem;color:var(--text2)">top performer</div></div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-rank">2</div>
-            <div class="sup-avatar" style="background:linear-gradient(135deg,#f97316,#fb923c)">SH</div>
-            <div class="sup-info"><div class="sup-name">Supervisor Hassan</div><div class="sup-meta">118 drivers · 109 active</div></div>
-            <div><div class="sup-score" style="color:var(--yellow)">81%</div><div style="font-size:0.6rem;color:var(--text2)">on track</div></div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-rank">3</div>
-            <div class="sup-avatar" style="background:linear-gradient(135deg,#dc2626,#ef4444)">SR</div>
-            <div class="sup-info"><div class="sup-name">Supervisor Rami</div><div class="sup-meta">102 drivers · 88 active</div></div>
-            <div><div class="sup-score" style="color:var(--red)">71%</div><div style="font-size:0.6rem;color:var(--red)">needs attention</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">⭐ Top Drivers — Keeta</div><div class="panel-action">View all 340</div></div>
-      <table class="data-table">
-        <thead><tr><th>#</th><th>Driver</th><th>Supervisor</th><th>Orders</th><th>Performance</th><th>COD Today</th><th>Last Login</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">1</td><td><div style="font-weight:600">Ahmed Al-Rashidi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0041</div></td><td>Sup. Ahmed</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">204</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-num">87%</div></div></td><td><span class="badge bg">✓ BD 124.50</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">08:32 AM</td><td><span class="badge bg">Active</span></td></tr>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">2</td><td><div style="font-weight:600">Ali Hassan</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0271</div></td><td>Sup. Hassan</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">189</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:82%;background:var(--green)"></div></div><div class="score-num">82%</div></div></td><td><span class="badge bg">✓ BD 98.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">09:14 AM</td><td><span class="badge bg">Active</span></td></tr>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">3</td><td><div style="font-weight:600">Khalid Al-Sayed</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0088</div></td><td>Sup. Rami</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">171</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:79%;background:var(--yellow)"></div></div><div class="score-num">79%</div></div></td><td><span class="badge by">⏳ Pending</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">10:02 AM</td><td><span class="badge by">Warning</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- JAHEZ -->
-
-  <div class="section" id="sec-jahez">
-    <div class="platform-banner" style="background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(139,92,246,0.05));border:1px solid rgba(139,92,246,0.2);">
-      <div class="pb-left"><h2 style="color:var(--jahez)">🟣 Jahez Platform</h2><p style="color:var(--text2)">Account Manager: Tariq Al-Dosari · 4 Supervisors</p></div>
-      <div class="pb-right" style="color:var(--jahez)"><div class="big">512</div><div class="sub">Active Drivers</div></div>
-    </div>
-    <div class="kpi-grid">
-      <div class="kpi-card" style="--ac:var(--jahez)"><div class="kpi-label">Active Drivers</div><div class="kpi-value">512</div><div class="kpi-sub"><span class="up">↑ 11</span> today</div></div>
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">COD Today</div><div class="kpi-value">BD 6.8K</div><div class="kpi-sub"><span class="up">↑ 8%</span> vs yesterday</div></div>
-      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Performance</div><div class="kpi-value">79%</div><div class="kpi-sub"><span class="down">↓ 1%</span> this week</div></div>
-      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Open Alerts</div><div class="kpi-value">11</div><div class="kpi-sub"><span class="down">4</span> critical</div></div>
-    </div>
-    <div class="grid-2">
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">📈 Jahez COD — This Week</div></div>
-        <div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="jahezLine"></canvas></div></div>
-      </div>
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">👥 Supervisors — Jahez</div></div>
-        <div class="panel-body">
-          <div class="sup-card"><div class="sup-rank">1</div><div class="sup-avatar" style="background:linear-gradient(135deg,var(--jahez),#a78bfa)">SM</div><div class="sup-info"><div class="sup-name">Supervisor Mohammed</div><div class="sup-meta">122 drivers · 118 active</div></div><div><div class="sup-score" style="color:var(--green)">89%</div></div></div>
-          <div class="sup-card"><div class="sup-rank">2</div><div class="sup-avatar" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6)">SO</div><div class="sup-info"><div class="sup-name">Supervisor Omar</div><div class="sup-meta">119 drivers · 107 active</div></div><div><div class="sup-score" style="color:var(--yellow)">74%</div></div></div>
-          <div class="sup-card"><div class="sup-rank">3</div><div class="sup-avatar" style="background:linear-gradient(135deg,#6d28d9,#7c3aed)">SY</div><div class="sup-info"><div class="sup-name">Supervisor Yousef</div><div class="sup-meta">121 drivers · 98 active</div></div><div><div class="sup-score" style="color:var(--yellow)">72%</div></div></div>
-          <div class="sup-card"><div class="sup-rank">4</div><div class="sup-avatar" style="background:linear-gradient(135deg,#dc2626,#ef4444)">SN</div><div class="sup-info"><div class="sup-name">Supervisor Nasser</div><div class="sup-meta">150 drivers · 116 active</div></div><div><div class="sup-score" style="color:var(--red)">65%</div><div style="font-size:0.6rem;color:var(--red)">⚠ critical</div></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">⭐ Top Drivers — Jahez</div><div class="panel-action">View all 512</div></div>
-      <table class="data-table">
-        <thead><tr><th>#</th><th>Driver</th><th>Supervisor</th><th>Orders</th><th>Performance</th><th>COD Today</th><th>Last Login</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">1</td><td><div style="font-weight:600">Mohammed Al-Ali</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0203</div></td><td>Sup. Mohammed</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">189</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:83%;background:var(--green)"></div></div><div class="score-num">83%</div></div></td><td><span class="badge bg">✓ BD 211.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">07:58 AM</td><td><span class="badge bg">Active</span></td></tr>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">2</td><td><div style="font-weight:600">Samir Al-Zahra</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0334</div></td><td>Sup. Omar</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">165</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:77%;background:var(--yellow)"></div></div><div class="score-num">77%</div></div></td><td><span class="badge by">⏳ Pending</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">08:44 AM</td><td><span class="badge by">Warning</span></td></tr>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">3</td><td><div style="font-weight:600">Ahmed K. (flagged)</div><div style="font-size:0.6rem;color:var(--red)">DRV-0089 · 3rd warning</div></td><td>Sup. Nasser</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">82</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">✕ Missing</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red)">Yesterday</td><td><span class="badge br">⚠ Suspended</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- NINJA -->
-
-  <div class="section" id="sec-ninja">
-    <div class="platform-banner" style="background:linear-gradient(135deg,rgba(6,182,212,0.15),rgba(6,182,212,0.05));border:1px solid rgba(6,182,212,0.2);">
-      <div class="pb-left"><h2 style="color:var(--ninja)">🔵 Ninja Platform</h2><p style="color:var(--text2)">Account Manager: Sara Al-Mansour · 2 Supervisors</p></div>
-      <div class="pb-right" style="color:var(--ninja)"><div class="big">218</div><div class="sub">Active Drivers</div></div>
-    </div>
-    <div class="kpi-grid">
-      <div class="kpi-card" style="--ac:var(--ninja)"><div class="kpi-label">Active Drivers</div><div class="kpi-value">218</div><div class="kpi-sub"><span class="up">↑ 4</span> today</div></div>
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">COD Today</div><div class="kpi-value">BD 2.9K</div><div class="kpi-sub"><span class="up">↑ 15%</span> vs yesterday</div></div>
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">Performance</div><div class="kpi-value">88%</div><div class="kpi-sub"><span class="up">↑ 4%</span> this week</div></div>
-      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Open Alerts</div><div class="kpi-value">3</div><div class="kpi-sub">all minor</div></div>
-    </div>
-    <div class="grid-2">
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">📈 Ninja COD — This Week</div></div>
-        <div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="ninjaLine"></canvas></div></div>
-      </div>
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">👥 Supervisors — Ninja</div></div>
-        <div class="panel-body">
-          <div class="sup-card"><div class="sup-rank">1</div><div class="sup-avatar" style="background:linear-gradient(135deg,var(--ninja),#38bdf8)">SK</div><div class="sup-info"><div class="sup-name">Supervisor Khalid</div><div class="sup-meta">118 drivers · 116 active</div></div><div><div class="sup-score" style="color:var(--green)">91%</div></div></div>
-          <div class="sup-card"><div class="sup-rank">2</div><div class="sup-avatar" style="background:linear-gradient(135deg,#0891b2,#06b6d4)">SZ</div><div class="sup-info"><div class="sup-name">Supervisor Ziad</div><div class="sup-meta">100 drivers · 96 active</div></div><div><div class="sup-score" style="color:var(--green)">85%</div></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">⭐ Top Drivers — Ninja</div><div class="panel-action">View all 218</div></div>
-      <table class="data-table">
-        <thead><tr><th>#</th><th>Driver</th><th>Supervisor</th><th>Orders</th><th>Performance</th><th>COD Today</th><th>Last Login</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">1</td><td><div style="font-weight:600">Raj Kumar Singh</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0156</div></td><td>Sup. Khalid</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">218</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:91%;background:var(--green)"></div></div><div class="score-num">91%</div></div></td><td><span class="badge bg">✓ BD 87.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">09:01 AM</td><td><span class="badge bg">Active</span></td></tr>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">2</td><td><div style="font-weight:600">Priya Nair</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0312</div></td><td>Sup. Ziad</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">176</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:79%;background:var(--yellow)"></div></div><div class="score-num">79%</div></div></td><td><span class="badge bg">✓ BD 54.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">09:45 AM</td><td><span class="badge bg">Active</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- NOON -->
-
-  <div class="section" id="sec-noon">
-    <div class="platform-banner" style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));border:1px solid rgba(245,158,11,0.2);">
-      <div class="pb-left"><h2 style="color:var(--noon)">🟡 Noon Platform</h2><p style="color:var(--text2)">Account Manager: Waleed Al-Hamdan · 2 Supervisors</p></div>
-      <div class="pb-right" style="color:var(--noon)"><div class="big">177</div><div class="sub">Active Drivers</div></div>
-    </div>
-    <div class="kpi-grid">
-      <div class="kpi-card" style="--ac:var(--noon)"><div class="kpi-label">Active Drivers</div><div class="kpi-value">177</div><div class="kpi-sub"><span class="up">↑ 2</span> today</div></div>
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">COD Today</div><div class="kpi-value">BD 2.1K</div><div class="kpi-sub"><span class="up">↑ 5%</span> vs yesterday</div></div>
-      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Performance</div><div class="kpi-value">81%</div><div class="kpi-sub"><span class="up">↑ 1%</span> this week</div></div>
-      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Open Alerts</div><div class="kpi-value">5</div><div class="kpi-sub"><span class="down">1</span> critical</div></div>
-    </div>
-    <div class="grid-2">
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">📈 Noon COD — This Week</div></div>
-        <div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="noonLine"></canvas></div></div>
-      </div>
-      <div class="panel">
-        <div class="panel-header"><div class="panel-title">👥 Supervisors — Noon</div></div>
-        <div class="panel-body">
-          <div class="sup-card"><div class="sup-rank">1</div><div class="sup-avatar" style="background:linear-gradient(135deg,var(--noon),#fbbf24)">SF</div><div class="sup-info"><div class="sup-name">Supervisor Fahad</div><div class="sup-meta">90 drivers · 88 active</div></div><div><div class="sup-score" style="color:var(--green)">84%</div></div></div>
-          <div class="sup-card"><div class="sup-rank">2</div><div class="sup-avatar" style="background:linear-gradient(135deg,#d97706,#f59e0b)">SB</div><div class="sup-info"><div class="sup-name">Supervisor Bader</div><div class="sup-meta">87 drivers · 78 active</div></div><div><div class="sup-score" style="color:var(--yellow)">75%</div></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">⭐ Top Drivers — Noon</div><div class="panel-action">View all 177</div></div>
-      <table class="data-table">
-        <thead><tr><th>#</th><th>Driver</th><th>Supervisor</th><th>Orders</th><th>Performance</th><th>COD Today</th><th>Last Login</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">1</td><td><div style="font-weight:600">Faisal Al-Ahmad</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0089</div></td><td>Sup. Fahad</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">197</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:85%;background:var(--green)"></div></div><div class="score-num">85%</div></div></td><td><span class="badge bg">✓ BD 143.00</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">08:10 AM</td><td><span class="badge bg">Active</span></td></tr>
-          <tr><td style="color:var(--text3);font-family:'IBM Plex Mono',monospace">2</td><td><div style="font-weight:600">Faisal Al-Mutairi</div><div style="font-size:0.6rem;color:var(--red)">DRV-0203 · Expired CPR</div></td><td>Sup. Bader</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">0</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">✕ Missing</span></td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red)">Yesterday</td><td><span class="badge br">Suspended</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- OPERATIONS -->
-
-  <div class="section" id="sec-operations">
-    <div class="kpi-grid">
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">On Shift Now</div><div class="kpi-value">847</div></div>
-      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Not Logged In</div><div class="kpi-value">53</div></div>
-      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Delayed Today</div><div class="kpi-value">29</div></div>
-      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Orders Complete</div><div class="kpi-value">4,821</div></div>
-    </div>
-    <div class="grid-2" style="margin-bottom:12px">
-      <div class="panel"><div class="panel-header"><div class="panel-title">⚡ Orders Per Hour</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="opsArea"></canvas></div></div></div>
-      <div class="panel"><div class="panel-header"><div class="panel-title">📊 Platform Activity Now</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="opsBar"></canvas></div></div></div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">🚴 Live Driver Activity</div><div class="live"><span class="live-dot"></span>Live</div></div>
-      <table class="data-table">
-        <thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Last Login</th><th>Shift</th><th>Orders</th><th>Score</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td><div style="font-weight:600">Ahmed Al-Rashidi</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Sup. Ahmed</td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">08:32 AM</td><td><span class="badge bg">On Shift</span></td><td style="font-family:'IBM Plex Mono',monospace">14</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-num">87%</div></div></td><td><span class="badge bg">🟢 Active</span></td></tr>
-          <tr><td><div style="font-weight:600">Mohammed Al-Zahra</div></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Sup. Nasser</td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--red)">Yesterday</td><td><span class="badge br">Not In</span></td><td style="font-family:'IBM Plex Mono',monospace">0</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">🔴 Absent</span></td></tr>
-          <tr><td><div style="font-weight:600">Raj Kumar Singh</div></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Sup. Khalid</td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">09:01 AM</td><td><span class="badge bg">On Shift</span></td><td style="font-family:'IBM Plex Mono',monospace">21</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:91%;background:var(--green)"></div></div><div class="score-num">91%</div></div></td><td><span class="badge bg">🟢 Active</span></td></tr>
-          <tr><td><div style="font-weight:600">Ali Hassan</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Sup. Hassan</td><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">10:17 AM</td><td><span class="badge bg">On Shift</span></td><td style="font-family:'IBM Plex Mono',monospace">9</td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:78%;background:var(--yellow)"></div></div><div class="score-num">78%</div></div></td><td><span class="badge by">🟡 Warning</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- DRIVERS -->
-
-  <div class="section" id="sec-drivers">
-    <div class="kpi-grid">
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">Active</div><div class="kpi-value">1,141</div></div>
-      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">On Warning</div><div class="kpi-value">63</div></div>
-      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Suspended</div><div class="kpi-value">18</div></div>
-      <div class="kpi-card" style="--ac:var(--text3)"><div class="kpi-label">Onboarding</div><div class="kpi-value">25</div></div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">Driver List</div><div class="panel-action">+ Add Driver</div></div>
-      <table class="data-table">
-        <thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Type</th><th>Performance</th><th>COD Today</th><th>Documents</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td><div style="font-weight:600">Ahmed Al-Rashidi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0041</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Sup. Ahmed</td><td><span class="badge bb">Local</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-num">87%</div></div></td><td><span class="badge bg">✓ Submitted</span></td><td><span class="badge bg">✓ Valid</span></td><td><span class="badge bg">Active</span></td></tr>
-          <tr><td><div style="font-weight:600">Mohammed Al-Zahra</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0089</div></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Sup. Nasser</td><td><span class="badge by">Offshore</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">✕ Missing</span></td><td><span class="badge br">❌ Expired</span></td><td><span class="badge br">Suspended</span></td></tr>
-          <tr><td><div style="font-weight:600">Raj Kumar Singh</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0156</div></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Sup. Khalid</td><td><span class="badge by">Offshore</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:91%;background:var(--green)"></div></div><div class="score-num">91%</div></div></td><td><span class="badge bg">✓ Submitted</span></td><td><span class="badge bg">✓ Valid</span></td><td><span class="badge bg">Active</span></td></tr>
-          <tr><td><div style="font-weight:600">Faisal Al-Mutairi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0203</div></td><td style="color:var(--noon);font-weight:600">Noon</td><td>Sup. Bader</td><td><span class="badge bb">Local</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:44%;background:var(--red)"></div></div><div class="score-num">44%</div></div></td><td><span class="badge br">✕ Missing</span></td><td><span class="badge br">❌ Expired</span></td><td><span class="badge br">Suspended</span></td></tr>
-          <tr><td><div style="font-weight:600">Ali Hassan</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0271</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Sup. Hassan</td><td><span class="badge bb">Local</span></td><td><div class="score-wrap"><div class="score-bar"><div class="score-fill" style="width:78%;background:var(--yellow)"></div></div><div class="score-num">78%</div></div></td><td><span class="badge bg">✓ Submitted</span></td><td><span class="badge by">⚠ Expiring</span></td><td><span class="badge by">Warning</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- HR -->
-
-  <div class="section" id="sec-hr">
-    <div class="kpi-grid">
-      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Expired Docs</div><div class="kpi-value">12</div></div>
-      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">Expiring ≤14 days</div><div class="kpi-value">22</div></div>
-      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Expiring ≤30 days</div><div class="kpi-value">47</div></div>
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">All Valid</div><div class="kpi-value">1,166</div></div>
-    </div>
-    <div class="grid-2" style="margin-bottom:12px">
-      <div class="panel"><div class="panel-header"><div class="panel-title">📊 Document Expiry by Type</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="hrBar"></canvas></div></div></div>
-      <div class="panel"><div class="panel-header"><div class="panel-title">📈 Compliance Trend — 30 Days</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="hrLine"></canvas></div></div></div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">🚨 Document Expiry Alerts</div><div class="panel-action">Export list</div></div>
-      <table class="data-table">
-        <thead><tr><th>Driver</th><th>Platform</th><th>Document</th><th>Expiry Date</th><th>Days Left</th><th>Status</th><th>HR Officer</th></tr></thead>
-        <tbody>
-          <tr><td><div style="font-weight:600">Mohammed Al-Zahra</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0089</div></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Visa</td><td>15 Mar 2026</td><td style="color:var(--red);font-weight:700;font-family:'IBM Plex Mono',monospace">7 days</td><td><span class="badge br">🔴 Critical</span></td><td>Sara H.</td></tr>
-          <tr><td><div style="font-weight:600">Priya Nair</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0312</div></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Driving License</td><td>18 Mar 2026</td><td style="color:var(--red);font-weight:700;font-family:'IBM Plex Mono',monospace">10 days</td><td><span class="badge br">🔴 Critical</span></td><td>Omar K.</td></tr>
-          <tr><td><div style="font-weight:600">Faisal Al-Mutairi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0203</div></td><td style="color:var(--noon);font-weight:600">Noon</td><td>CPR</td><td>1 Mar 2026</td><td style="color:var(--red);font-weight:700;font-family:'IBM Plex Mono',monospace">Expired</td><td><span class="badge br">❌ Expired</span></td><td>Sara H.</td></tr>
-          <tr><td><div style="font-weight:600">Ali Hassan</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0271</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Passport</td><td>22 Mar 2026</td><td style="color:var(--yellow);font-weight:700;font-family:'IBM Plex Mono',monospace">14 days</td><td><span class="badge by">🟡 Warning</span></td><td>Omar K.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- FINANCE -->
-
-  <div class="section" id="sec-finance">
-    <div class="cod-stages">
-      <div class="cod-stage"><div class="cod-num" style="color:var(--text2)">147</div><div class="cod-lbl">Pending</div></div>
-      <div class="cod-stage"><div class="cod-num" style="color:var(--green)">3,241</div><div class="cod-lbl">Approved</div></div>
-      <div class="cod-stage"><div class="cod-num" style="color:var(--red)">23</div><div class="cod-lbl">Flagged</div></div>
-      <div class="cod-stage"><div class="cod-num" style="color:var(--blue)">2,890</div><div class="cod-lbl">Settled</div></div>
-    </div>
-    <div class="grid-2" style="margin-bottom:12px">
-      <div class="panel"><div class="panel-header"><div class="panel-title">💰 COD by Platform — This Month</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="finBar"></canvas></div></div></div>
-      <div class="panel"><div class="panel-header"><div class="panel-title">📈 Settlement Rate — 30 Days</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="finLine"></canvas></div></div></div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">💰 COD Review Queue</div><div class="panel-action">Export</div></div>
-      <table class="data-table">
-        <thead><tr><th>Driver</th><th>Platform</th><th>Amount</th><th>Submitted</th><th>Screenshot</th><th>Status</th><th>Action</th></tr></thead>
-        <tbody>
-          <tr><td><div style="font-weight:600">Ahmed Al-Rashidi</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0041</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">BD 124.50</td><td>08:32 AM</td><td><span class="badge bg">✓ Uploaded</span></td><td><span class="badge by">⏳ Pending</span></td><td><div style="display:flex;gap:4px"><button style="background:var(--green-dim);border:1px solid var(--green);color:var(--green);border-radius:5px;padding:3px 8px;font-size:0.62rem;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;" onclick="this.textContent='✓ Done';this.style.opacity='0.5'">Approve</button><button style="background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:5px;padding:3px 8px;font-size:0.62rem;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Flag</button></div></td></tr>
-          <tr><td><div style="font-weight:600">Raj Kumar Singh</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0156</div></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">BD 87.00</td><td>09:14 AM</td><td><span class="badge bg">✓ Uploaded</span></td><td><span class="badge br">⚠ Flagged</span></td><td><div style="display:flex;gap:4px"><button style="background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:5px;padding:3px 8px;font-size:0.62rem;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Review</button></div></td></tr>
-          <tr><td><div style="font-weight:600">Ali Hassan</div><div style="font-size:0.6rem;color:var(--text2)">DRV-0271</div></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">BD 210.00</td><td>10:02 AM</td><td><span class="badge br">✕ Missing</span></td><td><span class="badge br">⚠ No Screenshot</span></td><td><div style="display:flex;gap:4px"><button style="background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:5px;padding:3px 8px;font-size:0.62rem;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;">Review</button></div></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- CRM -->
-
-  <div class="section" id="sec-crm">
-    <div class="kpi-grid">
-      <div class="kpi-card" style="--ac:var(--red)"><div class="kpi-label">Open Tickets</div><div class="kpi-value">38</div></div>
-      <div class="kpi-card" style="--ac:var(--yellow)"><div class="kpi-label">In Progress</div><div class="kpi-value">21</div></div>
-      <div class="kpi-card" style="--ac:var(--green)"><div class="kpi-label">Resolved Today</div><div class="kpi-value">64</div></div>
-      <div class="kpi-card" style="--ac:var(--blue)"><div class="kpi-label">Avg Response</div><div class="kpi-value">18m</div></div>
-    </div>
-    <div class="grid-2" style="margin-bottom:12px">
-      <div class="panel"><div class="panel-header"><div class="panel-title">📊 Tickets by Category</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="crmDonut"></canvas></div></div></div>
-      <div class="panel"><div class="panel-header"><div class="panel-title">📈 Ticket Volume — This Week</div></div><div class="panel-body"><div class="chart-wrap" style="height:170px"><canvas id="crmLine"></canvas></div></div></div>
-    </div>
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title">💬 Recent Tickets</div><div class="panel-action">View all</div></div>
-      <table class="data-table">
-        <thead><tr><th>Ticket</th><th>Driver</th><th>Platform</th><th>Category</th><th>Assigned</th><th>Open Since</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">#TKT-0821</td><td>Ahmed Al-Rashidi</td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Payment / COD</td><td>Finance Team</td><td>23 mins</td><td><span class="badge by">In Progress</span></td></tr>
-          <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">#TKT-0820</td><td>Raj Kumar Singh</td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Document / Visa</td><td>HR Officer</td><td>1h 12m</td><td><span class="badge br">Open</span></td></tr>
-          <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">#TKT-0819</td><td>Mohammed Al-Zahra</td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Platform Issue</td><td>Supervisor B</td><td>2h 04m</td><td><span class="badge br">Escalated</span></td></tr>
-          <tr><td style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem">#TKT-0818</td><td>Ali Hassan</td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Operations</td><td>Sup. Ahmed</td><td>3h 30m</td><td><span class="badge bg">Resolved</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  </div><!-- end content -->
-</div><!-- end main -->
 
 <script>
 // ── CLOCK ──
-function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB');}
-setInterval(tick,1000);tick();
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB');},1000);
+document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB');
 
-// ── NAVIGATION ──
-const titles={dashboard:'CEO Dashboard',operations:'Live Operations',drivers:'Driver Management',hr:'HR & Compliance',finance:'Finance & COD',crm:'CRM & Tickets',keeta:'Keeta Platform',jahez:'Jahez Platform',ninja:'Ninja Platform',noon:'Noon Platform'};
-function nav(el,id,title){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const sec=document.getElementById('sec-'+id);
-  if(sec){sec.classList.add('active');}
-  document.getElementById('pageTitle').textContent=title||titles[id]||id;
-  el.classList.add('active');
-  // lazy init charts
-  setTimeout(()=>initChartsForSection(id),50);
+// ── CHART DEFAULTS ──
+Chart.defaults.color='#94a3b8';
+Chart.defaults.borderColor='rgba(255,255,255,0.06)';
+Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.font.size=11;
+
+// ── ROLE DEFINITIONS ──
+const ROLES={
+  ceo:{label:'CEO / Owner',level:'Level 1',access:'Full System Access',initials:'MK',name:'Mohammed K.',nav:[
+    {g:'Overview',items:[{i:'⬛',l:'Dashboard',s:'dashboard'},{i:'📊',l:'Executive Reports',s:'reports'}]},
+    {g:'Operations',items:[{i:'🚴',l:'Live Operations',s:'operations'},{i:'👥',l:'All Drivers',s:'drivers'}]},
+    {g:'Departments',items:[{i:'💰',l:'Finance & COD',s:'finance'},{i:'📋',l:'HR & Compliance',s:'hr'},{i:'💬',l:'CRM & Tickets',s:'crm'}]},
+    {g:'Platforms',items:[{i:'🔶',l:'Keeta',s:'keeta',c:'--keeta'},{i:'🟣',l:'Jahez',s:'jahez',c:'--jahez'},{i:'🔵',l:'Ninja',s:'ninja',c:'--ninja'},{i:'🟡',l:'Noon',s:'noon',c:'--noon'}]},
+    {g:'System',items:[{i:'⚙️',l:'Admin Panel',s:'admin'},{i:'🔒',l:'Security Logs',s:'security'}]},
+  ],addBtn:'+ Add Driver'},
+  gm:{label:'General Manager',level:'Level 2',access:'Full Operational Control',initials:'AH',name:'Ahmed H.',nav:[
+    {g:'Overview',items:[{i:'⬛',l:'GM Dashboard',s:'dashboard'},{i:'📊',l:'Reports',s:'reports'}]},
+    {g:'Operations',items:[{i:'🚴',l:'Live Operations',s:'operations'},{i:'👥',l:'All Drivers',s:'drivers'},{i:'⚡',l:'Escalations',s:'escalations'}]},
+    {g:'Departments',items:[{i:'💰',l:'Finance & COD',s:'finance'},{i:'📋',l:'HR & Compliance',s:'hr'},{i:'💬',l:'CRM',s:'crm'}]},
+    {g:'Platforms',items:[{i:'🔶',l:'Keeta',s:'keeta',c:'--keeta'},{i:'🟣',l:'Jahez',s:'jahez',c:'--jahez'},{i:'🔵',l:'Ninja',s:'ninja',c:'--ninja'},{i:'🟡',l:'Noon',s:'noon',c:'--noon'}]},
+  ],addBtn:'+ Add Driver'},
+  'finance-ctrl':{label:'Finance Controller',level:'Level 3',access:'Finance & COD Only',initials:'FA',name:'Fatima A.',nav:[
+    {g:'Finance',items:[{i:'💰',l:'COD Dashboard',s:'dashboard'},{i:'📋',l:'COD Review Queue',s:'finance'},{i:'🏦',l:'Deposit Tracking',s:'deposits'},{i:'📊',l:'Financial Reports',s:'reports'}]},
+    {g:'Restricted',items:[{i:'🚴',l:'Operations',s:'locked',lock:true},{i:'📋',l:'HR Module',s:'locked',lock:true},{i:'👥',l:'Recruitment',s:'locked',lock:true}]},
+  ],addBtn:null},
+  'cod-officer':{label:'COD Reconciliation Officer',level:'Level 4',access:'COD Module Only',initials:'KA',name:'Khalid A.',nav:[
+    {g:'COD Work',items:[{i:'📥',l:'COD Queue',s:'dashboard'},{i:'✅',l:'Approved',s:'cod-approved'},{i:'🚩',l:'Flagged Items',s:'cod-flagged'},{i:'📊',l:'Daily Report',s:'cod-report'}]},
+    {g:'Restricted',items:[{i:'💰',l:'Finance Dashboard',s:'locked',lock:true},{i:'📋',l:'HR Module',s:'locked',lock:true}]},
+  ],addBtn:null},
+  'hr-lead':{label:'HR Ops & Compliance Lead',level:'Level 3',access:'Full HR Access',initials:'SN',name:'Sara N.',nav:[
+    {g:'HR',items:[{i:'📋',l:'HR Dashboard',s:'dashboard'},{i:'👥',l:'All Drivers',s:'drivers'},{i:'👤',l:'Employees',s:'employees'},{i:'📄',l:'Documents',s:'documents'},{i:'⚠️',l:'Compliance Alerts',s:'hr',badge:7}]},
+    {g:'Restricted',items:[{i:'💰',l:'Finance & COD',s:'locked',lock:true},{i:'🚴',l:'Operations',s:'locked',lock:true}]},
+  ],addBtn:'+ Add Driver'},
+  'hr-officer':{label:'HR Compliance Officer',level:'Level 4',access:'Driver Compliance Only',initials:'OM',name:'Omar M.',nav:[
+    {g:'Compliance',items:[{i:'⚠️',l:'Expiry Alerts',s:'dashboard'},{i:'📄',l:'Driver Documents',s:'documents'},{i:'👥',l:'Driver Profiles',s:'drivers'}]},
+    {g:'Restricted',items:[{i:'👤',l:'Staff Profiles',s:'locked',lock:true},{i:'💰',l:'Finance',s:'locked',lock:true},{i:'🚴',l:'Operations',s:'locked',lock:true}]},
+  ],addBtn:null},
+  'hr-recruitment':{label:'HR Recruitment',level:'Level 4',access:'Recruitment & Onboarding',initials:'NA',name:'Noor A.',nav:[
+    {g:'Recruitment',items:[{i:'📥',l:'Onboarding Pipeline',s:'dashboard'},{i:'➕',l:'Add New Driver',s:'add-driver'},{i:'👥',l:'Driver Profiles',s:'drivers'}]},
+    {g:'Restricted',items:[{i:'💰',l:'Finance',s:'locked',lock:true},{i:'📊',l:'Reports',s:'locked',lock:true}]},
+  ],addBtn:'+ New Driver'},
+  'head-ops':{label:'Head of Operations',level:'Level 3',access:'All Platform Operations',initials:'WA',name:'Waleed A.',nav:[
+    {g:'Operations',items:[{i:'⬛',l:'Ops Dashboard',s:'dashboard'},{i:'🚴',l:'Live Drivers',s:'operations'},{i:'📊',l:'Platform Reports',s:'reports'},{i:'⚡',l:'Escalations',s:'escalations'}]},
+    {g:'Platforms',items:[{i:'🔶',l:'Keeta',s:'keeta',c:'--keeta'},{i:'🟣',l:'Jahez',s:'jahez',c:'--jahez'},{i:'🔵',l:'Ninja',s:'ninja',c:'--ninja'},{i:'🟡',l:'Noon',s:'noon',c:'--noon'}]},
+    {g:'Restricted',items:[{i:'💰',l:'Finance',s:'locked',lock:true},{i:'📋',l:'HR Module',s:'locked',lock:true}]},
+  ],addBtn:null},
+  'account-mgr':{label:'Account Manager — Keeta',level:'Level 3',access:'Keeta Platform Only',initials:'TK',name:'Tariq K.',nav:[
+    {g:'Keeta',items:[{i:'⬛',l:'Keeta Dashboard',s:'dashboard'},{i:'🚴',l:'Keeta Drivers',s:'drivers'},{i:'👥',l:'Supervisors',s:'supervisors'},{i:'💰',l:'COD (View Only)',s:'finance'},{i:'📊',l:'Performance',s:'reports'}]},
+    {g:'Restricted',items:[{i:'🟣',l:'Jahez',s:'locked',lock:true},{i:'🔵',l:'Ninja',s:'locked',lock:true},{i:'🟡',l:'Noon',s:'locked',lock:true},{i:'📋',l:'HR Module',s:'locked',lock:true}]},
+  ],addBtn:null},
+  supervisor:{label:'Supervisor — Keeta A',level:'Level 4',access:'Assigned Drivers Only',initials:'HM',name:'Hassan M.',nav:[
+    {g:'My Drivers',items:[{i:'⬛',l:'Supervisor Dashboard',s:'dashboard'},{i:'🚴',l:'My 120 Drivers',s:'drivers'},{i:'💰',l:'COD View Only',s:'finance'},{i:'⚠️',l:'Alerts',s:'hr'}]},
+    {g:'Restricted',items:[{i:'👥',l:'Other Supervisors',s:'locked',lock:true},{i:'💰',l:'Finance Approvals',s:'locked',lock:true},{i:'📋',l:'HR Actions',s:'locked',lock:true}]},
+  ],addBtn:null},
+  'oct-lead':{label:'OCT Lead',level:'Level 3',access:'WhatsApp & Automation',initials:'ZA',name:'Ziad A.',nav:[
+    {g:'OCT',items:[{i:'💬',l:'OCT Dashboard',s:'dashboard'},{i:'🤖',l:'WhatsApp Flows',s:'crm'},{i:'📥',l:'COD Intake Monitor',s:'finance'},{i:'📊',l:'Automation Analytics',s:'reports'}]},
+    {g:'Restricted',items:[{i:'📋',l:'HR Module',s:'locked',lock:true},{i:'💰',l:'Finance Approvals',s:'locked',lock:true}]},
+  ],addBtn:null},
+  legal:{label:'Legal & Government Affairs',level:'Level 3',access:'Compliance Read-Only',initials:'LA',name:'Layla A.',nav:[
+    {g:'Legal',items:[{i:'⬛',l:'Compliance Overview',s:'dashboard'},{i:'📄',l:'Regulatory Docs',s:'documents'},{i:'📋',l:'HR Compliance',s:'hr'}]},
+    {g:'Restricted',items:[{i:'💰',l:'Finance',s:'locked',lock:true},{i:'🚴',l:'Operations',s:'locked',lock:true},{i:'📊',l:'Financial Reports',s:'locked',lock:true}]},
+  ],addBtn:null},
+};
+
+let currentRole='ceo';
+let currentSection='dashboard';
+let chartInstances={};
+
+// ── RENDER SIDEBAR ──
+function renderSidebar(roleKey){
+  const r=ROLES[roleKey];
+  document.getElementById('srLevel').textContent=r.level;
+  document.getElementById('srName').textContent=r.label;
+  document.getElementById('srAccess').textContent=r.access;
+  document.getElementById('userAv').textContent=r.initials;
+  document.getElementById('userName').textContent=r.name;
+  document.getElementById('userRole').textContent=r.label;
+  const addBtn=document.getElementById('addBtn');
+  if(r.addBtn){addBtn.textContent=r.addBtn;addBtn.style.display='flex';}
+  else{addBtn.style.display='none';}
+  let html='';
+  for(const g of r.nav){
+    html+=`<div class="nav-group">${g.g}</div>`;
+    for(const item of g.items){
+      const isActive=item.s===currentSection&&!item.lock;
+      const col=item.c?`style="color:var(${item.c})":`:``;
+      html+=`<div class="nav-item${isActive?' active':''}" ${col} onclick="${item.lock?`showLocked('${g.g}')`:``}${!item.lock?`navTo('${item.s}',this,'${item.l}')`:``}">
+        <span class="ni">${item.i}</span> ${item.l}
+        ${item.badge?`<span class="nav-badge">${item.badge}</span>`:''}
+        ${item.lock?`<span class="nav-lock">🔒</span>`:''}
+      </div>`;
+    }
+  }
+  document.getElementById('sidebarNav').innerHTML=html;
 }
 
-// ── DASHBOARD PLATFORM FILTER ──
-const dashData={
+// ── SET ROLE ──
+function setRole(roleKey,el){
+  currentRole=roleKey;
+  currentSection='dashboard';
+  document.querySelectorAll('.role-pill').forEach(p=>p.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderSidebar(roleKey);
+  renderContent(roleKey,'dashboard','Dashboard');
+  destroyCharts();
+}
+
+// ── NAVIGATION ──
+function navTo(section,el,title){
+  if(section==='locked')return;
+  currentSection=section;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.getElementById('pageTitle').textContent=title;
+  renderContent(currentRole,section,title);
+  destroyCharts();
+}
+
+function showLocked(groupName){
+  document.getElementById('mainContent').innerHTML=`
+    <div class="access-denied">
+      <div class="ad-icon">🔒</div>
+      <div class="ad-title">Access Restricted</div>
+      <div class="ad-sub">Your role (${ROLES[currentRole].label}) does not have access to the ${groupName} module.</div>
+      <div style="font-size:0.72rem;color:var(--text3);margin-top:4px">Contact your system administrator to request access.</div>
+    </div>`;
+}
+
+// ── DESTROY CHARTS ──
+function destroyCharts(){
+  Object.values(chartInstances).forEach(c=>{try{c.destroy();}catch(e){}});
+  chartInstances={};
+}
+
+// ── CHART HELPERS ──
+function mkLine(id,labels,datasets,h=160){
+  setTimeout(()=>{
+    const el=document.getElementById(id);if(!el)return;
+    const c=new Chart(el,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,labels:{boxWidth:10,padding:8,font:{size:10}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#475569'}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569'}}},elements:{point:{radius:2.5,hoverRadius:4}}}});
+    chartInstances[id]=c;
+    el.parentElement.style.height=h+'px';
+  },100);
+}
+function mkBar(id,labels,datasets,h=160){
+  setTimeout(()=>{
+    const el=document.getElementById(id);if(!el)return;
+    const c=new Chart(el,{type:'bar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,labels:{boxWidth:10,padding:8,font:{size:10}}}},scales:{x:{grid:{display:false},ticks:{color:'#475569'}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#475569'}}}}});
+    chartInstances[id]=c;
+    el.parentElement.style.height=h+'px';
+  },100);
+}
+function mkDoughnut(id,labels,data,colors,h=160){
+  setTimeout(()=>{
+    const el=document.getElementById(id);if(!el)return;
+    const c=new Chart(el,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#0c1220',borderWidth:3,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}}},cutout:'65%'}});
+    chartInstances[id]=c;
+    el.parentElement.style.height=h+'px';
+  },100);
+}
+
+// ── SHARED HTML FRAGMENTS ──
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const HRS=['6am','8am','10am','12pm','2pm','4pm','6pm','8pm'];
+
+function kpiHTML(label,val,sub,color='var(--blue)',spark=null){
+  const bars=spark?spark.map((v,i)=>`<div class="ks-bar" style="height:${v}%;background:${color};opacity:${0.3+i*0.1}"></div>`).join(''):'';
+  return`<div class="kpi" style="--kc:${color}">
+    <div class="kpi-label">${label}</div>
+    <div class="kpi-val">${val}</div>
+    <div class="kpi-sub">${sub}</div>
+    ${bars?`<div class="kpi-spark">${bars}</div>`:''}
+  </div>`;
+}
+
+function platformBanner(name,emoji,mgr,count,color){
+  return`<div class="platform-banner" style="background:${color}1a;border-color:${color}30;color:${color}">
+    <div class="pb-l"><h2>${emoji} ${name}</h2><p style="color:var(--text2)">Account Manager: ${mgr}</p></div>
+    <div class="pb-r"><div class="big">${count}</div><div class="small">Active Drivers</div></div>
+  </div>`;
+}
+
+function topSupervisors(){
+  const data=[
+    {name:'Supervisor Ahmed',platform:'Keeta',drivers:'120',active:'116',score:'94%',color:'#f97316'},
+    {name:'Supervisor Khalid',platform:'Ninja',drivers:'118',active:'116',score:'91%',color:'#06b6d4'},
+    {name:'Supervisor Mohammed',platform:'Jahez',drivers:'122',active:'118',score:'89%',color:'#8b5cf6'},
+    {name:'Supervisor Fahad',platform:'Noon',drivers:'115',active:'104',score:'78%',color:'#eab308'},
+    {name:'Supervisor Omar',platform:'Jahez',drivers:'119',active:'98',score:'74%',color:'#64748b'},
+  ];
+  return data.map((s,i)=>`
+    <div class="top-item">
+      <div class="ti-rank">${i+1}</div>
+      <div class="ti-av" style="background:linear-gradient(135deg,${s.color},${s.color}99)">${s.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+      <div class="ti-info"><div class="ti-name">${s.name}</div><div class="ti-sub">${s.platform} · ${s.active}/${s.drivers} active</div></div>
+      <div class="ti-val" style="color:${parseFloat(s.score)>=80?'var(--green)':parseFloat(s.score)>=70?'var(--amber)':'var(--red)'}">${s.score}</div>
+    </div>`).join('');
+}
+
+function topDrivers(){
+  const data=[
+    {name:'Raj Kumar Singh',sub:'Ninja · DRV-0156',orders:'218',score:91,color:'#06b6d4'},
+    {name:'Ahmed Al-Rashidi',sub:'Keeta · DRV-0041',orders:'204',score:87,color:'#f97316'},
+    {name:'Faisal Al-Ahmad',sub:'Noon · DRV-0089',orders:'197',score:85,color:'#eab308'},
+    {name:'Mohammed Al-Ali',sub:'Jahez · DRV-0203',orders:'189',score:83,color:'#8b5cf6'},
+    {name:'Priya Nair',sub:'Ninja · DRV-0312',orders:'176',score:79,color:'#6366f1'},
+  ];
+  return data.map((d,i)=>`
+    <div class="top-item">
+      <div class="ti-rank">${i+1}</div>
+      <div class="ti-av" style="background:linear-gradient(135deg,${d.color},${d.color}99)">${d.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+      <div class="ti-info"><div class="ti-name">${d.name}</div><div class="ti-sub">${d.sub}</div></div>
+      <div style="text-align:right"><div class="ti-val" style="color:var(--green)">${d.score}%</div><div style="font-size:0.6rem;color:var(--text3)">${d.orders} orders</div></div>
+    </div>`).join('');
+}
+
+function alertsHTML(){
+  const items=[
+    {ic:'🔴',bg:'var(--red-dim)',txt:'Ahmed K. (Jahez) — 3rd warning issued. Suspension recommended.',time:'2 mins ago'},
+    {ic:'🟡',bg:'var(--amber-dim)',txt:'COD mismatch flagged — Keeta · BD 240 reported vs BD 190 screenshot',time:'14 mins ago'},
+    {ic:'📄',bg:'var(--red-dim)',txt:'7 driver visas expiring within 14 days — HR action required',time:'1 hour ago'},
+    {ic:'⚡',bg:'var(--amber-dim)',txt:'Jahez Supervisor B — only 89/120 drivers active today',time:'2 hours ago'},
+  ];
+  return items.map(a=>`<div class="alert-item"><div class="ai-icon" style="background:${a.bg}">${a.ic}</div><div><div class="ai-text">${a.txt}</div><div class="ai-time">${a.time}</div></div></div>`).join('');
+}
+
+function driverTableRows(filter){
+  const rows=[
+    {name:'Ahmed Al-Rashidi',id:'DRV-0041',platform:'Keeta',pcol:'--keeta',sup:'Sup. Ahmed',type:'Local',score:87,cod:'✓ Submitted','bg',docs:'✓ Valid','bg',status:'Active','bg'},
+    {name:'Mohammed Al-Zahra',id:'DRV-0089',platform:'Jahez',pcol:'--jahez',sup:'Sup. Nasser',type:'Offshore',score:44,cod:'✕ Missing','br',docs:'❌ Expired','br',status:'Suspended','br'},
+    {name:'Raj Kumar Singh',id:'DRV-0156',platform:'Ninja',pcol:'--ninja',sup:'Sup. Khalid',type:'Offshore',score:91,cod:'✓ Submitted','bg',docs:'✓ Valid','bg',status:'Active','bg'},
+    {name:'Ali Hassan',id:'DRV-0271',platform:'Keeta',pcol:'--keeta',sup:'Sup. Hassan',type:'Local',score:78,cod:'✓ Submitted','bg',docs:'⚠ Expiring','ba',status:'Warning','ba'},
+    {name:'Faisal Al-Mutairi',id:'DRV-0203',platform:'Noon',pcol:'--noon',sup:'Sup. Bader',type:'Local',score:44,cod:'✕ Missing','br',docs:'❌ Expired','br',status:'Suspended','br'},
+  ];
+  const filtered=filter?rows.filter(r=>r.platform.toLowerCase()===filter.toLowerCase()):rows;
+  return filtered.map(r=>`<tr onclick="viewDriverProfile('${r.name}','${r.id}','${r.platform}','${r.pcol}','${r.sup}',${r.score})" style="cursor:pointer">
+    <td><div style="font-weight:600">${r.name}</div><div style="font-size:0.62rem;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.id}</div></td>
+    <td><span style="color:var(var(${r.pcol}));font-weight:600;color:var(${r.pcol})">${r.platform}</span></td>
+    <td>${r.sup}</td>
+    <td><span class="b bb">${r.type}</span></td>
+    <td><div class="score"><div class="score-track"><div class="score-fill" style="width:${r.score}%;background:${r.score>=80?'var(--green)':r.score>=60?'var(--amber)':'var(--red)'}"></div></div><div class="score-label">${r.score}%</div></div></td>
+    <td><span class="b ${r[4]||'bb'}">${r.cod}</span></td>
+    <td><span class="b ${r[5]||'bb'}">${r.docs}</span></td>
+    <td><span class="b ${r[6]||'bb'}">${r.status}</span></td>
+  </tr>`).join('');
+}
+
+// ── DRIVER PROFILE ──
+function viewDriverProfile(name,id,platform,pcol,supervisor,score){
+  const col=`var(${pcol})`;
+  document.getElementById('mainContent').innerHTML=`
+    <div class="sec-header">
+      <div>
+        <button onclick="navTo('drivers',null,'Drivers')" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.72rem;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;">← Back to Drivers</button>
+        <div class="sec-title">Driver Profile</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost">Edit Profile</button>
+        <button class="btn btn-danger">Suspend Driver</button>
+      </div>
+    </div>
+
+    <div class="profile-hero" style="--profile-color:${col}">
+      <div class="ph-avatar" style="background:linear-gradient(135deg,${col},${col}99)">${name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+      <div class="ph-info">
+        <div class="ph-name">${name}</div>
+        <div class="ph-role">${supervisor} · ${platform} Platform</div>
+        <div class="ph-badges">
+          <span class="b" style="background:${col}20;color:${col};border:1px solid ${col}40">${platform}</span>
+          <span class="b bg">● Active</span>
+          <span class="b bb">Local Driver</span>
+          <span class="b" style="background:rgba(139,92,246,0.1);color:var(--purple);border:1px solid rgba(139,92,246,0.2)">Lease-to-own Bike</span>
+        </div>
+        <div class="ph-stats">
+          <div class="phs-item"><div class="phs-val" style="color:var(--green)">${score}%</div><div class="phs-lbl">Performance</div></div>
+          <div class="phs-item"><div class="phs-val">142</div><div class="phs-lbl">Orders / Month</div></div>
+          <div class="phs-item"><div class="phs-val">0</div><div class="phs-lbl">Warnings</div></div>
+          <div class="phs-item"><div class="phs-val">BD 1,240</div><div class="phs-lbl">COD This Month</div></div>
+        </div>
+      </div>
+      <div class="ph-actions-row">
+        <button class="btn btn-primary" onclick="openForm('add-cod')">Submit COD</button>
+        <button class="btn btn-ghost">View COD History</button>
+        <button class="btn btn-ghost">Send Message</button>
+      </div>
+    </div>
+
+    <div class="tabs" id="profileTabs">
+      <div class="tab active" onclick="profileTab('overview',this)">Overview</div>
+      <div class="tab" onclick="profileTab('documents',this)">Documents</div>
+      <div class="tab" onclick="profileTab('cod',this)">COD History</div>
+      <div class="tab" onclick="profileTab('performance',this)">Performance</div>
+      <div class="tab" onclick="profileTab('activity',this)">Activity Log</div>
+    </div>
+    <div id="profileTabContent"></div>`;
+
+  profileTab('overview',document.querySelector('#profileTabs .tab'));
+  window._profileData={name,id,platform,pcol,supervisor,score,col};
+}
+
+function profileTab(tab,el){
+  document.querySelectorAll('#profileTabs .tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const d=window._profileData||{};
+  const c=document.getElementById('profileTabContent');
+
+  if(tab==='overview'){
+    c.innerHTML=`
+    <div class="g2">
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Personal Information</div></div>
+        <div class="pb">
+          <div class="info-grid">
+            <div class="ig-item"><div class="ig-label">Driver ID</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">${d.id||'DRV-0041'}</div></div>
+            <div class="ig-item"><div class="ig-label">Full Name</div><div class="ig-val">${d.name||'Ahmed Al-Rashidi'}</div></div>
+            <div class="ig-item"><div class="ig-label">Nationality</div><div class="ig-val">Bahraini</div></div>
+            <div class="ig-item"><div class="ig-label">Phone</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">+973 3300 0041</div></div>
+            <div class="ig-item"><div class="ig-label">Driver Type</div><div class="ig-val">Local</div></div>
+            <div class="ig-item"><div class="ig-label">Employment Start</div><div class="ig-val">01 March 2024</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Platform & Assignment</div></div>
+        <div class="pb">
+          <div class="info-grid">
+            <div class="ig-item"><div class="ig-label">Platform</div><div class="ig-val" style="color:var(${d.pcol||'--keeta'});font-weight:600">${d.platform||'Keeta'}</div></div>
+            <div class="ig-item"><div class="ig-label">Supervisor</div><div class="ig-val">${d.supervisor||'Supervisor Ahmed'}</div></div>
+            <div class="ig-item"><div class="ig-label">Contract Type</div><div class="ig-val">Local Contract</div></div>
+            <div class="ig-item"><div class="ig-label">Status</div><div class="ig-val"><span class="b bg">Active</span></div></div>
+            <div class="ig-item"><div class="ig-label">Shift</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">08:00 — 20:00</div></div>
+            <div class="ig-item"><div class="ig-label">Last Login</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">Today 08:32 AM</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ph"><div class="ph-title">Bike & Vehicle Information</div></div>
+      <div class="pb">
+        <div class="g3" style="margin:0">
+          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Bike Type</div><div class="ig-val">Honda CB200</div></div>
+          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Ownership</div><div class="ig-val">Lease-to-Own</div></div>
+          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Plate Number</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">BH 4471 D</div></div>
+          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Registration Expiry</div><div class="ig-val">Dec 2026</div></div>
+          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Insurance</div><div class="ig-val"><span class="b bg">Valid</span></div></div>
+          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Bike ID</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">BK-0041-C</div></div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  else if(tab==='documents'){
+    c.innerHTML=`
+    <div class="panel">
+      <div class="ph"><div class="ph-title">Driver Documents</div><div class="ph-actions"><button class="btn btn-primary" style="font-size:0.72rem;padding:5px 14px">+ Upload Document</button></div></div>
+      <div class="pb">
+        ${[
+          {icon:'🛂',name:'Passport',expiry:'15 Jan 2027',days:312,status:'bg',slabel:'Valid'},
+          {icon:'🪪',name:'Visa',expiry:'20 Aug 2026',days:165,status:'bg',slabel:'Valid'},
+          {icon:'🪪',name:'CPR / National ID',expiry:'12 Dec 2026',days:279,status:'bg',slabel:'Valid'},
+          {icon:'🚗',name:'Driving License',expiry:'3 Nov 2026',days:240,status:'bg',slabel:'Valid'},
+          {icon:'🛡️',name:'Insurance',expiry:'1 Apr 2026',days:24,status:'ba',slabel:'Expiring Soon'},
+          {icon:'📋',name:'Employment Contract',expiry:'15 Sep 2026',days:191,status:'bg',slabel:'Valid'},
+          {icon:'🏍️',name:'Bike Registration',expiry:'20 Dec 2026',days:287,status:'bg',slabel:'Valid'},
+        ].map(doc=>`
+          <div class="doc-row">
+            <div class="doc-icon" style="background:rgba(255,255,255,0.04)">${doc.icon}</div>
+            <div class="doc-info">
+              <div class="doc-name">${doc.name}</div>
+              <div class="doc-expiry">Expires: ${doc.expiry} · ${doc.days} days remaining</div>
+            </div>
+            <span class="b ${doc.status}">${doc.slabel}</span>
+            <div class="doc-actions">
+              <button class="doc-btn">View</button>
+              <button class="doc-btn">Replace</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  else if(tab==='cod'){
+    c.innerHTML=`
+    <div class="panel">
+      <div class="ph"><div class="ph-title">COD Submission History</div><div class="ph-actions"><span class="ph-link">Export CSV</span></div></div>
+      <table class="tbl">
+        <thead><tr><th>Reference</th><th>Date</th><th>Platform</th><th>Amount</th><th>Screenshot</th><th>Status</th><th>Approved By</th><th>Settled</th></tr></thead>
+        <tbody>
+          ${[
+            {ref:'COD-4821',date:'Today 08:32',amt:'BD 124.500',s:'bg',sl:'Approved',by:'Khalid A.',settled:'Pending'},
+            {ref:'COD-4798',date:'Mar 7, 07:15',amt:'BD 98.000',s:'bb',sl:'Settled',by:'Khalid A.',settled:'Mar 7'},
+            {ref:'COD-4771',date:'Mar 6, 06:45',amt:'BD 211.000',s:'bb',sl:'Settled',by:'Khalid A.',settled:'Mar 6'},
+            {ref:'COD-4744',date:'Mar 5, 08:10',amt:'BD 87.500',s:'ba',sl:'Pending',by:'—',settled:'—'},
+            {ref:'COD-4721',date:'Mar 4, 07:55',amt:'BD 156.000',s:'bb',sl:'Settled',by:'Fatima A.',settled:'Mar 4'},
+          ].map(r=>`<tr>
+            <td class="mono">${r.ref}</td>
+            <td>${r.date}</td>
+            <td style="color:var(${d.pcol||'--keeta'});font-weight:600">${d.platform||'Keeta'}</td>
+            <td class="mono" style="font-weight:600">${r.amt}</td>
+            <td><span class="b bg">✓ Uploaded</span></td>
+            <td><span class="b ${r.s}">${r.sl}</span></td>
+            <td style="color:var(--text2)">${r.by}</td>
+            <td class="mono" style="color:var(--text2)">${r.settled}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
+  else if(tab==='performance'){
+    c.innerHTML=`
+    <div class="g4" style="margin-bottom:14px">
+      ${kpiHTML('This Month Score',d.score+'%','<span class="up">↑ 3%</span> vs last month','var(--green)',[55,60,65,72,78,82,87])}
+      ${kpiHTML('Orders Completed','142','<span class="up">↑ 12</span> vs last month','var(--blue)',[80,85,90,95,100,110,120])}
+      ${kpiHTML('Delays','3','<span class="up">↓ 2</span> improved','var(--amber)',[8,6,7,5,6,4,3])}
+      ${kpiHTML('Attendance','100%','<span class="up">Perfect</span> this month','var(--green)',[90,95,95,100,100,100,100])}
+    </div>
+    <div class="g2">
+      <div class="panel"><div class="ph"><div class="ph-title">Performance Trend — 7 Days</div></div><div class="pb"><div class="chart-wrap"><canvas id="perfLine"></canvas></div></div></div>
+      <div class="panel"><div class="ph"><div class="ph-title">Daily Orders — This Week</div></div><div class="pb"><div class="chart-wrap"><canvas id="ordersBar"></canvas></div></div></div>
+    </div>`;
+    mkLine('perfLine',DAYS,[{label:'Score %',data:[79,82,80,85,83,86,87],borderColor:'var(--green)',backgroundColor:'rgba(16,185,129,0.06)',tension:0.4,fill:true}]);
+    mkBar('ordersBar',DAYS,[{label:'Orders',data:[18,22,19,24,20,23,16],backgroundColor:'rgba(59,130,246,0.6)',borderRadius:6}]);
+  }
+
+  else if(tab==='activity'){
+    c.innerHTML=`
+    <div class="panel">
+      <div class="ph"><div class="ph-title">Activity Log</div></div>
+      <div class="pb">
+        ${[
+          {t:'08:32 AM','Today',a:'Portal Login',d:'iPhone · IP 192.168.1.41 · Manama, Bahrain',ic:'🟢'},
+          {t:'08:34 AM','Today',a:'COD Submitted',d:'Amount: BD 124.500 · Reference: COD-4821',ic:'💰'},
+          {t:'09:14 AM','Today',a:'Document Viewed',d:'Passport · Expiry: 15 Jan 2027',ic:'📄'},
+          {t:'10:02 AM','Today',a:'Ticket Opened',d:'Ticket #TKT-0821 · Category: Payment / COD',ic:'🎫'},
+          {t:'07:15 PM','Yesterday',a:'COD Submitted',d:'Amount: BD 98.000 · Reference: COD-4798',ic:'💰'},
+          {t:'07:18 PM','Yesterday',a:'Portal Logout',d:'Session Duration: 11h 43m',ic:'🔴'},
+        ].map(r=>`
+          <div class="alert-item">
+            <div class="ai-icon" style="background:rgba(255,255,255,0.04);font-size:0.9rem">${r.ic}</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div class="ai-text" style="font-weight:600">${r.a}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text3)">${r.t} · ${r[1]||'Today'}</div>
+              </div>
+              <div class="ai-time">${r.d}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+}
+
+// ── EMPLOYEE PROFILE ──
+function viewEmployeeProfile(name,title,dept,level){
+  document.getElementById('mainContent').innerHTML=`
+    <div class="sec-header">
+      <div>
+        <button onclick="navTo('employees',null,'Employees')" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.72rem;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;">← Back to Employees</button>
+        <div class="sec-title">Employee Profile</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost">Edit Profile</button>
+        <button class="btn btn-ghost">Reset Password</button>
+      </div>
+    </div>
+
+    <div class="profile-hero" style="--profile-color:var(--purple)">
+      <div class="ph-avatar" style="background:linear-gradient(135deg,var(--purple),#6366f1)">${name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+      <div class="ph-info">
+        <div class="ph-name">${name}</div>
+        <div class="ph-role">${title} · ${dept}</div>
+        <div class="ph-badges">
+          <span class="b bp">${dept}</span>
+          <span class="b bg">● Active</span>
+          <span class="b bb">Full-time</span>
+          <span class="b bb">${level}</span>
+        </div>
+        <div class="ph-stats">
+          <div class="phs-item"><div class="phs-val">2yr 3m</div><div class="phs-lbl">Tenure</div></div>
+          <div class="phs-item"><div class="phs-val">0</div><div class="phs-lbl">Open Tickets</div></div>
+          <div class="phs-item"><div class="phs-val">12</div><div class="phs-lbl">Actions Today</div></div>
+          <div class="phs-item"><div class="phs-val" style="color:var(--green)">Active</div><div class="phs-lbl">System Status</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Personal Information</div></div>
+        <div class="pb">
+          <div class="info-grid">
+            <div class="ig-item"><div class="ig-label">Full Name</div><div class="ig-val">${name}</div></div>
+            <div class="ig-item"><div class="ig-label">CPR / ID</div><div class="ig-val mono">880412-1234</div></div>
+            <div class="ig-item"><div class="ig-label">Job Title</div><div class="ig-val">${title}</div></div>
+            <div class="ig-item"><div class="ig-label">Department</div><div class="ig-val">${dept}</div></div>
+            <div class="ig-item"><div class="ig-label">Reports To</div><div class="ig-val">General Manager</div></div>
+            <div class="ig-item"><div class="ig-label">Work Location</div><div class="ig-val">Office — Manama</div></div>
+            <div class="ig-item"><div class="ig-label">Employment Type</div><div class="ig-val">Full-time</div></div>
+            <div class="ig-item"><div class="ig-label">Contract Start</div><div class="ig-val">01 Jan 2023</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="panel" style="margin-bottom:14px">
+          <div class="ph"><div class="ph-title">System Access</div></div>
+          <div class="pb">
+            <div class="info-grid">
+              <div class="ig-item"><div class="ig-label">System Role</div><div class="ig-val">${level}</div></div>
+              <div class="ig-item"><div class="ig-label">Access Level</div><div class="ig-val"><span class="b bp">${dept} Modules</span></div></div>
+              <div class="ig-item"><div class="ig-label">Last Login</div><div class="ig-val mono">Today 08:14 AM</div></div>
+              <div class="ig-item"><div class="ig-label">2FA</div><div class="ig-val"><span class="b bg">Enabled</span></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="ph"><div class="ph-title">Documents</div></div>
+          <div class="pb">
+            ${[
+              {icon:'🛂',name:'Passport',expiry:'Mar 2028',status:'bg',sl:'Valid'},
+              {icon:'🪪',name:'CPR / ID',expiry:'Oct 2027',status:'bg',sl:'Valid'},
+              {icon:'📋',name:'Employment Contract',expiry:'Jan 2027',status:'bg',sl:'Valid'},
+              {icon:'🛡️',name:'Insurance',expiry:'Apr 2026',status:'ba',sl:'Expiring'},
+            ].map(d=>`
+              <div class="doc-row" style="padding:8px 0">
+                <div class="doc-icon" style="background:rgba(255,255,255,0.04);width:30px;height:30px;font-size:0.8rem">${d.icon}</div>
+                <div class="doc-info"><div class="doc-name">${d.name}</div><div class="doc-expiry">Exp: ${d.expiry}</div></div>
+                <span class="b ${d.status}">${d.sl}</span>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── CONTENT RENDERER ──
+function renderContent(role,section,title){
+  destroyCharts();
+  const el=document.getElementById('mainContent');
+  document.getElementById('pageTitle').textContent=title||section;
+
+  // ── CEO & GM DASHBOARD ──
+  if(section==='dashboard'&&(role==='ceo'||role==='gm')){
+    el.innerHTML=`
+      <div class="ptabs">
+        <div class="ptab active" data-p="all" onclick="filterPtab(this,'all')">🏢 All Platforms</div>
+        <div class="ptab" data-p="keeta" onclick="filterPtab(this,'keeta')">🔶 Keeta</div>
+        <div class="ptab" data-p="jahez" onclick="filterPtab(this,'jahez')">🟣 Jahez</div>
+        <div class="ptab" data-p="ninja" onclick="filterPtab(this,'ninja')">🔵 Ninja</div>
+        <div class="ptab" data-p="noon" onclick="filterPtab(this,'noon')">🟡 Noon</div>
+      </div>
+      <div class="g4" id="dashKpis">
+        ${kpiHTML('Active Drivers','1,247','<span class="up">↑ 23</span> from yesterday','var(--blue)',[50,55,60,65,70,75,80])}
+        ${kpiHTML('COD Outstanding','BD 18.4K','<span class="dn">BD 2.1K</span> unsettled','var(--amber)',[80,70,75,85,80,90,88])}
+        ${kpiHTML('Compliance Alerts','34','<span class="dn">7</span> expiring this week','var(--red)',[20,25,28,30,32,33,34])}
+        ${kpiHTML('Avg Performance','82%','<span class="up">↑ 3%</span> vs last week','var(--green)',[70,72,75,76,79,80,82])}
+      </div>
+      <div class="g2-1">
+        <div class="panel"><div class="ph"><div class="ph-title">📈 COD Revenue — Last 7 Days</div><div class="ph-link">Export</div></div><div class="pb"><div class="chart-wrap"><canvas id="mainLine"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">🍩 Drivers by Platform</div></div><div class="pb"><div class="chart-wrap"><canvas id="mainDonut"></canvas></div></div></div>
+      </div>
+      <div class="g3">
+        <div class="panel"><div class="ph"><div class="ph-title">🏆 Top Supervisors</div></div><div class="pb">${topSupervisors()}</div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">⭐ Top Drivers</div></div><div class="pb">${topDrivers()}</div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">🚨 Live Alerts</div><div class="ph-link">View all</div></div><div class="pb">${alertsHTML()}</div></div>
+      </div>
+      <div class="g3">
+        <div class="panel"><div class="ph"><div class="ph-title">⚡ Platform Performance</div></div><div class="pb"><div class="chart-wrap"><canvas id="perfBar"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">📊 Driver Status</div></div><div class="pb"><div class="chart-wrap"><canvas id="statusDonut"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">🕐 Hourly Orders</div></div><div class="pb"><div class="chart-wrap"><canvas id="hourlyArea"></canvas></div></div></div>
+      </div>`;
+    mkLine('mainLine',DAYS,[
+      {label:'Keeta',data:[3200,4100,3800,5200,4700,6100,4230],borderColor:'#f97316',tension:0.4,backgroundColor:'rgba(249,115,22,0.04)',fill:true},
+      {label:'Jahez',data:[4800,5200,6100,5800,7200,6400,6870],borderColor:'#8b5cf6',tension:0.4,backgroundColor:'rgba(139,92,246,0.04)',fill:true},
+      {label:'Ninja',data:[1800,2100,2400,2200,3100,2800,2940],borderColor:'#06b6d4',tension:0.4},
+      {label:'Noon',data:[1400,1700,1900,2100,1800,2300,2110],borderColor:'#eab308',tension:0.4},
+    ],170);
+    mkDoughnut('mainDonut',['Keeta','Jahez','Ninja','Noon'],[340,512,218,177],['#f97316','#8b5cf6','#06b6d4','#eab308'],160);
+    mkBar('perfBar',['Keeta','Jahez','Ninja','Noon'],[{label:'Performance %',data:[84,79,88,81],backgroundColor:['rgba(249,115,22,0.7)','rgba(139,92,246,0.7)','rgba(6,182,212,0.7)','rgba(234,179,8,0.7)'],borderRadius:6}],160);
+    mkDoughnut('statusDonut',['Active','Warning','Suspended','Onboarding'],[1141,63,18,25],['#10b981','#f59e0b','#ef4444','#3b82f6'],160);
+    mkLine('hourlyArea',HRS,[{label:'Orders',data:[12,45,89,142,168,201,189,178],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.08)',tension:0.4,fill:true}],160);
+    return;
+  }
+
+  // ── FINANCE CONTROLLER DASHBOARD ──
+  if(section==='dashboard'&&role==='finance-ctrl'){
+    el.innerHTML=`
+      <div class="g4">
+        ${kpiHTML('Pending Review','147','submissions awaiting','var(--amber)',[60,70,80,75,90,100,95])}
+        ${kpiHTML('Approved Today','312','<span class="up">↑ 24</span> vs yesterday','var(--green)',[200,220,250,280,300,310,312])}
+        ${kpiHTML('Flagged Items','23','<span class="dn">requires action</span>','var(--red)',[15,18,20,22,21,24,23])}
+        ${kpiHTML('Settled This Week','2,890','<span class="up">BD 161,400</span>','var(--blue)',[400,500,450,600,550,650,740])}
+      </div>
+      <div class="cod-timeline">
+        ${['Submitted','Pending','Approved','Flagged','Settled'].map((s,i)=>`<div class="ct-stage ${i<3?'done':i===3?'active':''}"><div class="ct-dot">${i<3?'✓':i===3?'!':i+1}</div><div class="ct-lbl">${s}</div><div class="ct-count" style="color:${['var(--text2)','var(--text2)','var(--green)','var(--red)','var(--blue)'][i]}">${['4,020','147','3,241','23','2,890'][i]}</div></div>`).join('')}
+      </div>
+      <div class="g2">
+        <div class="panel"><div class="ph"><div class="ph-title">💰 COD by Platform — This Month</div></div><div class="pb"><div class="chart-wrap"><canvas id="finPlatBar"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">📈 Settlement Rate — 7 Days</div></div><div class="pb"><div class="chart-wrap"><canvas id="finLine"></canvas></div></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">COD Review Queue — Pending Approval</div><div class="ph-actions"><span class="ph-link">Export</span></div></div>
+        <table class="tbl">
+          <thead><tr><th>Driver</th><th>Platform</th><th>Amount</th><th>Submitted</th><th>Screenshot</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><b>Ahmed Al-Rashidi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0041</span></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td class="mono" style="font-weight:700">BD 124.500</td><td>08:32 AM</td><td><span class="b bg">✓ Uploaded</span></td><td><span class="b ba">⏳ Pending</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-success" style="font-size:0.65rem;padding:4px 10px" onclick="this.textContent='✓';this.style.opacity='.5'">Approve</button><button class="btn btn-danger" style="font-size:0.65rem;padding:4px 10px">Flag</button></div></td></tr>
+            <tr><td><b>Raj Kumar Singh</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0156</span></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td class="mono" style="font-weight:700">BD 87.000</td><td>09:14 AM</td><td><span class="b bg">✓ Uploaded</span></td><td><span class="b br">⚠ Flagged</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:0.65rem;padding:4px 10px">Review</button></div></td></tr>
+            <tr><td><b>Ali Hassan</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0271</span></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td class="mono" style="font-weight:700">BD 210.000</td><td>10:02 AM</td><td><span class="b br">✕ Missing</span></td><td><span class="b br">⚠ No Screenshot</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:0.65rem;padding:4px 10px">Review</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>`;
+    mkBar('finPlatBar',['Keeta','Jahez','Ninja','Noon'],[{label:'BD Collected',data:[42300,68700,29400,21100],backgroundColor:['rgba(249,115,22,0.7)','rgba(139,92,246,0.7)','rgba(6,182,212,0.7)','rgba(234,179,8,0.7)'],borderRadius:6}]);
+    mkLine('finLine',DAYS,[
+      {label:'Collected',data:[5200,6100,5800,7200,6400,8100,7400],borderColor:'#3b82f6',tension:0.4},
+      {label:'Settled',data:[4800,5700,5400,6800,6100,7600,6900],borderColor:'#10b981',tension:0.4},
+    ]);
+    return;
+  }
+
+  // ── HR DASHBOARD ──
+  if(section==='dashboard'&&(role==='hr-lead'||role==='hr-officer')){
+    el.innerHTML=`
+      <div class="g4">
+        ${kpiHTML('Expired Docs','12','<span class="dn">Immediate action</span>','var(--red)',[5,6,8,9,10,11,12])}
+        ${kpiHTML('Expiring ≤14 days','22','HR Lead notified','var(--amber)',[15,17,18,20,21,22,22])}
+        ${kpiHTML('Expiring ≤30 days','47','HR Officer alerted','var(--blue)',[30,32,35,38,42,45,47])}
+        ${kpiHTML('All Compliant','1,166','<span class="up">Valid documents</span>','var(--green)',[1100,1110,1120,1130,1140,1160,1166])}
+      </div>
+      <div class="g2">
+        <div class="panel"><div class="ph"><div class="ph-title">📊 Doc Expiry by Type</div></div><div class="pb"><div class="chart-wrap"><canvas id="hrBar"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">📈 Compliance Trend</div></div><div class="pb"><div class="chart-wrap"><canvas id="hrLine"></canvas></div></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">🚨 Document Expiry Alerts</div><div class="ph-actions"><span class="ph-link">Export</span></div></div>
+        <table class="tbl">
+          <thead><tr><th>Driver</th><th>Platform</th><th>Document</th><th>Expiry</th><th>Days Left</th><th>Severity</th><th>HR Officer</th></tr></thead>
+          <tbody>
+            <tr><td><b>Mohammed Al-Zahra</b></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Visa</td><td>15 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">7 days</td><td><span class="b br">🔴 Critical</span></td><td>Sara H.</td></tr>
+            <tr><td><b>Priya Nair</b></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Driving License</td><td>18 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">10 days</td><td><span class="b br">🔴 Critical</span></td><td>Omar K.</td></tr>
+            <tr><td><b>Faisal Al-Mutairi</b></td><td style="color:var(--noon);font-weight:600">Noon</td><td>CPR</td><td>1 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">Expired</td><td><span class="b br">❌ Expired</span></td><td>Sara H.</td></tr>
+            <tr><td><b>Ali Hassan</b></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Passport</td><td>22 Mar 2026</td><td class="mono" style="color:var(--amber);font-weight:700">14 days</td><td><span class="b ba">🟡 Warning</span></td><td>Omar K.</td></tr>
+          </tbody>
+        </table>
+      </div>`;
+    mkBar('hrBar',['Passport','Visa','CPR','License','Insurance','Contract'],[
+      {label:'Expiring',data:[8,12,5,7,9,3],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:4},
+      {label:'Expired',data:[2,4,3,1,2,0],backgroundColor:'rgba(239,68,68,0.7)',borderRadius:4},
+    ]);
+    mkLine('hrLine',['Mar 1','Mar 5','Mar 8','Mar 10','Mar 12','Mar 15','Mar 8'],[
+      {label:'Active Alerts',data:[18,22,25,28,30,34,34],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.05)',tension:0.4,fill:true}
+    ]);
+    return;
+  }
+
+  // ── DRIVERS SECTION ──
+  if(section==='drivers'){
+    const filter=role==='supervisor'?'Keeta':role==='account-mgr'?'Keeta':null;
+    const restriction=role==='supervisor'?`<div class="restricted">🔒 You are viewing your assigned drivers only (Keeta · Supervisor Hassan). You cannot see drivers from other platforms or supervisors.</div>`:
+      role==='account-mgr'?`<div class="restricted">🔒 You are viewing Keeta platform drivers only. Other platforms are not visible to your role.</div>`:'';
+    el.innerHTML=`
+      <div class="sec-header">
+        <div><div class="sec-title">Driver Management</div><div class="sec-sub">${filter?`${filter} platform only`:'All platforms · 1,247 total drivers'}</div></div>
+        <div style="display:flex;gap:8px">
+          <select style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:var(--r-sm);padding:7px 12px;font-size:0.76rem;font-family:'DM Sans',sans-serif;outline:none"><option>All Platforms</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select>
+          <button class="tb-btn primary" onclick="openForm('add-driver')">+ Add Driver</button>
+        </div>
+      </div>
+      ${restriction}
+      <div class="g4" style="margin-bottom:14px">
+        ${kpiHTML('Active','1,141','<span class="up">91.5%</span> of total','var(--green)',[80,82,84,86,88,90,91])}
+        ${kpiHTML('Warning','63','<span class="dn">5.0%</span> of total','var(--amber)',[40,45,50,55,58,61,63])}
+        ${kpiHTML('Suspended','18','<span class="dn">1.4%</span> of total','var(--red)',[8,10,12,14,15,17,18])}
+        ${kpiHTML('Onboarding','25','New this month','var(--blue)',[5,8,12,15,18,22,25])}
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Driver List</div><div class="ph-link" onclick="openForm('add-driver')">+ Add Driver</div></div>
+        <table class="tbl">
+          <thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Type</th><th>Performance</th><th>COD Today</th><th>Documents</th><th>Status</th></tr></thead>
+          <tbody>${driverTableRows(filter)}</tbody>
+        </table>
+        <div style="padding:12px 18px;border-top:1px solid var(--border);font-size:0.72rem;color:var(--text3)">Click any driver row to view full profile</div>
+      </div>`;
+    return;
+  }
+
+  // ── EMPLOYEES SECTION ──
+  if(section==='employees'){
+    el.innerHTML=`
+      <div class="sec-header">
+        <div><div class="sec-title">Employees</div><div class="sec-sub">Internal staff · All departments</div></div>
+        <button class="tb-btn primary" onclick="openForm('add-employee')">+ Add Employee</button>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Staff Directory</div></div>
+        <table class="tbl">
+          <thead><tr><th>Employee</th><th>Title</th><th>Department</th><th>Level</th><th>Reports To</th><th>Status</th><th>System Access</th></tr></thead>
+          <tbody>
+            ${[
+              {name:'Fatima Al-Ahmad',title:'Finance Controller',dept:'Finance',level:'L3',rep:'GM',access:'Finance + COD'},
+              {name:'Sara Al-Nasser',title:'HR Ops & Compliance Lead',dept:'HR',level:'L3',rep:'GM',access:'Full HR'},
+              {name:'Waleed Al-Hamdan',title:'Head of Operations',dept:'Operations',level:'L3',rep:'GM',access:'All Ops'},
+              {name:'Omar Mohammed',title:'HR Compliance Officer',dept:'HR',level:'L4',rep:'HR Lead',access:'HR Compliance'},
+              {name:'Khalid Al-Rashid',title:'COD Reconciliation Officer',dept:'Finance',level:'L4',rep:'Finance Ctrl',access:'COD Only'},
+              {name:'Ziad Al-Ahmad',title:'OCT Lead',dept:'OCT',level:'L3',rep:'GM',access:'WhatsApp + COD'},
+            ].map(e=>`<tr onclick="viewEmployeeProfile('${e.name}','${e.title}','${e.dept}','${e.level}')" style="cursor:pointer">
+              <td><div style="font-weight:600">${e.name}</div></td>
+              <td>${e.title}</td>
+              <td><span class="b bp">${e.dept}</span></td>
+              <td><span class="b bb">${e.level}</span></td>
+              <td style="color:var(--text2)">${e.rep}</td>
+              <td><span class="b bg">Active</span></td>
+              <td style="font-size:0.72rem;color:var(--text2)">${e.access}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+        <div style="padding:12px 18px;border-top:1px solid var(--border);font-size:0.72rem;color:var(--text3)">Click any employee row to view full profile</div>
+      </div>`;
+    return;
+  }
+
+  // ── SUPERVISOR DASHBOARD ──
+  if(section==='dashboard'&&role==='supervisor'){
+    el.innerHTML=`
+      <div class="restricted">🔒 You are viewing your assigned driver group only. Keeta · Supervisor Hassan · 120 drivers assigned.</div>
+      <div class="g4">
+        ${kpiHTML('My Active Drivers','108','<span class="up">108/120</span> on shift','var(--green)',[90,95,100,105,108,108,108])}
+        ${kpiHTML('Not Logged In','12','<span class="dn">need follow up</span>','var(--red)',[20,18,15,14,13,12,12])}
+        ${kpiHTML('COD Submitted','89','View only · no edit','var(--blue)',[60,65,70,75,80,85,89])}
+        ${kpiHTML('Warnings Today','2','auto escalated','var(--amber)',[0,1,1,2,2,2,2])}
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">🚴 My Drivers — Live Status</div><div class="tb-live"><span class="live-dot"></span>Live</div></div>
+        <table class="tbl">
+          <thead><tr><th>Driver</th><th>Last Login</th><th>Shift Status</th><th>Orders</th><th>Score</th><th>COD</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr onclick="viewDriverProfile('Ahmed Al-Rashidi','DRV-0041','Keeta','--keeta','Sup. Hassan',87)" style="cursor:pointer"><td><b>Ahmed Al-Rashidi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0041</span></td><td class="mono">08:32 AM</td><td><span class="b bg">On Shift</span></td><td class="mono">14</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-label">87%</div></div></td><td><span class="b bg">✓ Submitted</span></td><td><span class="b bg">Active</span></td></tr>
+            <tr onclick="viewDriverProfile('Ali Hassan','DRV-0271','Keeta','--keeta','Sup. Hassan',78)" style="cursor:pointer"><td><b>Ali Hassan</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0271</span></td><td class="mono">10:17 AM</td><td><span class="b bg">On Shift</span></td><td class="mono">9</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:78%;background:var(--amber)"></div></div><div class="score-label">78%</div></div></td><td><span class="b bg">✓ Submitted</span></td><td><span class="b ba">Warning</span></td></tr>
+            <tr><td><b>Nasser Al-Khaldi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0299</span></td><td class="mono" style="color:var(--red)">Yesterday</td><td><span class="b br">Not In</span></td><td class="mono">0</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:55%;background:var(--red)"></div></div><div class="score-label">55%</div></div></td><td><span class="b br">✕ Missing</span></td><td><span class="b br">Absent</span></td></tr>
+          </tbody>
+        </table>
+      </div>`;
+    return;
+  }
+
+  // ── OCT DASHBOARD ──
+  if(section==='dashboard'&&role==='oct-lead'){
+    el.innerHTML=`
+      <div class="g4">
+        ${kpiHTML('WhatsApp Messages','1,247','received today','var(--blue)',[800,900,950,1000,1050,1100,1247])}
+        ${kpiHTML('Auto-Resolved','1,089','<span class="up">87.3%</span> automation rate','var(--green)',[700,800,850,900,950,1000,1089])}
+        ${kpiHTML('Escalated to Human','158','<span class="dn">12.7%</span> of total','var(--amber)',[200,190,180,170,165,160,158])}
+        ${kpiHTML('COD Submissions','842','via WhatsApp today','var(--purple)',[600,650,680,710,740,780,842])}
+      </div>
+      <div class="g2">
+        <div class="panel"><div class="ph"><div class="ph-title">🤖 Automation vs Human — 7 Days</div></div><div class="pb"><div class="chart-wrap"><canvas id="octBar"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">📈 Message Volume Trend</div></div><div class="pb"><div class="chart-wrap"><canvas id="octLine"></canvas></div></div></div>
+      </div>`;
+    mkBar('octBar',DAYS,[
+      {label:'Auto-resolved',data:[980,1100,1050,1200,1150,1300,1089],backgroundColor:'rgba(16,185,129,0.7)',borderRadius:5},
+      {label:'Human handled',data:[140,160,150,180,165,190,158],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:5},
+    ]);
+    mkLine('octLine',DAYS,[{label:'Total Messages',data:[1120,1260,1200,1380,1315,1490,1247],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.07)',tension:0.4,fill:true}]);
+    return;
+  }
+
+  // ── LEGAL DASHBOARD ──
+  if(section==='dashboard'&&role==='legal'){
+    el.innerHTML=`
+      <div class="restricted">🔒 Read-only access. You can view compliance data but cannot make operational or financial changes.</div>
+      <div class="g4">
+        ${kpiHTML('Regulatory Docs','47','all current','var(--blue)',[40,42,44,45,46,47,47])}
+        ${kpiHTML('Compliance Issues','3','require review','var(--amber)',[0,1,1,2,2,3,3])}
+        ${kpiHTML('Driver Compliance','91.5%','<span class="dn">34 alerts</span>','var(--green)',[88,89,90,90,91,91,91.5])}
+        ${kpiHTML('Expiring Licenses','7','within 30 days','var(--red)',[3,4,5,5,6,7,7])}
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">📄 Compliance Overview (Read Only)</div></div>
+        <div class="pb">
+          <div style="padding:20px;text-align:center;color:var(--text2)">
+            <div style="font-size:2rem;margin-bottom:8px">📋</div>
+            <div style="font-size:0.85rem">Compliance data is available in the HR & Legal modules.<br>You have read-only access to regulatory documentation.</div>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // ── ACCOUNT MANAGER DASHBOARD ──
+  if(section==='dashboard'&&role==='account-mgr'){
+    el.innerHTML=`
+      ${platformBanner('Keeta','🔶','Tariq Khalid','340','#f97316')}
+      <div class="restricted">🔒 You are viewing Keeta platform only. Other platforms are not accessible to your role.</div>
+      <div class="g4">
+        ${kpiHTML('Active Drivers','340','<span class="up">↑ 8</span> today','var(--keeta)',[300,310,315,320,325,332,340])}
+        ${kpiHTML('COD Today','BD 4.2K','<span class="up">↑ 12%</span>','var(--green)',[3,3.5,3.2,4,3.8,4.5,4.2])}
+        ${kpiHTML('Performance','84%','<span class="up">↑ 2%</span>','var(--blue)',[78,79,80,81,82,83,84])}
+        ${kpiHTML('Open Alerts','6','<span class="dn">2 critical</span>','var(--red)',[3,4,5,5,6,6,6])}
+      </div>
+      <div class="g2">
+        <div class="panel"><div class="ph"><div class="ph-title">👥 Supervisors — Keeta</div></div><div class="pb">
+          ${[{n:'Supervisor Ahmed',d:'120',a:'116',s:'94%',c:'#f97316'},{n:'Supervisor Hassan',d:'118',a:'109',s:'81%',c:'#fb923c'},{n:'Supervisor Rami',d:'102',a:'88',s:'71%',c:'#ef4444'}].map((s,i)=>`
+          <div class="top-item"><div class="ti-rank">${i+1}</div><div class="ti-av" style="background:linear-gradient(135deg,${s.c},${s.c}99)">${s.n.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div class="ti-info"><div class="ti-name">${s.n}</div><div class="ti-sub">${s.a}/${s.d} active</div></div><div class="ti-val" style="color:${parseFloat(s.s)>=80?'var(--green)':parseFloat(s.s)>=70?'var(--amber)':'var(--red)'}">${s.s}</div></div>`).join('')}
+        </div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">📈 Keeta COD — This Week</div></div><div class="pb"><div class="chart-wrap"><canvas id="keetaChart"></canvas></div></div></div>
+      </div>`;
+    mkLine('keetaChart',DAYS,[{label:'BD',data:[2800,3400,3100,4200,3900,5100,4230],borderColor:'#f97316',backgroundColor:'rgba(249,115,22,0.07)',tension:0.4,fill:true}]);
+    return;
+  }
+
+  // ── DEFAULT FALLBACK ──
+  el.innerHTML=`<div class="sec-header"><div class="sec-title">${title}</div></div>
+    <div class="panel"><div class="ph"><div class="ph-title">${title}</div></div>
+    <div class="pb" style="padding:40px;text-align:center;color:var(--text2)">
+      <div style="font-size:2.5rem;margin-bottom:12px">📊</div>
+      <div style="font-size:0.88rem">${title} module content for ${ROLES[role]?.label||role}</div>
+    </div></div>`;
+}
+
+// ── PLATFORM FILTER ──
+const PLATFORM_DATA={
   all:{drivers:'1,247',cod:'BD 18.4K',alerts:'34',perf:'82%'},
   keeta:{drivers:'340',cod:'BD 4.2K',alerts:'6',perf:'84%'},
   jahez:{drivers:'512',cod:'BD 6.8K',alerts:'11',perf:'79%'},
   ninja:{drivers:'218',cod:'BD 2.9K',alerts:'3',perf:'88%'},
   noon:{drivers:'177',cod:'BD 2.1K',alerts:'5',perf:'81%'},
 };
-function filterDash(el,p){
+function filterPtab(el,p){
   document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  const d=dashData[p];
-  document.getElementById('kpiDrivers').textContent=d.drivers;
-  document.getElementById('kpiCod').textContent=d.cod;
-  document.getElementById('kpiAlerts').textContent=d.alerts;
-  document.getElementById('kpiPerf').textContent=d.perf;
+  const d=PLATFORM_DATA[p];
+  document.getElementById('dashKpis').innerHTML=
+    kpiHTML('Active Drivers',d.drivers,`<span class="up">↑ 23</span> from yesterday`,'var(--blue)',[50,55,60,65,70,75,80])+
+    kpiHTML('COD Outstanding',d.cod,`<span class="dn">unsettled</span>`,'var(--amber)',[80,70,75,85,80,90,88])+
+    kpiHTML('Compliance Alerts',d.alerts,`<span class="dn">expiring this week</span>`,'var(--red)',[20,25,28,30,32,33,34])+
+    kpiHTML('Avg Performance',d.perf,`<span class="up">↑ 3%</span> vs last week`,'var(--green)',[70,72,75,76,79,80,82]);
 }
 
-// ── CHART DEFAULTS ──
-Chart.defaults.color='#8892a4';
-Chart.defaults.borderColor='#1e2535';
-Chart.defaults.font.family="'IBM Plex Sans', sans-serif";
-Chart.defaults.font.size=11;
+// ── FORMS ──
+function openForm(type){
+  const overlay=document.getElementById('formOverlay');
+  const card=document.getElementById('formCard');
+  overlay.style.display='flex';
 
-const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const hrs=['6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm'];
-
-function mkLine(id,labels,datasets,opts={}){
-  const ctx=document.getElementById(id);
-  if(!ctx||ctx._chart)return;
-  ctx._chart=new Chart(ctx,{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#4a5568'}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4a5568'}}},elements:{point:{radius:3,hoverRadius:5}},...opts}});
-}
-function mkBar(id,labels,datasets,opts={}){
-  const ctx=document.getElementById(id);
-  if(!ctx||ctx._chart)return;
-  ctx._chart=new Chart(ctx,{type:'bar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:datasets.length>1,position:'top',labels:{boxWidth:10,padding:10}}},scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#4a5568'}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4a5568'}}},...opts}});
-}
-function mkDoughnut(id,labels,data,colors){
-  const ctx=document.getElementById(id);
-  if(!ctx||ctx._chart)return;
-  ctx._chart=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#0d1017',borderWidth:3,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'70%'}});
-}
-
-let chartsInit={};
-function initChartsForSection(id){
-  if(chartsInit[id])return;
-  chartsInit[id]=true;
-
-  if(id==='dashboard'){
-    // Main line chart
-    mkLine('lineChart',days,[
-      {label:'Keeta',data:[3200,4100,3800,5200,4700,6100,4230],borderColor:'#ff6b35',backgroundColor:'rgba(255,107,53,0.05)',tension:0.4,fill:true},
-      {label:'Jahez',data:[4800,5200,6100,5800,7200,6400,6870],borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.05)',tension:0.4,fill:true},
-      {label:'Ninja',data:[1800,2100,2400,2200,3100,2800,2940],borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.05)',tension:0.4,fill:true},
-      {label:'Noon',data:[1400,1700,1900,2100,1800,2300,2110],borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.05)',tension:0.4,fill:true},
-    ]);
-    mkDoughnut('donutChart',['Keeta','Jahez','Ninja','Noon'],[340,512,218,177],['#ff6b35','#8b5cf6','#06b6d4','#f59e0b']);
-    mkBar('barChart',['Keeta','Jahez','Ninja','Noon'],[
-      {label:'Performance %',data:[84,79,88,81],backgroundColor:['rgba(255,107,53,0.7)','rgba(139,92,246,0.7)','rgba(6,182,212,0.7)','rgba(245,158,11,0.7)'],borderRadius:6,borderSkipped:false}
-    ],{plugins:{legend:{display:false}}});
-    mkDoughnut('statusChart',['Active','Warning','Suspended','Onboarding'],[1141,63,18,25],['#00d68f','#ffb547','#ff4d6a','#1e6fff']);
-    mkLine('areaChart',hrs,[
-      {label:'Orders',data:[12,45,89,142,168,201,189,210,178,145,112,78],borderColor:'#1e6fff',backgroundColor:'rgba(30,111,255,0.08)',tension:0.4,fill:true}
-    ]);
-  }
-
-  if(id==='keeta'){
-    mkLine('keetaLine',days,[{label:'COD (BD)',data:[2800,3400,3100,4200,3900,5100,4230],borderColor:'#ff6b35',backgroundColor:'rgba(255,107,53,0.08)',tension:0.4,fill:true}]);
-  }
-  if(id==='jahez'){
-    mkLine('jahezLine',days,[{label:'COD (BD)',data:[4200,5100,5800,5400,6800,6200,6870],borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.08)',tension:0.4,fill:true}]);
-  }
-  if(id==='ninja'){
-    mkLine('ninjaLine',days,[{label:'COD (BD)',data:[1600,1900,2200,2000,2800,2600,2940],borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.08)',tension:0.4,fill:true}]);
-  }
-  if(id==='noon'){
-    mkLine('noonLine',days,[{label:'COD (BD)',data:[1200,1500,1700,1900,1600,2100,2110],borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.08)',tension:0.4,fill:true}]);
-  }
-
-  if(id==='operations'){
-    mkLine('opsArea',hrs,[{label:'Orders/Hour',data:[8,32,71,118,145,167,154,178,142,119,88,54],borderColor:'#00d68f',backgroundColor:'rgba(0,214,143,0.08)',tension:0.4,fill:true}]);
-    mkBar('opsBar',['Keeta','Jahez','Ninja','Noon'],[
-      {label:'On Shift',data:[310,478,208,165],backgroundColor:'rgba(0,214,143,0.7)',borderRadius:4},
-      {label:'Not In',data:[30,34,10,12],backgroundColor:'rgba(255,77,106,0.7)',borderRadius:4},
-    ],{scales:{x:{stacked:false},y:{stacked:false}}});
-  }
-
-  if(id==='hr'){
-    mkBar('hrBar',['Passport','Visa','CPR','License','Insurance','Contract'],[
-      {label:'Expiring Soon',data:[8,12,5,7,9,3],backgroundColor:'rgba(255,181,71,0.7)',borderRadius:4},
-      {label:'Expired',data:[2,4,3,1,2,0],backgroundColor:'rgba(255,77,106,0.7)',borderRadius:4},
-    ]);
-    const d30=Array.from({length:10},(_,i)=>`Mar ${i+1}`);
-    mkLine('hrLine',d30,[{label:'Active Alerts',data:[18,22,19,25,28,24,30,27,34,34],borderColor:'#ff4d6a',backgroundColor:'rgba(255,77,106,0.06)',tension:0.4,fill:true}]);
-  }
-
-  if(id==='finance'){
-    mkBar('finBar',['Keeta','Jahez','Ninja','Noon'],[
-      {label:'Collected (BD)',data:[42300,68700,29400,21100],backgroundColor:['rgba(255,107,53,0.7)','rgba(139,92,246,0.7)','rgba(6,182,212,0.7)','rgba(245,158,11,0.7)'],borderRadius:6},
-    ],{plugins:{legend:{display:false}}});
-    const d30=Array.from({length:10},(_,i)=>`Mar ${i+1}`);
-    mkLine('finLine',d30,[
-      {label:'Collected',data:[5200,6100,5800,7200,6400,8100,7400,8800,7900,9200],borderColor:'#1e6fff',tension:0.4},
-      {label:'Settled',data:[4800,5700,5400,6800,6100,7600,6900,8200,7400,8700],borderColor:'#00d68f',tension:0.4},
-    ]);
-  }
-
-  if(id==='crm'){
-    mkDoughnut('crmDonut',['Payment/COD','Documents','Platform','Operations','Other'],[34,28,18,12,8],['#1e6fff','#8b5cf6','#ff6b35','#00d68f','#ffb547']);
-    mkLine('crmLine',days,[
-      {label:'New Tickets',data:[18,24,21,32,28,38,35],borderColor:'#ff4d6a',tension:0.4},
-      {label:'Resolved',data:[15,21,19,29,25,34,31],borderColor:'#00d68f',tension:0.4},
-    ]);
+  if(type==='add-driver'||type==='hr-recruitment'){
+    card.innerHTML=driverFormHTML(1);
+  } else if(type==='add-employee'){
+    card.innerHTML=employeeFormHTML(1);
   }
 }
 
-// Init dashboard charts on load
-setTimeout(()=>initChartsForSection('dashboard'),200);
+function closeForm(){
+  document.getElementById('formOverlay').style.display='none';
+}
+
+function driverFormHTML(step){
+  const steps=['Personal Info','Platform & Assignment','Documents','Review'];
+  const stepsHTML=steps.map((s,i)=>`
+    <div class="fstep">
+      <div class="fstep-num ${i+1<step?'done':i+1===step?'active':'pending'}">${i+1<step?'✓':i+1}</div>
+      <div class="fstep-label ${i+1===step?'active':'pending'}">${s}</div>
+      ${i<steps.length-1?`<div class="fstep-line ${i+1<step?'done':''}"></div>`:''}
+    </div>`).join('');
+
+  let body='';
+  if(step===1){
+    body=`
+      <div class="form-section-title">Personal Information</div>
+      <div class="form-row">
+        <div class="field required"><label>First Name</label><input type="text" placeholder="Ahmed"></div>
+        <div class="field required"><label>Last Name</label><input type="text" placeholder="Al-Rashidi"></div>
+      </div>
+      <div class="form-row">
+        <div class="field required"><label>Nationality</label><select><option>Select...</option><option>Bahraini</option><option>Saudi</option><option>Indian</option><option>Pakistani</option><option>Filipino</option></select></div>
+        <div class="field required"><label>Driver Type</label><select><option>Select...</option><option>Local</option><option>Offshore</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="field required"><label>Phone Number</label><input type="tel" placeholder="+973 3300 XXXX"></div>
+        <div class="field"><label>CPR / ID Number</label><input type="text" placeholder="XXXXXX-XXXX"></div>
+      </div>
+      <div class="form-row single">
+        <div class="field"><label>Notes</label><textarea rows="2" placeholder="Any additional notes..."></textarea></div>
+
+```
+  </div>`;
+```
+
+} else if(step===2){
+body=` <div class="form-section-title">Platform & Assignment</div> <div class="form-row"> <div class="field required"><label>Platform</label><select><option>Select Platform...</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select></div> <div class="field required"><label>Supervisor</label><select><option>Select Supervisor...</option><option>Supervisor Ahmed (Keeta)</option><option>Supervisor Hassan (Keeta)</option><option>Supervisor Mohammed (Jahez)</option></select></div> </div> <div class="form-row"> <div class="field required"><label>Contract Type</label><select><option>Local Contract</option><option>Offshore Contract</option></select></div> <div class="field required"><label>Employment Start Date</label><input type="date"></div> </div> <div class="form-section-title" style="margin-top:8px">Bike Information</div> <div class="form-row"> <div class="field required"><label>Bike Type</label><select><option>Lease-to-Own</option><option>Rental</option><option>Personal</option></select></div> <div class="field"><label>Bike Model</label><input type="text" placeholder="Honda CB200"></div> </div> <div class="form-row"> <div class="field"><label>Plate Number</label><input type="text" placeholder="BH XXXX X"></div> <div class="field"><label>Registration Expiry</label><input type="date"></div> </div>`;
+} else if(step===3){
+body=` <div class="form-section-title">Upload Documents</div> ${['Passport','Visa','CPR / ID','Driving License','Insurance','Contract'].map(d=>`
+<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+<div>
+<div style="font-size:0.8rem;font-weight:600">${d}</div>
+<div style="font-size:0.65rem;color:var(--text3);margin-top:2px">PDF or image · max 5MB</div>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<input type="date" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:5px 10px;font-size:0.72rem;color:var(--text2);font-family:'DM Sans',sans-serif;outline:none" placeholder="Expiry date">
+<button class="btn btn-ghost" style="font-size:0.7rem;padding:5px 12px" onclick="this.textContent='✓ Uploaded';this.classList.replace('btn-ghost','btn-success')">Upload</button>
+</div>
+</div>`).join('')}`;
+} else if(step===4){
+body=` <div class="success-card"> <div class="sc-icon">✅</div> <div><div class="sc-title">Ready to Create Driver</div><div class="sc-sub">All required information has been filled in. Review below and confirm.</div></div> </div> <div class="panel" style="margin-bottom:0"> <div class="ph"><div class="ph-title">Summary</div></div> <div class="pb"> <div class="info-grid"> <div class="ig-item"><div class="ig-label">Name</div><div class="ig-val">Ahmed Al-Rashidi</div></div> <div class="ig-item"><div class="ig-label">Platform</div><div class="ig-val" style="color:var(--keeta)">Keeta</div></div> <div class="ig-item"><div class="ig-label">Supervisor</div><div class="ig-val">Supervisor Ahmed</div></div> <div class="ig-item"><div class="ig-label">Driver Type</div><div class="ig-val">Local</div></div> <div class="ig-item"><div class="ig-label">Documents</div><div class="ig-val"><span class="b bg">6 uploaded</span></div></div> <div class="ig-item"><div class="ig-label">Status</div><div class="ig-val"><span class="b ba">Onboarding</span></div></div> </div> </div> </div>`;
+}
+
+return` <div class="form-header"> <div class="form-title">➕ Add New Driver</div> <div class="form-close" onclick="closeForm()">✕</div> </div> <div class="form-steps">${stepsHTML}</div> <div class="form-body">${body}</div> <div class="form-footer"> <button class="btn btn-ghost" onclick="${step>1?`document.getElementById(‘formCard’).innerHTML=driverFormHTML(${step-1})`:`closeForm()`}">${step>1?'← Back':'Cancel'}</button> <div style="font-size:0.72rem;color:var(--text3)">Step ${step} of ${steps.length}</div> <button class="btn btn-primary" onclick="${step<steps.length?`document.getElementById(‘formCard’).innerHTML=driverFormHTML(${step+1})`:`driverSubmitSuccess()`}">${step<steps.length?'Next →':'✓ Create Driver'}</button> </div>`;
+}
+
+function employeeFormHTML(step){
+const steps=[‘Personal Info’,‘Role & Department’,‘System Access’];
+const stepsHTML=steps.map((s,i)=>` <div class="fstep"> <div class="fstep-num ${i+1<step?'done':i+1===step?'active':'pending'}">${i+1<step?'✓':i+1}</div> <div class="fstep-label ${i+1===step?'active':'pending'}">${s}</div> ${i<steps.length-1?`<div class="fstep-line ${i+1<step?'done':''}"></div>`:''} </div>`).join(’’);
+
+let body=’’;
+if(step===1){
+body=` <div class="form-section-title">Personal Information</div> <div class="form-row"> <div class="field required"><label>First Name</label><input type="text" placeholder="Sara"></div> <div class="field required"><label>Last Name</label><input type="text" placeholder="Al-Nasser"></div> </div> <div class="form-row"> <div class="field required"><label>CPR / ID</label><input type="text" placeholder="XXXXXX-XXXX"></div> <div class="field required"><label>Phone</label><input type="tel" placeholder="+973 3X XX XXXX"></div> </div> <div class="form-row"> <div class="field required"><label>Work Email</label><input type="email" placeholder="sara@courierx.com"></div> <div class="field required"><label>Employment Type</label><select><option>Full-time</option><option>Part-time</option><option>Consultant</option><option>External</option></select></div> </div> <div class="form-row"> <div class="field"><label>Contract Start</label><input type="date"></div> <div class="field"><label>Contract End</label><input type="date"></div> </div>`;
+} else if(step===2){
+body=` <div class="form-section-title">Role & Department</div> <div class="form-row"> <div class="field required"><label>Job Title</label><input type="text" placeholder="Finance Controller"></div> <div class="field required"><label>Department</label><select><option>Finance</option><option>HR</option><option>Operations</option><option>OCT</option><option>Legal</option></select></div> </div> <div class="form-row"> <div class="field required"><label>Reports To</label><select><option>CEO / Owner</option><option>General Manager</option><option>Finance Controller</option><option>HR Lead</option><option>Head of Operations</option></select></div> <div class="field required"><label>Work Location</label><select><option>Office — Manama</option><option>Field</option><option>Hybrid</option><option>Remote</option></select></div> </div>`;
+} else if(step===3){
+body=` <div class="form-section-title">System Access Level</div> <div style="display:grid;gap:10px"> ${[ {l:'Level 3 — Department Lead',d:'Full access to assigned department module. No cross-department data.',v:'l3'}, {l:'Level 4 — Officer / Specialist',d:'Limited to specific tasks within one module. No approval authority.',v:'l4'}, {l:'View Only',d:'Can see dashboards relevant to role. Cannot take any action.',v:'view'}, ].map(o=>`
+<label style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);cursor:pointer">
+<input type="radio" name="access" value="${o.v}" style="margin-top:3px;accent-color:var(--blue)">
+<div><div style="font-size:0.8rem;font-weight:600">${o.l}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:3px">${o.d}</div></div>
+</label>`).join('')} </div> <div style="margin-top:14px"> <div class="form-section-title">Notify Employee</div> <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--blue)"><span style="font-size:0.8rem">Send welcome email with login credentials</span></label> </div>`;
+}
+
+return` <div class="form-header"> <div class="form-title">➕ Add New Employee</div> <div class="form-close" onclick="closeForm()">✕</div> </div> <div class="form-steps">${stepsHTML}</div> <div class="form-body">${body}</div> <div class="form-footer"> <button class="btn btn-ghost" onclick="${step>1?`document.getElementById(‘formCard’).innerHTML=employeeFormHTML(${step-1})`:`closeForm()`}">${step>1?'← Back':'Cancel'}</button> <div style="font-size:0.72rem;color:var(--text3)">Step ${step} of ${steps.length}</div> <button class="btn btn-primary" onclick="${step<steps.length?`document.getElementById(‘formCard’).innerHTML=employeeFormHTML(${step+1})`:`employeeSubmitSuccess()`}">${step<steps.length?'Next →':'✓ Create Employee'}</button> </div>`;
+}
+
+function driverSubmitSuccess(){
+closeForm();
+const content=document.getElementById(‘mainContent’);
+const successBanner=`<div class="success-card">
+<div class="sc-icon">🎉</div>
+<div><div class="sc-title">Driver Created Successfully</div><div class="sc-sub">Ahmed Al-Rashidi · DRV-1248 · Keeta · Supervisor Ahmed · Status: Onboarding · Welcome WhatsApp sent automatically.</div></div>
+<button class="btn btn-ghost" style="margin-left:auto;white-space:nowrap" onclick="this.parentElement.remove()">Dismiss</button>
+
+  </div>`;
+  content.insertAdjacentHTML('afterbegin',successBanner);
+  content.scrollTop=0;
+}
+
+function employeeSubmitSuccess(){
+closeForm();
+const content=document.getElementById(‘mainContent’);
+const successBanner=`<div class="success-card">
+<div class="sc-icon">🎉</div>
+<div><div class="sc-title">Employee Created Successfully</div><div class="sc-sub">Sara Al-Nasser · Finance · Level 3 · System credentials sent to sara@courierx.com</div></div>
+<button class="btn btn-ghost" style="margin-left:auto;white-space:nowrap" onclick="this.parentElement.remove()">Dismiss</button>
+
+  </div>`;
+  content.insertAdjacentHTML('afterbegin',successBanner);
+  content.scrollTop=0;
+}
+
+// ── INIT ──
+setRole(‘ceo’,document.querySelector(’.role-pill’));
 </script>
 
 </body>
