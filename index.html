@@ -701,7 +701,15 @@ const PD={
 };
 function getPlats(){return currentPlatform==='all'?Object.values(PD):[PD[currentPlatform]];}
 function getSPD(){return currentPlatform==='all'?null:PD[currentPlatform];}
-function platTabs(ap){return '<div class="ptabs"><div class="ptab'+(ap==='all'?' active':'')+'" onclick="switchPlat('all',this)">🏢 All</div>'+Object.entries(PD).map(([k,p])=>'<div class="ptab'+(ap===k?' active':'')+'" onclick="switchPlat(''+k+'',this)">'+p.emoji+' '+p.name+'</div>').join('')+'</div>';}
+function platTabs(ap){
+  let h='<div class="ptabs">';
+  h+='<div class="ptab'+(ap==='all'?' active':'')+'" onclick="switchPlat(\'all\')">🏢 All</div>';
+  Object.entries(PD).forEach(([k,p])=>{
+    h+='<div class="ptab'+(ap===k?' active':'')+'" onclick="switchPlat(\''+k+'\')">'+ p.emoji+' '+p.name+'</div>';
+  });
+  h+='</div>';
+  return h;
+}
 function switchPlat(plat){currentPlatform=plat;renderContent(currentRole,currentSection,document.getElementById('pageTitle').textContent);}
 let calendarDate=new Date(2026,2,1); // March 2026
 let calendarEvents={
