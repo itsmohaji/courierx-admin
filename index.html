@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -38,275 +37,217 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;display:flex;flex-direction:column;}
-
-/* ROLE SWITCHER BAR */
-.role-bar{background:var(–surface);border-bottom:1px solid var(–border);padding:0 20px;height:44px;display:flex;align-items:center;gap:6px;flex-shrink:0;overflow-x:auto;}
+.role-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:44px;display:flex;align-items:center;gap:6px;flex-shrink:0;overflow-x:auto;}
 .role-bar::-webkit-scrollbar{display:none;}
-.role-bar-label{font-size:0.65rem;color:var(–text3);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-right:6px;white-space:nowrap;}
-.role-pill{display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:0.72rem;color:var(–text2);transition:all 0.2s;white-space:nowrap;border:1px solid transparent;font-weight:500;}
-.role-pill:hover{background:var(–surface3);color:var(–text);}
-.role-pill.active{background:var(–blue2);color:white;border-color:rgba(59,130,246,0.3);box-shadow:0 0 12px rgba(37,99,235,0.3);}
+.role-bar-label{font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-right:6px;white-space:nowrap;}
+.role-pill{display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:0.72rem;color:var(--text2);transition:all 0.2s;white-space:nowrap;border:1px solid transparent;font-weight:500;}
+.role-pill:hover{background:var(--surface3);color:var(--text);}
+.role-pill.active{background:var(--blue2);color:white;border-color:rgba(59,130,246,0.3);box-shadow:0 0 12px rgba(37,99,235,0.3);}
 .role-pill .rp-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0.7;}
-
-/* MAIN LAYOUT */
 .app{display:flex;flex:1;overflow:hidden;}
-
-/* SIDEBAR */
-.sidebar{width:230px;background:var(–surface);border-right:1px solid var(–border);display:flex;flex-direction:column;flex-shrink:0;transition:all 0.3s;}
-.sidebar-logo{padding:16px 18px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:10px;}
-.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(–blue2),var(–blue));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:‘Syne’,sans-serif;font-weight:800;font-size:13px;color:white;box-shadow:0 4px 12px rgba(37,99,235,0.3);}
-.logo-text{font-family:‘Syne’,sans-serif;font-weight:800;font-size:0.95rem;}
-.logo-sub{font-size:0.6rem;color:var(–text3);margin-top:1px;}
-.sidebar-role{margin:10px;padding:10px 12px;background:var(–surface3);border:1px solid var(–border2);border-radius:var(–r-sm);}
-.sr-level{font-size:0.58rem;color:var(–text3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;}
-.sr-name{font-size:0.82rem;font-weight:600;color:var(–text);margin-top:2px;}
-.sr-access{font-size:0.65rem;color:var(–blue);margin-top:2px;}
+.sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:all 0.3s;}
+.sidebar-logo{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--blue2),var(--blue));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:white;box-shadow:0 4px 12px rgba(37,99,235,0.3);}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;}
+.logo-sub{font-size:0.6rem;color:var(--text3);margin-top:1px;}
+.sidebar-role{margin:10px;padding:10px 12px;background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r-sm);}
+.sr-level{font-size:0.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;}
+.sr-name{font-size:0.82rem;font-weight:600;color:var(--text);margin-top:2px;}
+.sr-access{font-size:0.65rem;color:var(--blue);margin-top:2px;}
 .nav{flex:1;padding:8px;overflow-y:auto;}
 .nav::-webkit-scrollbar{width:3px;}
-.nav::-webkit-scrollbar-thumb{background:var(–border2);border-radius:3px;}
-.nav-group{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(–text3);padding:12px 10px 5px;font-weight:700;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(–r-sm);cursor:pointer;color:var(–text2);transition:all 0.15s;margin-bottom:1px;font-size:0.8rem;border:1px solid transparent;position:relative;}
-.nav-item:hover{background:var(–surface3);color:var(–text);}
-.nav-item.active{background:var(–blue-glow);color:var(–blue);border-color:rgba(59,130,246,0.12);}
+.nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+.nav-group{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:12px 10px 5px;font-weight:700;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-sm);cursor:pointer;color:var(--text2);transition:all 0.15s;margin-bottom:1px;font-size:0.8rem;border:1px solid transparent;position:relative;}
+.nav-item:hover{background:var(--surface3);color:var(--text);}
+.nav-item.active{background:var(--blue-glow);color:var(--blue);border-color:rgba(59,130,246,0.12);}
 .nav-item .ni{font-size:0.85rem;width:18px;text-align:center;flex-shrink:0;}
-.nav-badge{margin-left:auto;background:var(–red);color:white;border-radius:10px;padding:1px 6px;font-size:0.58rem;font-weight:700;}
+.nav-badge{margin-left:auto;background:var(--red);color:white;border-radius:10px;padding:1px 6px;font-size:0.58rem;font-weight:700;}
 .nav-lock{margin-left:auto;font-size:0.7rem;opacity:0.4;}
-.sidebar-user{padding:12px;border-top:1px solid var(–border);}
+.sidebar-user{padding:12px;border-top:1px solid var(--border);}
 .su-row{display:flex;align-items:center;gap:9px;}
-.su-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(–blue2),var(–purple));display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;color:white;flex-shrink:0;}
+.su-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;color:white;flex-shrink:0;}
 .su-name{font-size:0.78rem;font-weight:600;}
-.su-role{font-size:0.62rem;color:var(–text3);}
-
-/* TOPBAR */
-.topbar{background:var(–surface);border-bottom:1px solid var(–border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.su-role{font-size:0.62rem;color:var(--text3);}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .tb-left{display:flex;align-items:center;gap:12px;}
-.tb-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.95rem;}
-.tb-breadcrumb{font-size:0.72rem;color:var(–text3);}
+.tb-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;}
 .tb-right{display:flex;align-items:center;gap:10px;}
-.tb-clock{font-family:‘JetBrains Mono’,monospace;font-size:0.72rem;color:var(–text3);}
-.tb-live{display:flex;align-items:center;gap:5px;font-size:0.65rem;color:var(–green);font-weight:600;}
-.live-dot{width:6px;height:6px;background:var(–green);border-radius:50%;animation:pulse 2s infinite;}
+.tb-clock{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text3);}
+.tb-live{display:flex;align-items:center;gap:5px;font-size:0.65rem;color:var(--green);font-weight:600;}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
-.tb-btn{background:var(–surface3);border:1px solid var(–border2);border-radius:var(–r-sm);padding:6px 12px;cursor:pointer;font-size:0.75rem;color:var(–text2);display:flex;align-items:center;gap:5px;transition:all 0.15s;font-family:‘DM Sans’,sans-serif;}
-.tb-btn:hover{background:var(–surface4);color:var(–text);}
-.tb-btn.primary{background:var(–blue2);color:white;border-color:transparent;}
-.tb-btn.primary:hover{background:var(–blue);}
-.notif-btn{position:relative;background:var(–surface3);border:1px solid var(–border);border-radius:var(–r-sm);padding:7px 10px;cursor:pointer;font-size:0.85rem;}
-.notif-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;background:var(–red);border-radius:50%;}
-
-/* CONTENT */
+.tb-btn{background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer;font-size:0.75rem;color:var(--text2);display:flex;align-items:center;gap:5px;transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+.tb-btn:hover{background:var(--surface4);color:var(--text);}
+.tb-btn.primary{background:var(--blue2);color:white;border-color:transparent;}
+.tb-btn.primary:hover{background:var(--blue);}
+.notif-btn{position:relative;background:var(--surface3);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;cursor:pointer;font-size:0.85rem;}
+.notif-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;background:var(--red);border-radius:50%;}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 .content{flex:1;overflow-y:auto;padding:20px 24px;}
 .content::-webkit-scrollbar{width:4px;}
-.content::-webkit-scrollbar-thumb{background:var(–border2);border-radius:4px;}
-
-/* ACCESS DENIED */
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
 .access-denied{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;opacity:0.5;}
 .ad-icon{font-size:3rem;}
-.ad-title{font-family:‘Syne’,sans-serif;font-size:1.2rem;font-weight:700;}
-.ad-sub{font-size:0.82rem;color:var(–text2);}
-
-/* GRID */
+.ad-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;}
+.ad-sub{font-size:0.82rem;color:var(--text2);}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
 .g2-1{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;}
 .g1-2{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:14px;}
 .g3-1{display:grid;grid-template-columns:3fr 1fr;gap:14px;margin-bottom:14px;}
-
-/* KPI CARD */
-.kpi{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);padding:16px;position:relative;overflow:hidden;transition:border-color 0.2s;}
-.kpi:hover{border-color:var(–border2);}
-.kpi::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:var(–kc,var(–blue));}
-.kpi-label{font-size:0.62rem;color:var(–text2);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;}
-.kpi-val{font-family:‘Syne’,sans-serif;font-size:1.7rem;font-weight:800;color:var(–text);margin:6px 0 4px;line-height:1;}
-.kpi-sub{font-size:0.65rem;color:var(–text2);display:flex;align-items:center;gap:4px;}
-.up{color:var(–green);}.dn{color:var(–red);}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.kpi:hover{border-color:var(--border2);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--kc,var(--blue));}
+.kpi-label{font-size:0.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.07em;font-weight:600;}
+.kpi-val{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;color:var(--text);margin:6px 0 4px;line-height:1;}
+.kpi-sub{font-size:0.65rem;color:var(--text2);display:flex;align-items:center;gap:4px;}
+.up{color:var(--green);}.dn{color:var(--red);}
 .kpi-spark{margin-top:10px;height:28px;display:flex;align-items:flex-end;gap:2px;}
 .ks-bar{flex:1;border-radius:2px;background:rgba(255,255,255,0.06);min-height:3px;}
-
-/* PANEL */
-.panel{background:var(–surface);border:1px solid var(–border);border-radius:var(–r);overflow:hidden;}
-.ph{padding:14px 18px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;}
-.ph-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.82rem;display:flex;align-items:center;gap:7px;}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.ph{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.ph-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;display:flex;align-items:center;gap:7px;}
 .ph-actions{display:flex;align-items:center;gap:8px;}
-.ph-link{font-size:0.7rem;color:var(–blue);cursor:pointer;}
+.ph-link{font-size:0.7rem;color:var(--blue);cursor:pointer;}
 .pb{padding:16px 18px;}
-
-/* TABLE */
 .tbl{width:100%;border-collapse:collapse;}
-.tbl th{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(–text3);padding:8px 12px;text-align:left;border-bottom:1px solid var(–border);font-weight:700;background:rgba(255,255,255,0.01);}
-.tbl td{padding:10px 12px;border-bottom:1px solid var(–border);font-size:0.78rem;vertical-align:middle;}
+.tbl th{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:700;background:rgba(255,255,255,0.01);}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:0.78rem;vertical-align:middle;}
 .tbl tr:last-child td{border-bottom:none;}
 .tbl tr:hover td{background:rgba(255,255,255,0.015);}
-.tbl td.mono{font-family:‘JetBrains Mono’,monospace;font-size:0.72rem;}
-
-/* BADGE */
+.tbl td.mono{font-family:'JetBrains Mono',monospace;font-size:0.72rem;}
 .b{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:0.62rem;font-weight:600;white-space:nowrap;}
-.bg{background:var(–green-dim);color:var(–green);border:1px solid rgba(16,185,129,0.2);}
-.ba{background:var(–amber-dim);color:var(–amber);border:1px solid rgba(245,158,11,0.2);}
-.br{background:var(–red-dim);color:var(–red);border:1px solid rgba(239,68,68,0.2);}
-.bb{background:var(–blue-glow);color:var(–blue);border:1px solid rgba(59,130,246,0.2);}
-.bp{background:rgba(139,92,246,0.1);color:var(–purple);border:1px solid rgba(139,92,246,0.2);}
-
-/* SCORE */
+.bg{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,185,129,0.2);}
+.ba{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,0.2);}
+.br{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,0.2);}
+.bb{background:var(--blue-glow);color:var(--blue);border:1px solid rgba(59,130,246,0.2);}
+.bp{background:rgba(139,92,246,0.1);color:var(--purple);border:1px solid rgba(139,92,246,0.2);}
 .score{display:flex;align-items:center;gap:7px;}
-.score-track{flex:1;height:4px;background:var(–border);border-radius:4px;overflow:hidden;}
+.score-track{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
 .score-fill{height:100%;border-radius:4px;}
-.score-label{font-family:‘JetBrains Mono’,monospace;font-size:0.68rem;color:var(–text2);width:30px;text-align:right;}
-
-/* SECTION */
+.score-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--text2);width:30px;text-align:right;}
 .sec{display:none;animation:fadeIn 0.2s ease;}
 .sec.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-
-/* TABS */
-.tabs{display:flex;gap:2px;background:var(–surface2);border:1px solid var(–border);border-radius:var(–r-sm);padding:3px;width:fit-content;margin-bottom:16px;}
-.tab{padding:6px 16px;border-radius:6px;cursor:pointer;font-size:0.78rem;color:var(–text2);transition:all 0.15s;font-weight:500;}
-.tab.active{background:var(–surface4);color:var(–text);box-shadow:0 1px 3px rgba(0,0,0,0.3);}
-
-/* PLATFORM TABS */
+.tabs{display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:3px;width:fit-content;margin-bottom:16px;}
+.tab{padding:6px 16px;border-radius:6px;cursor:pointer;font-size:0.78rem;color:var(--text2);transition:all 0.15s;font-weight:500;}
+.tab.active{background:var(--surface4);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.3);}
 .ptabs{display:flex;gap:4px;margin-bottom:16px;}
-.ptab{padding:6px 16px;border-radius:20px;cursor:pointer;font-size:0.75rem;color:var(–text2);transition:all 0.15s;font-weight:500;border:1px solid var(–border);background:var(–surface);}
-.ptab:hover{border-color:var(–border2);}
-.ptab[data-p=all].active{background:rgba(59,130,246,0.15);color:var(–blue);border-color:rgba(59,130,246,0.3);}
-.ptab[data-p=keeta].active{background:var(–keeta-dim);color:var(–keeta);border-color:rgba(249,115,22,0.3);}
-.ptab[data-p=jahez].active{background:var(–jahez-dim);color:var(–jahez);border-color:rgba(139,92,246,0.3);}
-.ptab[data-p=ninja].active{background:var(–ninja-dim);color:var(–ninja);border-color:rgba(6,182,212,0.3);}
-.ptab[data-p=noon].active{background:var(–noon-dim);color:var(–noon);border-color:rgba(234,179,8,0.3);}
-
-/* PROFILE HERO */
-.profile-hero{background:linear-gradient(135deg,var(–surface2) 0%,var(–surface3) 100%);border:1px solid var(–border2);border-radius:var(–r-lg);padding:24px;margin-bottom:16px;display:flex;align-items:flex-start;gap:20px;position:relative;overflow:hidden;}
-.profile-hero::before{content:’’;position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:var(–profile-color,var(–blue));opacity:0.04;pointer-events:none;}
-.ph-avatar{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.4rem;color:white;flex-shrink:0;box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+.ptab{padding:6px 16px;border-radius:20px;cursor:pointer;font-size:0.75rem;color:var(--text2);transition:all 0.15s;font-weight:500;border:1px solid var(--border);background:var(--surface);}
+.ptab:hover{border-color:var(--border2);}
+.ptab[data-p=all].active{background:rgba(59,130,246,0.15);color:var(--blue);border-color:rgba(59,130,246,0.3);}
+.ptab[data-p=keeta].active{background:var(--keeta-dim);color:var(--keeta);border-color:rgba(249,115,22,0.3);}
+.ptab[data-p=jahez].active{background:var(--jahez-dim);color:var(--jahez);border-color:rgba(139,92,246,0.3);}
+.ptab[data-p=ninja].active{background:var(--ninja-dim);color:var(--ninja);border-color:rgba(6,182,212,0.3);}
+.ptab[data-p=noon].active{background:var(--noon-dim);color:var(--noon);border-color:rgba(234,179,8,0.3);}
+.profile-hero{background:linear-gradient(135deg,var(--surface2) 0%,var(--surface3) 100%);border:1px solid var(--border2);border-radius:var(--r-lg);padding:24px;margin-bottom:16px;display:flex;align-items:flex-start;gap:20px;position:relative;overflow:hidden;}
+.profile-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:var(--profile-color,var(--blue));opacity:0.04;pointer-events:none;}
+.ph-avatar{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:white;flex-shrink:0;box-shadow:0 8px 24px rgba(0,0,0,0.3);}
 .ph-info{flex:1;}
-.ph-name{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.2rem;line-height:1.2;}
-.ph-role{font-size:0.78rem;color:var(–text2);margin-top:4px;}
+.ph-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;line-height:1.2;}
+.ph-role{font-size:0.78rem;color:var(--text2);margin-top:4px;}
 .ph-badges{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
 .ph-stats{display:flex;gap:24px;margin-top:16px;}
 .phs-item{text-align:center;}
-.phs-val{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1.1rem;}
-.phs-lbl{font-size:0.62rem;color:var(–text3);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;}
+.phs-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;}
+.phs-lbl{font-size:0.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;}
 .ph-actions-row{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
-
-/* INFO GRID */
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
-.ig-item{padding:12px 0;border-bottom:1px solid var(–border);}
+.ig-item{padding:12px 0;border-bottom:1px solid var(--border);}
 .ig-item:nth-last-child(-n+2){border-bottom:none;}
-.ig-label{font-size:0.62rem;color:var(–text3);text-transform:uppercase;letter-spacing:0.06em;font-weight:700;margin-bottom:4px;}
-.ig-val{font-size:0.82rem;color:var(–text);font-weight:500;}
-
-/* DOC ITEM */
-.doc-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(–border);}
+.ig-label{font-size:0.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;font-weight:700;margin-bottom:4px;}
+.ig-val{font-size:0.82rem;color:var(--text);font-weight:500;}
+.doc-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
 .doc-row:last-child{border-bottom:none;}
 .doc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;}
 .doc-info{flex:1;}
 .doc-name{font-size:0.8rem;font-weight:600;}
-.doc-expiry{font-size:0.65rem;color:var(–text2);margin-top:2px;}
+.doc-expiry{font-size:0.65rem;color:var(--text2);margin-top:2px;}
 .doc-actions{display:flex;gap:6px;}
-.doc-btn{background:var(–surface3);border:1px solid var(–border);border-radius:6px;padding:4px 10px;font-size:0.65rem;cursor:pointer;color:var(–text2);font-family:‘DM Sans’,sans-serif;transition:all 0.15s;}
-.doc-btn:hover{color:var(–text);border-color:var(–border2);}
-
-/* FORM */
+.doc-btn{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:0.65rem;cursor:pointer;color:var(--text2);font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.doc-btn:hover{color:var(--text);border-color:var(--border2);}
 .form-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease;}
-.form-card{background:var(–surface);border:1px solid var(–border2);border-radius:var(–r-lg);width:640px;max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.5);}
+.form-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-lg);width:640px;max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.5);}
 .form-card::-webkit-scrollbar{width:3px;}
-.form-card::-webkit-scrollbar-thumb{background:var(–border2);border-radius:3px;}
-.form-header{padding:20px 24px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(–surface);z-index:1;}
-.form-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1rem;}
-.form-close{background:var(–surface2);border:1px solid var(–border);border-radius:7px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;color:var(–text2);}
-.form-steps{display:flex;gap:0;padding:16px 24px;border-bottom:1px solid var(–border);}
+.form-card::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+.form-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1;}
+.form-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;}
+.form-close{background:var(--surface2);border:1px solid var(--border);border-radius:7px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;color:var(--text2);}
+.form-steps{display:flex;gap:0;padding:16px 24px;border-bottom:1px solid var(--border);}
 .fstep{flex:1;display:flex;align-items:center;gap:8px;}
 .fstep-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;flex-shrink:0;transition:all 0.3s;}
-.fstep-num.done{background:var(–green);color:white;}
-.fstep-num.active{background:var(–blue2);color:white;box-shadow:0 0 10px rgba(37,99,235,0.4);}
-.fstep-num.pending{background:var(–surface3);color:var(–text3);border:1px solid var(–border);}
+.fstep-num.done{background:var(--green);color:white;}
+.fstep-num.active{background:var(--blue2);color:white;box-shadow:0 0 10px rgba(37,99,235,0.4);}
+.fstep-num.pending{background:var(--surface3);color:var(--text3);border:1px solid var(--border);}
 .fstep-label{font-size:0.7rem;font-weight:500;transition:color 0.3s;}
-.fstep-label.active{color:var(–text);}
-.fstep-label.pending{color:var(–text3);}
-.fstep-line{flex:1;height:1px;background:var(–border);margin:0 8px;}
-.fstep-line.done{background:var(–green);}
+.fstep-label.active{color:var(--text);}
+.fstep-label.pending{color:var(--text3);}
+.fstep-line{flex:1;height:1px;background:var(--border);margin:0 8px;}
+.fstep-line.done{background:var(--green);}
 .form-body{padding:20px 24px;}
-.form-section-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(–text3);font-weight:700;margin-bottom:14px;}
+.form-section-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);font-weight:700;margin-bottom:14px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
 .form-row.single{grid-template-columns:1fr;}
 .form-row.triple{grid-template-columns:1fr 1fr 1fr;}
 .field{display:flex;flex-direction:column;gap:5px;}
-.field label{font-size:0.68rem;color:var(–text2);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
-.field input,.field select,.field textarea{background:var(–surface2);border:1px solid var(–border2);border-radius:var(–r-sm);padding:9px 12px;font-size:0.82rem;color:var(–text);font-family:‘DM Sans’,sans-serif;outline:none;transition:border-color 0.2s;}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(–blue);box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
-.field select option{background:var(–surface2);}
+.field label{font-size:0.68rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
+.field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:9px 12px;font-size:0.82rem;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
+.field select option{background:var(--surface2);}
 .field textarea{resize:none;}
-.field.required label::after{content:’ *’;color:var(–red);}
-.form-footer{padding:16px 24px;border-top:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;position:sticky;bottom:0;background:var(–surface);}
-.btn{padding:8px 20px;border-radius:var(–r-sm);font-size:0.8rem;font-weight:600;cursor:pointer;border:1px solid transparent;font-family:‘DM Sans’,sans-serif;transition:all 0.15s;}
-.btn-ghost{background:transparent;border-color:var(–border2);color:var(–text2);}
-.btn-ghost:hover{background:var(–surface3);}
-.btn-primary{background:var(–blue2);color:white;}
-.btn-primary:hover{background:var(–blue);}
-.btn-success{background:var(–green);color:white;}
-.btn-danger{background:var(–red);color:white;}
-
-/* SUCCESS FLASH */
-.success-card{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(16,185,129,0.05));border:1px solid rgba(16,185,129,0.25);border-radius:var(–r);padding:20px;display:flex;align-items:center;gap:16px;animation:slideIn 0.4s ease;margin-bottom:16px;}
+.field.required label::after{content:' *';color:var(--red);}
+.form-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;bottom:0;background:var(--surface);}
+.btn{padding:8px 20px;border-radius:var(--r-sm);font-size:0.8rem;font-weight:600;cursor:pointer;border:1px solid transparent;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.btn-ghost{background:transparent;border-color:var(--border2);color:var(--text2);}
+.btn-ghost:hover{background:var(--surface3);}
+.btn-primary{background:var(--blue2);color:white;}
+.btn-primary:hover{background:var(--blue);}
+.btn-success{background:var(--green);color:white;}
+.btn-danger{background:var(--red);color:white;}
+.success-card{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(16,185,129,0.05));border:1px solid rgba(16,185,129,0.25);border-radius:var(--r);padding:20px;display:flex;align-items:center;gap:16px;animation:slideIn 0.4s ease;margin-bottom:16px;}
 @keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .sc-icon{font-size:2rem;}
-.sc-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.95rem;color:var(–green);}
-.sc-sub{font-size:0.75rem;color:var(–text2);margin-top:3px;}
-
-/* COD TIMELINE */
+.sc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:var(--green);}
+.sc-sub{font-size:0.75rem;color:var(--text2);margin-top:3px;}
 .cod-timeline{display:flex;gap:0;margin-bottom:16px;}
 .ct-stage{flex:1;text-align:center;position:relative;}
-.ct-stage::after{content:’’;position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(–border);}
+.ct-stage::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(--border);}
 .ct-stage:last-child::after{display:none;}
-.ct-stage.done::after{background:var(–green);}
-.ct-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(–border);background:var(–surface2);display:flex;align-items:center;justify-content:center;font-size:0.7rem;margin:0 auto 6px;position:relative;z-index:1;}
-.ct-stage.done .ct-dot{background:var(–green);border-color:var(–green);color:white;}
-.ct-stage.active .ct-dot{background:var(–blue2);border-color:var(–blue);color:white;box-shadow:0 0 10px rgba(37,99,235,0.4);}
-.ct-lbl{font-size:0.65rem;color:var(–text2);}
-.ct-count{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1.1rem;margin-top:4px;}
-
-/* ALERT ITEMS */
-.alert-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(–border);}
+.ct-stage.done::after{background:var(--green);}
+.ct-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:0.7rem;margin:0 auto 6px;position:relative;z-index:1;}
+.ct-stage.done .ct-dot{background:var(--green);border-color:var(--green);color:white;}
+.ct-stage.active .ct-dot{background:var(--blue2);border-color:var(--blue);color:white;box-shadow:0 0 10px rgba(37,99,235,0.4);}
+.ct-lbl{font-size:0.65rem;color:var(--text2);}
+.ct-count{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-top:4px;}
+.alert-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
 .alert-item:last-child{border-bottom:none;}
 .ai-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
 .ai-text{font-size:0.75rem;line-height:1.4;}
-.ai-time{font-size:0.62rem;color:var(–text3);margin-top:3px;}
-
-/* TOP LIST */
-.top-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(–border);}
+.ai-time{font-size:0.62rem;color:var(--text3);margin-top:3px;}
+.top-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
 .top-item:last-child{border-bottom:none;}
-.ti-rank{font-family:‘JetBrains Mono’,monospace;font-size:0.68rem;color:var(–text3);width:16px;}
+.ti-rank{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--text3);width:16px;}
 .ti-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:white;flex-shrink:0;}
 .ti-info{flex:1;}
 .ti-name{font-size:0.76rem;font-weight:600;}
-.ti-sub{font-size:0.62rem;color:var(–text2);}
-.ti-val{font-family:‘JetBrains Mono’,monospace;font-size:0.8rem;font-weight:600;}
-
-/* CHART */
+.ti-sub{font-size:0.62rem;color:var(--text2);}
+.ti-val{font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:600;}
 .chart-wrap{position:relative;width:100%;}
-
-/* PLATFORM BANNER */
-.platform-banner{border-radius:var(–r);padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;border:1px solid;}
-.pb-l h2{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.1rem;}
+.platform-banner{border-radius:var(--r);padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;border:1px solid;}
+.pb-l h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;}
 .pb-l p{font-size:0.72rem;margin-top:3px;opacity:0.65;}
 .pb-r{text-align:right;}
-.pb-r .big{font-family:‘Syne’,sans-serif;font-weight:800;font-size:2rem;line-height:1;}
+.pb-r .big{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;line-height:1;}
 .pb-r .small{font-size:0.65rem;opacity:0.6;margin-top:3px;}
-
-/* SECTION HEADER */
 .sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.sec-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:1rem;}
-.sec-sub{font-size:0.75rem;color:var(–text3);margin-top:2px;}
-
-/* RESTRICTED NOTICE */
-.restricted{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:var(–r-sm);padding:10px 14px;font-size:0.75rem;color:var(–text2);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.sec-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;}
+.sec-sub{font-size:0.75rem;color:var(--text3);margin-top:2px;}
+.restricted{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:var(--r-sm);padding:10px 14px;font-size:0.75rem;color:var(--text2);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
 </style>
-
 </head>
 <body>
-
-<!-- ROLE SWITCHER -->
 
 <div class="role-bar">
   <span class="role-bar-label">Switch Role:</span>
@@ -324,12 +265,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="role-pill" onclick="setRole('legal',this)"><span class="rp-dot"></span>Legal & Gov Affairs</div>
 </div>
 
-<!-- APP -->
-
 <div class="app">
-
-<!-- SIDEBAR -->
-
 <div class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-mark">CX</div>
@@ -349,8 +285,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   </div>
 </div>
 
-<!-- MAIN -->
-
 <div class="main">
   <div class="topbar">
     <div class="tb-left">
@@ -363,29 +297,21 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="notif-btn">🔔<div class="notif-dot"></div></div>
     </div>
   </div>
-
   <div class="content" id="mainContent"></div>
 </div>
 </div>
-
-<!-- FORM OVERLAY -->
 
 <div class="form-overlay" id="formOverlay" style="display:none" onclick="if(event.target===this)closeForm()">
   <div class="form-card" id="formCard"></div>
 </div>
 
 <script>
-// ── CLOCK ──
 setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB');},1000);
 document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB');
-
-// ── CHART DEFAULTS ──
 Chart.defaults.color='#94a3b8';
 Chart.defaults.borderColor='rgba(255,255,255,0.06)';
 Chart.defaults.font.family="'DM Sans',sans-serif";
 Chart.defaults.font.size=11;
-
-// ── ROLE DEFINITIONS ──
 const ROLES={
   ceo:{label:'CEO / Owner',level:'Level 1',access:'Full System Access',initials:'MK',name:'Mohammed K.',nav:[
     {g:'Overview',items:[{i:'⬛',l:'Dashboard',s:'dashboard'},{i:'📊',l:'Executive Reports',s:'reports'}]},
@@ -442,12 +368,9 @@ const ROLES={
     {g:'Restricted',items:[{i:'💰',l:'Finance',s:'locked',lock:true},{i:'🚴',l:'Operations',s:'locked',lock:true},{i:'📊',l:'Financial Reports',s:'locked',lock:true}]},
   ],addBtn:null},
 };
-
 let currentRole='ceo';
 let currentSection='dashboard';
 let chartInstances={};
-
-// ── RENDER SIDEBAR ──
 function renderSidebar(roleKey){
   const r=ROLES[roleKey];
   document.getElementById('srLevel').textContent=r.level;
@@ -464,7 +387,7 @@ function renderSidebar(roleKey){
     html+=`<div class="nav-group">${g.g}</div>`;
     for(const item of g.items){
       const isActive=item.s===currentSection&&!item.lock;
-      const col=item.c?`style="color:var(${item.c})":`:``;
+      const col=item.c?`style="color:var(${item.c})"`:``; 
       html+=`<div class="nav-item${isActive?' active':''}" ${col} onclick="${item.lock?`showLocked('${g.g}')`:``}${!item.lock?`navTo('${item.s}',this,'${item.l}')`:``}">
         <span class="ni">${item.i}</span> ${item.l}
         ${item.badge?`<span class="nav-badge">${item.badge}</span>`:''}
@@ -474,8 +397,6 @@ function renderSidebar(roleKey){
   }
   document.getElementById('sidebarNav').innerHTML=html;
 }
-
-// ── SET ROLE ──
 function setRole(roleKey,el){
   currentRole=roleKey;
   currentSection='dashboard';
@@ -485,8 +406,6 @@ function setRole(roleKey,el){
   renderContent(roleKey,'dashboard','Dashboard');
   destroyCharts();
 }
-
-// ── NAVIGATION ──
 function navTo(section,el,title){
   if(section==='locked')return;
   currentSection=section;
@@ -496,7 +415,6 @@ function navTo(section,el,title){
   renderContent(currentRole,section,title);
   destroyCharts();
 }
-
 function showLocked(groupName){
   document.getElementById('mainContent').innerHTML=`
     <div class="access-denied">
@@ -506,14 +424,10 @@ function showLocked(groupName){
       <div style="font-size:0.72rem;color:var(--text3);margin-top:4px">Contact your system administrator to request access.</div>
     </div>`;
 }
-
-// ── DESTROY CHARTS ──
 function destroyCharts(){
   Object.values(chartInstances).forEach(c=>{try{c.destroy();}catch(e){}});
   chartInstances={};
 }
-
-// ── CHART HELPERS ──
 function mkLine(id,labels,datasets,h=160){
   setTimeout(()=>{
     const el=document.getElementById(id);if(!el)return;
@@ -538,11 +452,8 @@ function mkDoughnut(id,labels,data,colors,h=160){
     el.parentElement.style.height=h+'px';
   },100);
 }
-
-// ── SHARED HTML FRAGMENTS ──
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const HRS=['6am','8am','10am','12pm','2pm','4pm','6pm','8pm'];
-
 function kpiHTML(label,val,sub,color='var(--blue)',spark=null){
   const bars=spark?spark.map((v,i)=>`<div class="ks-bar" style="height:${v}%;background:${color};opacity:${0.3+i*0.1}"></div>`).join(''):'';
   return`<div class="kpi" style="--kc:${color}">
@@ -552,14 +463,12 @@ function kpiHTML(label,val,sub,color='var(--blue)',spark=null){
     ${bars?`<div class="kpi-spark">${bars}</div>`:''}
   </div>`;
 }
-
 function platformBanner(name,emoji,mgr,count,color){
   return`<div class="platform-banner" style="background:${color}1a;border-color:${color}30;color:${color}">
     <div class="pb-l"><h2>${emoji} ${name}</h2><p style="color:var(--text2)">Account Manager: ${mgr}</p></div>
     <div class="pb-r"><div class="big">${count}</div><div class="small">Active Drivers</div></div>
   </div>`;
 }
-
 function topSupervisors(){
   const data=[
     {name:'Supervisor Ahmed',platform:'Keeta',drivers:'120',active:'116',score:'94%',color:'#f97316'},
@@ -576,7 +485,6 @@ function topSupervisors(){
       <div class="ti-val" style="color:${parseFloat(s.score)>=80?'var(--green)':parseFloat(s.score)>=70?'var(--amber)':'var(--red)'}">${s.score}</div>
     </div>`).join('');
 }
-
 function topDrivers(){
   const data=[
     {name:'Raj Kumar Singh',sub:'Ninja · DRV-0156',orders:'218',score:91,color:'#06b6d4'},
@@ -593,7 +501,6 @@ function topDrivers(){
       <div style="text-align:right"><div class="ti-val" style="color:var(--green)">${d.score}%</div><div style="font-size:0.6rem;color:var(--text3)">${d.orders} orders</div></div>
     </div>`).join('');
 }
-
 function alertsHTML(){
   const items=[
     {ic:'🔴',bg:'var(--red-dim)',txt:'Ahmed K. (Jahez) — 3rd warning issued. Suspension recommended.',time:'2 mins ago'},
@@ -603,29 +510,26 @@ function alertsHTML(){
   ];
   return items.map(a=>`<div class="alert-item"><div class="ai-icon" style="background:${a.bg}">${a.ic}</div><div><div class="ai-text">${a.txt}</div><div class="ai-time">${a.time}</div></div></div>`).join('');
 }
-
 function driverTableRows(filter){
   const rows=[
-    {name:'Ahmed Al-Rashidi',id:'DRV-0041',platform:'Keeta',pcol:'--keeta',sup:'Sup. Ahmed',type:'Local',score:87,cod:'✓ Submitted','bg',docs:'✓ Valid','bg',status:'Active','bg'},
-    {name:'Mohammed Al-Zahra',id:'DRV-0089',platform:'Jahez',pcol:'--jahez',sup:'Sup. Nasser',type:'Offshore',score:44,cod:'✕ Missing','br',docs:'❌ Expired','br',status:'Suspended','br'},
-    {name:'Raj Kumar Singh',id:'DRV-0156',platform:'Ninja',pcol:'--ninja',sup:'Sup. Khalid',type:'Offshore',score:91,cod:'✓ Submitted','bg',docs:'✓ Valid','bg',status:'Active','bg'},
-    {name:'Ali Hassan',id:'DRV-0271',platform:'Keeta',pcol:'--keeta',sup:'Sup. Hassan',type:'Local',score:78,cod:'✓ Submitted','bg',docs:'⚠ Expiring','ba',status:'Warning','ba'},
-    {name:'Faisal Al-Mutairi',id:'DRV-0203',platform:'Noon',pcol:'--noon',sup:'Sup. Bader',type:'Local',score:44,cod:'✕ Missing','br',docs:'❌ Expired','br',status:'Suspended','br'},
+    {name:'Ahmed Al-Rashidi',id:'DRV-0041',platform:'Keeta',pcol:'--keeta',sup:'Sup. Ahmed',type:'Local',score:87,cod:'✓ Submitted',cods:'bg',docs:'✓ Valid',docss:'bg',status:'Active',ss:'bg'},
+    {name:'Mohammed Al-Zahra',id:'DRV-0089',platform:'Jahez',pcol:'--jahez',sup:'Sup. Nasser',type:'Offshore',score:44,cod:'✕ Missing',cods:'br',docs:'❌ Expired',docss:'br',status:'Suspended',ss:'br'},
+    {name:'Raj Kumar Singh',id:'DRV-0156',platform:'Ninja',pcol:'--ninja',sup:'Sup. Khalid',type:'Offshore',score:91,cod:'✓ Submitted',cods:'bg',docs:'✓ Valid',docss:'bg',status:'Active',ss:'bg'},
+    {name:'Ali Hassan',id:'DRV-0271',platform:'Keeta',pcol:'--keeta',sup:'Sup. Hassan',type:'Local',score:78,cod:'✓ Submitted',cods:'bg',docs:'⚠ Expiring',docss:'ba',status:'Warning',ss:'ba'},
+    {name:'Faisal Al-Mutairi',id:'DRV-0203',platform:'Noon',pcol:'--noon',sup:'Sup. Bader',type:'Local',score:44,cod:'✕ Missing',cods:'br',docs:'❌ Expired',docss:'br',status:'Suspended',ss:'br'},
   ];
   const filtered=filter?rows.filter(r=>r.platform.toLowerCase()===filter.toLowerCase()):rows;
   return filtered.map(r=>`<tr onclick="viewDriverProfile('${r.name}','${r.id}','${r.platform}','${r.pcol}','${r.sup}',${r.score})" style="cursor:pointer">
     <td><div style="font-weight:600">${r.name}</div><div style="font-size:0.62rem;color:var(--text3);font-family:'JetBrains Mono',monospace">${r.id}</div></td>
-    <td><span style="color:var(var(${r.pcol}));font-weight:600;color:var(${r.pcol})">${r.platform}</span></td>
+    <td><span style="color:var(${r.pcol});font-weight:600">${r.platform}</span></td>
     <td>${r.sup}</td>
     <td><span class="b bb">${r.type}</span></td>
     <td><div class="score"><div class="score-track"><div class="score-fill" style="width:${r.score}%;background:${r.score>=80?'var(--green)':r.score>=60?'var(--amber)':'var(--red)'}"></div></div><div class="score-label">${r.score}%</div></div></td>
-    <td><span class="b ${r[4]||'bb'}">${r.cod}</span></td>
-    <td><span class="b ${r[5]||'bb'}">${r.docs}</span></td>
-    <td><span class="b ${r[6]||'bb'}">${r.status}</span></td>
+    <td><span class="b ${r.cods}">${r.cod}</span></td>
+    <td><span class="b ${r.docss}">${r.docs}</span></td>
+    <td><span class="b ${r.ss}">${r.status}</span></td>
   </tr>`).join('');
 }
-
-// ── DRIVER PROFILE ──
 function viewDriverProfile(name,id,platform,pcol,supervisor,score){
   const col=`var(${pcol})`;
   document.getElementById('mainContent').innerHTML=`
@@ -639,7 +543,6 @@ function viewDriverProfile(name,id,platform,pcol,supervisor,score){
         <button class="btn btn-danger">Suspend Driver</button>
       </div>
     </div>
-
     <div class="profile-hero" style="--profile-color:${col}">
       <div class="ph-avatar" style="background:linear-gradient(135deg,${col},${col}99)">${name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
       <div class="ph-info">
@@ -664,7 +567,6 @@ function viewDriverProfile(name,id,platform,pcol,supervisor,score){
         <button class="btn btn-ghost">Send Message</button>
       </div>
     </div>
-
     <div class="tabs" id="profileTabs">
       <div class="tab active" onclick="profileTab('overview',this)">Overview</div>
       <div class="tab" onclick="profileTab('documents',this)">Documents</div>
@@ -673,121 +575,54 @@ function viewDriverProfile(name,id,platform,pcol,supervisor,score){
       <div class="tab" onclick="profileTab('activity',this)">Activity Log</div>
     </div>
     <div id="profileTabContent"></div>`;
-
   profileTab('overview',document.querySelector('#profileTabs .tab'));
   window._profileData={name,id,platform,pcol,supervisor,score,col};
 }
-
 function profileTab(tab,el){
   document.querySelectorAll('#profileTabs .tab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
   const d=window._profileData||{};
   const c=document.getElementById('profileTabContent');
-
   if(tab==='overview'){
     c.innerHTML=`
     <div class="g2">
-      <div class="panel">
-        <div class="ph"><div class="ph-title">Personal Information</div></div>
-        <div class="pb">
-          <div class="info-grid">
-            <div class="ig-item"><div class="ig-label">Driver ID</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">${d.id||'DRV-0041'}</div></div>
-            <div class="ig-item"><div class="ig-label">Full Name</div><div class="ig-val">${d.name||'Ahmed Al-Rashidi'}</div></div>
-            <div class="ig-item"><div class="ig-label">Nationality</div><div class="ig-val">Bahraini</div></div>
-            <div class="ig-item"><div class="ig-label">Phone</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">+973 3300 0041</div></div>
-            <div class="ig-item"><div class="ig-label">Driver Type</div><div class="ig-val">Local</div></div>
-            <div class="ig-item"><div class="ig-label">Employment Start</div><div class="ig-val">01 March 2024</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="ph"><div class="ph-title">Platform & Assignment</div></div>
-        <div class="pb">
-          <div class="info-grid">
-            <div class="ig-item"><div class="ig-label">Platform</div><div class="ig-val" style="color:var(${d.pcol||'--keeta'});font-weight:600">${d.platform||'Keeta'}</div></div>
-            <div class="ig-item"><div class="ig-label">Supervisor</div><div class="ig-val">${d.supervisor||'Supervisor Ahmed'}</div></div>
-            <div class="ig-item"><div class="ig-label">Contract Type</div><div class="ig-val">Local Contract</div></div>
-            <div class="ig-item"><div class="ig-label">Status</div><div class="ig-val"><span class="b bg">Active</span></div></div>
-            <div class="ig-item"><div class="ig-label">Shift</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">08:00 — 20:00</div></div>
-            <div class="ig-item"><div class="ig-label">Last Login</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">Today 08:32 AM</div></div>
-          </div>
-        </div>
-      </div>
+      <div class="panel"><div class="ph"><div class="ph-title">Personal Information</div></div><div class="pb"><div class="info-grid">
+        <div class="ig-item"><div class="ig-label">Driver ID</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">${d.id||'DRV-0041'}</div></div>
+        <div class="ig-item"><div class="ig-label">Full Name</div><div class="ig-val">${d.name||'Ahmed Al-Rashidi'}</div></div>
+        <div class="ig-item"><div class="ig-label">Nationality</div><div class="ig-val">Bahraini</div></div>
+        <div class="ig-item"><div class="ig-label">Phone</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">+973 3300 0041</div></div>
+        <div class="ig-item"><div class="ig-label">Driver Type</div><div class="ig-val">Local</div></div>
+        <div class="ig-item"><div class="ig-label">Employment Start</div><div class="ig-val">01 March 2024</div></div>
+      </div></div></div>
+      <div class="panel"><div class="ph"><div class="ph-title">Platform & Assignment</div></div><div class="pb"><div class="info-grid">
+        <div class="ig-item"><div class="ig-label">Platform</div><div class="ig-val" style="color:var(${d.pcol||'--keeta'});font-weight:600">${d.platform||'Keeta'}</div></div>
+        <div class="ig-item"><div class="ig-label">Supervisor</div><div class="ig-val">${d.supervisor||'Supervisor Ahmed'}</div></div>
+        <div class="ig-item"><div class="ig-label">Contract Type</div><div class="ig-val">Local Contract</div></div>
+        <div class="ig-item"><div class="ig-label">Status</div><div class="ig-val"><span class="b bg">Active</span></div></div>
+        <div class="ig-item"><div class="ig-label">Shift</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">08:00 — 20:00</div></div>
+        <div class="ig-item"><div class="ig-label">Last Login</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">Today 08:32 AM</div></div>
+      </div></div></div>
     </div>
-    <div class="panel">
-      <div class="ph"><div class="ph-title">Bike & Vehicle Information</div></div>
-      <div class="pb">
-        <div class="g3" style="margin:0">
-          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Bike Type</div><div class="ig-val">Honda CB200</div></div>
-          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Ownership</div><div class="ig-val">Lease-to-Own</div></div>
-          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Plate Number</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">BH 4471 D</div></div>
-          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Registration Expiry</div><div class="ig-val">Dec 2026</div></div>
-          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Insurance</div><div class="ig-val"><span class="b bg">Valid</span></div></div>
-          <div class="ig-item" style="border-bottom:none"><div class="ig-label">Bike ID</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">BK-0041-C</div></div>
-        </div>
-      </div>
-    </div>`;
-  }
-
-  else if(tab==='documents'){
-    c.innerHTML=`
-    <div class="panel">
-      <div class="ph"><div class="ph-title">Driver Documents</div><div class="ph-actions"><button class="btn btn-primary" style="font-size:0.72rem;padding:5px 14px">+ Upload Document</button></div></div>
-      <div class="pb">
-        ${[
-          {icon:'🛂',name:'Passport',expiry:'15 Jan 2027',days:312,status:'bg',slabel:'Valid'},
-          {icon:'🪪',name:'Visa',expiry:'20 Aug 2026',days:165,status:'bg',slabel:'Valid'},
-          {icon:'🪪',name:'CPR / National ID',expiry:'12 Dec 2026',days:279,status:'bg',slabel:'Valid'},
-          {icon:'🚗',name:'Driving License',expiry:'3 Nov 2026',days:240,status:'bg',slabel:'Valid'},
-          {icon:'🛡️',name:'Insurance',expiry:'1 Apr 2026',days:24,status:'ba',slabel:'Expiring Soon'},
-          {icon:'📋',name:'Employment Contract',expiry:'15 Sep 2026',days:191,status:'bg',slabel:'Valid'},
-          {icon:'🏍️',name:'Bike Registration',expiry:'20 Dec 2026',days:287,status:'bg',slabel:'Valid'},
-        ].map(doc=>`
-          <div class="doc-row">
-            <div class="doc-icon" style="background:rgba(255,255,255,0.04)">${doc.icon}</div>
-            <div class="doc-info">
-              <div class="doc-name">${doc.name}</div>
-              <div class="doc-expiry">Expires: ${doc.expiry} · ${doc.days} days remaining</div>
-            </div>
-            <span class="b ${doc.status}">${doc.slabel}</span>
-            <div class="doc-actions">
-              <button class="doc-btn">View</button>
-              <button class="doc-btn">Replace</button>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>`;
-  }
-
-  else if(tab==='cod'){
-    c.innerHTML=`
-    <div class="panel">
-      <div class="ph"><div class="ph-title">COD Submission History</div><div class="ph-actions"><span class="ph-link">Export CSV</span></div></div>
-      <table class="tbl">
-        <thead><tr><th>Reference</th><th>Date</th><th>Platform</th><th>Amount</th><th>Screenshot</th><th>Status</th><th>Approved By</th><th>Settled</th></tr></thead>
-        <tbody>
-          ${[
-            {ref:'COD-4821',date:'Today 08:32',amt:'BD 124.500',s:'bg',sl:'Approved',by:'Khalid A.',settled:'Pending'},
-            {ref:'COD-4798',date:'Mar 7, 07:15',amt:'BD 98.000',s:'bb',sl:'Settled',by:'Khalid A.',settled:'Mar 7'},
-            {ref:'COD-4771',date:'Mar 6, 06:45',amt:'BD 211.000',s:'bb',sl:'Settled',by:'Khalid A.',settled:'Mar 6'},
-            {ref:'COD-4744',date:'Mar 5, 08:10',amt:'BD 87.500',s:'ba',sl:'Pending',by:'—',settled:'—'},
-            {ref:'COD-4721',date:'Mar 4, 07:55',amt:'BD 156.000',s:'bb',sl:'Settled',by:'Fatima A.',settled:'Mar 4'},
-          ].map(r=>`<tr>
-            <td class="mono">${r.ref}</td>
-            <td>${r.date}</td>
-            <td style="color:var(${d.pcol||'--keeta'});font-weight:600">${d.platform||'Keeta'}</td>
-            <td class="mono" style="font-weight:600">${r.amt}</td>
-            <td><span class="b bg">✓ Uploaded</span></td>
-            <td><span class="b ${r.s}">${r.sl}</span></td>
-            <td style="color:var(--text2)">${r.by}</td>
-            <td class="mono" style="color:var(--text2)">${r.settled}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>`;
-  }
-
-  else if(tab==='performance'){
+    <div class="panel"><div class="ph"><div class="ph-title">Bike & Vehicle Information</div></div><div class="pb"><div class="g3" style="margin:0">
+      <div class="ig-item" style="border-bottom:none"><div class="ig-label">Bike Type</div><div class="ig-val">Honda CB200</div></div>
+      <div class="ig-item" style="border-bottom:none"><div class="ig-label">Ownership</div><div class="ig-val">Lease-to-Own</div></div>
+      <div class="ig-item" style="border-bottom:none"><div class="ig-label">Plate Number</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">BH 4471 D</div></div>
+      <div class="ig-item" style="border-bottom:none"><div class="ig-label">Registration Expiry</div><div class="ig-val">Dec 2026</div></div>
+      <div class="ig-item" style="border-bottom:none"><div class="ig-label">Insurance</div><div class="ig-val"><span class="b bg">Valid</span></div></div>
+      <div class="ig-item" style="border-bottom:none"><div class="ig-label">Bike ID</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">BK-0041-C</div></div>
+    </div></div></div>`;
+  } else if(tab==='documents'){
+    c.innerHTML=`<div class="panel"><div class="ph"><div class="ph-title">Driver Documents</div><div class="ph-actions"><button class="btn btn-primary" style="font-size:0.72rem;padding:5px 14px">+ Upload Document</button></div></div><div class="pb">
+      ${[{icon:'🛂',name:'Passport',expiry:'15 Jan 2027',days:312,status:'bg',slabel:'Valid'},{icon:'🪪',name:'Visa',expiry:'20 Aug 2026',days:165,status:'bg',slabel:'Valid'},{icon:'🪪',name:'CPR / National ID',expiry:'12 Dec 2026',days:279,status:'bg',slabel:'Valid'},{icon:'🚗',name:'Driving License',expiry:'3 Nov 2026',days:240,status:'bg',slabel:'Valid'},{icon:'🛡️',name:'Insurance',expiry:'1 Apr 2026',days:24,status:'ba',slabel:'Expiring Soon'},{icon:'📋',name:'Employment Contract',expiry:'15 Sep 2026',days:191,status:'bg',slabel:'Valid'},{icon:'🏍️',name:'Bike Registration',expiry:'20 Dec 2026',days:287,status:'bg',slabel:'Valid'}]
+      .map(doc=>`<div class="doc-row"><div class="doc-icon" style="background:rgba(255,255,255,0.04)">${doc.icon}</div><div class="doc-info"><div class="doc-name">${doc.name}</div><div class="doc-expiry">Expires: ${doc.expiry} · ${doc.days} days remaining</div></div><span class="b ${doc.status}">${doc.slabel}</span><div class="doc-actions"><button class="doc-btn">View</button><button class="doc-btn">Replace</button></div></div>`).join('')}
+    </div></div>`;
+  } else if(tab==='cod'){
+    c.innerHTML=`<div class="panel"><div class="ph"><div class="ph-title">COD Submission History</div><div class="ph-actions"><span class="ph-link">Export CSV</span></div></div>
+    <table class="tbl"><thead><tr><th>Reference</th><th>Date</th><th>Platform</th><th>Amount</th><th>Screenshot</th><th>Status</th><th>Approved By</th><th>Settled</th></tr></thead><tbody>
+    ${[{ref:'COD-4821',date:'Today 08:32',amt:'BD 124.500',s:'bg',sl:'Approved',by:'Khalid A.',settled:'Pending'},{ref:'COD-4798',date:'Mar 7, 07:15',amt:'BD 98.000',s:'bb',sl:'Settled',by:'Khalid A.',settled:'Mar 7'},{ref:'COD-4771',date:'Mar 6, 06:45',amt:'BD 211.000',s:'bb',sl:'Settled',by:'Khalid A.',settled:'Mar 6'},{ref:'COD-4744',date:'Mar 5, 08:10',amt:'BD 87.500',s:'ba',sl:'Pending',by:'—',settled:'—'},{ref:'COD-4721',date:'Mar 4, 07:55',amt:'BD 156.000',s:'bb',sl:'Settled',by:'Fatima A.',settled:'Mar 4'}]
+    .map(r=>`<tr><td class="mono">${r.ref}</td><td>${r.date}</td><td style="color:var(${d.pcol||'--keeta'});font-weight:600">${d.platform||'Keeta'}</td><td class="mono" style="font-weight:600">${r.amt}</td><td><span class="b bg">✓ Uploaded</span></td><td><span class="b ${r.s}">${r.sl}</span></td><td style="color:var(--text2)">${r.by}</td><td class="mono" style="color:var(--text2)">${r.settled}</td></tr>`).join('')}
+    </tbody></table></div>`;
+  } else if(tab==='performance'){
     c.innerHTML=`
     <div class="g4" style="margin-bottom:14px">
       ${kpiHTML('This Month Score',d.score+'%','<span class="up">↑ 3%</span> vs last month','var(--green)',[55,60,65,72,78,82,87])}
@@ -801,37 +636,13 @@ function profileTab(tab,el){
     </div>`;
     mkLine('perfLine',DAYS,[{label:'Score %',data:[79,82,80,85,83,86,87],borderColor:'var(--green)',backgroundColor:'rgba(16,185,129,0.06)',tension:0.4,fill:true}]);
     mkBar('ordersBar',DAYS,[{label:'Orders',data:[18,22,19,24,20,23,16],backgroundColor:'rgba(59,130,246,0.6)',borderRadius:6}]);
-  }
-
-  else if(tab==='activity'){
-    c.innerHTML=`
-    <div class="panel">
-      <div class="ph"><div class="ph-title">Activity Log</div></div>
-      <div class="pb">
-        ${[
-          {t:'08:32 AM','Today',a:'Portal Login',d:'iPhone · IP 192.168.1.41 · Manama, Bahrain',ic:'🟢'},
-          {t:'08:34 AM','Today',a:'COD Submitted',d:'Amount: BD 124.500 · Reference: COD-4821',ic:'💰'},
-          {t:'09:14 AM','Today',a:'Document Viewed',d:'Passport · Expiry: 15 Jan 2027',ic:'📄'},
-          {t:'10:02 AM','Today',a:'Ticket Opened',d:'Ticket #TKT-0821 · Category: Payment / COD',ic:'🎫'},
-          {t:'07:15 PM','Yesterday',a:'COD Submitted',d:'Amount: BD 98.000 · Reference: COD-4798',ic:'💰'},
-          {t:'07:18 PM','Yesterday',a:'Portal Logout',d:'Session Duration: 11h 43m',ic:'🔴'},
-        ].map(r=>`
-          <div class="alert-item">
-            <div class="ai-icon" style="background:rgba(255,255,255,0.04);font-size:0.9rem">${r.ic}</div>
-            <div style="flex:1">
-              <div style="display:flex;align-items:center;justify-content:space-between">
-                <div class="ai-text" style="font-weight:600">${r.a}</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text3)">${r.t} · ${r[1]||'Today'}</div>
-              </div>
-              <div class="ai-time">${r.d}</div>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>`;
+  } else if(tab==='activity'){
+    c.innerHTML=`<div class="panel"><div class="ph"><div class="ph-title">Activity Log</div></div><div class="pb">
+    ${[{t:'08:32 AM',day:'Today',a:'Portal Login',d:'iPhone · IP 192.168.1.41 · Manama, Bahrain',ic:'🟢'},{t:'08:34 AM',day:'Today',a:'COD Submitted',d:'Amount: BD 124.500 · Reference: COD-4821',ic:'💰'},{t:'09:14 AM',day:'Today',a:'Document Viewed',d:'Passport · Expiry: 15 Jan 2027',ic:'📄'},{t:'10:02 AM',day:'Today',a:'Ticket Opened',d:'Ticket #TKT-0821 · Category: Payment / COD',ic:'🎫'},{t:'07:15 PM',day:'Yesterday',a:'COD Submitted',d:'Amount: BD 98.000 · Reference: COD-4798',ic:'💰'},{t:'07:18 PM',day:'Yesterday',a:'Portal Logout',d:'Session Duration: 11h 43m',ic:'🔴'}]
+    .map(r=>`<div class="alert-item"><div class="ai-icon" style="background:rgba(255,255,255,0.04);font-size:0.9rem">${r.ic}</div><div style="flex:1"><div style="display:flex;align-items:center;justify-content:space-between"><div class="ai-text" style="font-weight:600">${r.a}</div><div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text3)">${r.t} · ${r.day}</div></div><div class="ai-time">${r.d}</div></div></div>`).join('')}
+    </div></div>`;
   }
 }
-
-// ── EMPLOYEE PROFILE ──
 function viewEmployeeProfile(name,title,dept,level){
   document.getElementById('mainContent').innerHTML=`
     <div class="sec-header">
@@ -839,23 +650,14 @@ function viewEmployeeProfile(name,title,dept,level){
         <button onclick="navTo('employees',null,'Employees')" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.72rem;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;">← Back to Employees</button>
         <div class="sec-title">Employee Profile</div>
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-ghost">Edit Profile</button>
-        <button class="btn btn-ghost">Reset Password</button>
-      </div>
+      <div style="display:flex;gap:8px"><button class="btn btn-ghost">Edit Profile</button><button class="btn btn-ghost">Reset Password</button></div>
     </div>
-
     <div class="profile-hero" style="--profile-color:var(--purple)">
       <div class="ph-avatar" style="background:linear-gradient(135deg,var(--purple),#6366f1)">${name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
       <div class="ph-info">
         <div class="ph-name">${name}</div>
         <div class="ph-role">${title} · ${dept}</div>
-        <div class="ph-badges">
-          <span class="b bp">${dept}</span>
-          <span class="b bg">● Active</span>
-          <span class="b bb">Full-time</span>
-          <span class="b bb">${level}</span>
-        </div>
+        <div class="ph-badges"><span class="b bp">${dept}</span><span class="b bg">● Active</span><span class="b bb">Full-time</span><span class="b bb">${level}</span></div>
         <div class="ph-stats">
           <div class="phs-item"><div class="phs-val">2yr 3m</div><div class="phs-lbl">Tenure</div></div>
           <div class="phs-item"><div class="phs-val">0</div><div class="phs-lbl">Open Tickets</div></div>
@@ -864,62 +666,35 @@ function viewEmployeeProfile(name,title,dept,level){
         </div>
       </div>
     </div>
-
     <div class="g2">
-      <div class="panel">
-        <div class="ph"><div class="ph-title">Personal Information</div></div>
-        <div class="pb">
-          <div class="info-grid">
-            <div class="ig-item"><div class="ig-label">Full Name</div><div class="ig-val">${name}</div></div>
-            <div class="ig-item"><div class="ig-label">CPR / ID</div><div class="ig-val mono">880412-1234</div></div>
-            <div class="ig-item"><div class="ig-label">Job Title</div><div class="ig-val">${title}</div></div>
-            <div class="ig-item"><div class="ig-label">Department</div><div class="ig-val">${dept}</div></div>
-            <div class="ig-item"><div class="ig-label">Reports To</div><div class="ig-val">General Manager</div></div>
-            <div class="ig-item"><div class="ig-label">Work Location</div><div class="ig-val">Office — Manama</div></div>
-            <div class="ig-item"><div class="ig-label">Employment Type</div><div class="ig-val">Full-time</div></div>
-            <div class="ig-item"><div class="ig-label">Contract Start</div><div class="ig-val">01 Jan 2023</div></div>
-          </div>
-        </div>
-      </div>
+      <div class="panel"><div class="ph"><div class="ph-title">Personal Information</div></div><div class="pb"><div class="info-grid">
+        <div class="ig-item"><div class="ig-label">Full Name</div><div class="ig-val">${name}</div></div>
+        <div class="ig-item"><div class="ig-label">CPR / ID</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">880412-1234</div></div>
+        <div class="ig-item"><div class="ig-label">Job Title</div><div class="ig-val">${title}</div></div>
+        <div class="ig-item"><div class="ig-label">Department</div><div class="ig-val">${dept}</div></div>
+        <div class="ig-item"><div class="ig-label">Reports To</div><div class="ig-val">General Manager</div></div>
+        <div class="ig-item"><div class="ig-label">Work Location</div><div class="ig-val">Office — Manama</div></div>
+        <div class="ig-item"><div class="ig-label">Employment Type</div><div class="ig-val">Full-time</div></div>
+        <div class="ig-item"><div class="ig-label">Contract Start</div><div class="ig-val">01 Jan 2023</div></div>
+      </div></div></div>
       <div>
-        <div class="panel" style="margin-bottom:14px">
-          <div class="ph"><div class="ph-title">System Access</div></div>
-          <div class="pb">
-            <div class="info-grid">
-              <div class="ig-item"><div class="ig-label">System Role</div><div class="ig-val">${level}</div></div>
-              <div class="ig-item"><div class="ig-label">Access Level</div><div class="ig-val"><span class="b bp">${dept} Modules</span></div></div>
-              <div class="ig-item"><div class="ig-label">Last Login</div><div class="ig-val mono">Today 08:14 AM</div></div>
-              <div class="ig-item"><div class="ig-label">2FA</div><div class="ig-val"><span class="b bg">Enabled</span></div></div>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="ph"><div class="ph-title">Documents</div></div>
-          <div class="pb">
-            ${[
-              {icon:'🛂',name:'Passport',expiry:'Mar 2028',status:'bg',sl:'Valid'},
-              {icon:'🪪',name:'CPR / ID',expiry:'Oct 2027',status:'bg',sl:'Valid'},
-              {icon:'📋',name:'Employment Contract',expiry:'Jan 2027',status:'bg',sl:'Valid'},
-              {icon:'🛡️',name:'Insurance',expiry:'Apr 2026',status:'ba',sl:'Expiring'},
-            ].map(d=>`
-              <div class="doc-row" style="padding:8px 0">
-                <div class="doc-icon" style="background:rgba(255,255,255,0.04);width:30px;height:30px;font-size:0.8rem">${d.icon}</div>
-                <div class="doc-info"><div class="doc-name">${d.name}</div><div class="doc-expiry">Exp: ${d.expiry}</div></div>
-                <span class="b ${d.status}">${d.sl}</span>
-              </div>`).join('')}
-          </div>
-        </div>
+        <div class="panel" style="margin-bottom:14px"><div class="ph"><div class="ph-title">System Access</div></div><div class="pb"><div class="info-grid">
+          <div class="ig-item"><div class="ig-label">System Role</div><div class="ig-val">${level}</div></div>
+          <div class="ig-item"><div class="ig-label">Access Level</div><div class="ig-val"><span class="b bp">${dept} Modules</span></div></div>
+          <div class="ig-item"><div class="ig-label">Last Login</div><div class="ig-val" style="font-family:'JetBrains Mono',monospace">Today 08:14 AM</div></div>
+          <div class="ig-item"><div class="ig-label">2FA</div><div class="ig-val"><span class="b bg">Enabled</span></div></div>
+        </div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">Documents</div></div><div class="pb">
+          ${[{icon:'🛂',name:'Passport',expiry:'Mar 2028',status:'bg',sl:'Valid'},{icon:'🪪',name:'CPR / ID',expiry:'Oct 2027',status:'bg',sl:'Valid'},{icon:'📋',name:'Employment Contract',expiry:'Jan 2027',status:'bg',sl:'Valid'},{icon:'🛡️',name:'Insurance',expiry:'Apr 2026',status:'ba',sl:'Expiring'}]
+          .map(d=>`<div class="doc-row" style="padding:8px 0"><div class="doc-icon" style="background:rgba(255,255,255,0.04);width:30px;height:30px;font-size:0.8rem">${d.icon}</div><div class="doc-info"><div class="doc-name">${d.name}</div><div class="doc-expiry">Exp: ${d.expiry}</div></div><span class="b ${d.status}">${d.sl}</span></div>`).join('')}
+        </div></div>
       </div>
     </div>`;
 }
-
-// ── CONTENT RENDERER ──
 function renderContent(role,section,title){
   destroyCharts();
   const el=document.getElementById('mainContent');
   document.getElementById('pageTitle').textContent=title||section;
-
-  // ── CEO & GM DASHBOARD ──
   if(section==='dashboard'&&(role==='ceo'||role==='gm')){
     el.innerHTML=`
       <div class="ptabs">
@@ -961,8 +736,6 @@ function renderContent(role,section,title){
     mkLine('hourlyArea',HRS,[{label:'Orders',data:[12,45,89,142,168,201,189,178],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.08)',tension:0.4,fill:true}],160);
     return;
   }
-
-  // ── FINANCE CONTROLLER DASHBOARD ──
   if(section==='dashboard'&&role==='finance-ctrl'){
     el.innerHTML=`
       <div class="g4">
@@ -980,24 +753,17 @@ function renderContent(role,section,title){
       </div>
       <div class="panel">
         <div class="ph"><div class="ph-title">COD Review Queue — Pending Approval</div><div class="ph-actions"><span class="ph-link">Export</span></div></div>
-        <table class="tbl">
-          <thead><tr><th>Driver</th><th>Platform</th><th>Amount</th><th>Submitted</th><th>Screenshot</th><th>Status</th><th>Actions</th></tr></thead>
-          <tbody>
-            <tr><td><b>Ahmed Al-Rashidi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0041</span></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td class="mono" style="font-weight:700">BD 124.500</td><td>08:32 AM</td><td><span class="b bg">✓ Uploaded</span></td><td><span class="b ba">⏳ Pending</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-success" style="font-size:0.65rem;padding:4px 10px" onclick="this.textContent='✓';this.style.opacity='.5'">Approve</button><button class="btn btn-danger" style="font-size:0.65rem;padding:4px 10px">Flag</button></div></td></tr>
-            <tr><td><b>Raj Kumar Singh</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0156</span></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td class="mono" style="font-weight:700">BD 87.000</td><td>09:14 AM</td><td><span class="b bg">✓ Uploaded</span></td><td><span class="b br">⚠ Flagged</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:0.65rem;padding:4px 10px">Review</button></div></td></tr>
-            <tr><td><b>Ali Hassan</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0271</span></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td class="mono" style="font-weight:700">BD 210.000</td><td>10:02 AM</td><td><span class="b br">✕ Missing</span></td><td><span class="b br">⚠ No Screenshot</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:0.65rem;padding:4px 10px">Review</button></div></td></tr>
-          </tbody>
-        </table>
+        <table class="tbl"><thead><tr><th>Driver</th><th>Platform</th><th>Amount</th><th>Submitted</th><th>Screenshot</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td><b>Ahmed Al-Rashidi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0041</span></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td class="mono" style="font-weight:700">BD 124.500</td><td>08:32 AM</td><td><span class="b bg">✓ Uploaded</span></td><td><span class="b ba">⏳ Pending</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-success" style="font-size:0.65rem;padding:4px 10px" onclick="this.textContent='✓';this.style.opacity='.5'">Approve</button><button class="btn btn-danger" style="font-size:0.65rem;padding:4px 10px">Flag</button></div></td></tr>
+          <tr><td><b>Raj Kumar Singh</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0156</span></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td class="mono" style="font-weight:700">BD 87.000</td><td>09:14 AM</td><td><span class="b bg">✓ Uploaded</span></td><td><span class="b br">⚠ Flagged</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:0.65rem;padding:4px 10px">Review</button></div></td></tr>
+          <tr><td><b>Ali Hassan</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0271</span></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td class="mono" style="font-weight:700">BD 210.000</td><td>10:02 AM</td><td><span class="b br">✕ Missing</span></td><td><span class="b br">⚠ No Screenshot</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:0.65rem;padding:4px 10px">Review</button></div></td></tr>
+        </tbody></table>
       </div>`;
     mkBar('finPlatBar',['Keeta','Jahez','Ninja','Noon'],[{label:'BD Collected',data:[42300,68700,29400,21100],backgroundColor:['rgba(249,115,22,0.7)','rgba(139,92,246,0.7)','rgba(6,182,212,0.7)','rgba(234,179,8,0.7)'],borderRadius:6}]);
-    mkLine('finLine',DAYS,[
-      {label:'Collected',data:[5200,6100,5800,7200,6400,8100,7400],borderColor:'#3b82f6',tension:0.4},
-      {label:'Settled',data:[4800,5700,5400,6800,6100,7600,6900],borderColor:'#10b981',tension:0.4},
-    ]);
+    mkLine('finLine',DAYS,[{label:'Collected',data:[5200,6100,5800,7200,6400,8100,7400],borderColor:'#3b82f6',tension:0.4},{label:'Settled',data:[4800,5700,5400,6800,6100,7600,6900],borderColor:'#10b981',tension:0.4}]);
     return;
   }
-
-  // ── HR DASHBOARD ──
   if(section==='dashboard'&&(role==='hr-lead'||role==='hr-officer')){
     el.innerHTML=`
       <div class="g4">
@@ -1012,31 +778,21 @@ function renderContent(role,section,title){
       </div>
       <div class="panel">
         <div class="ph"><div class="ph-title">🚨 Document Expiry Alerts</div><div class="ph-actions"><span class="ph-link">Export</span></div></div>
-        <table class="tbl">
-          <thead><tr><th>Driver</th><th>Platform</th><th>Document</th><th>Expiry</th><th>Days Left</th><th>Severity</th><th>HR Officer</th></tr></thead>
-          <tbody>
-            <tr><td><b>Mohammed Al-Zahra</b></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Visa</td><td>15 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">7 days</td><td><span class="b br">🔴 Critical</span></td><td>Sara H.</td></tr>
-            <tr><td><b>Priya Nair</b></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Driving License</td><td>18 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">10 days</td><td><span class="b br">🔴 Critical</span></td><td>Omar K.</td></tr>
-            <tr><td><b>Faisal Al-Mutairi</b></td><td style="color:var(--noon);font-weight:600">Noon</td><td>CPR</td><td>1 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">Expired</td><td><span class="b br">❌ Expired</span></td><td>Sara H.</td></tr>
-            <tr><td><b>Ali Hassan</b></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Passport</td><td>22 Mar 2026</td><td class="mono" style="color:var(--amber);font-weight:700">14 days</td><td><span class="b ba">🟡 Warning</span></td><td>Omar K.</td></tr>
-          </tbody>
-        </table>
+        <table class="tbl"><thead><tr><th>Driver</th><th>Platform</th><th>Document</th><th>Expiry</th><th>Days Left</th><th>Severity</th><th>HR Officer</th></tr></thead>
+        <tbody>
+          <tr><td><b>Mohammed Al-Zahra</b></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Visa</td><td>15 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">7 days</td><td><span class="b br">🔴 Critical</span></td><td>Sara H.</td></tr>
+          <tr><td><b>Priya Nair</b></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Driving License</td><td>18 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">10 days</td><td><span class="b br">🔴 Critical</span></td><td>Omar K.</td></tr>
+          <tr><td><b>Faisal Al-Mutairi</b></td><td style="color:var(--noon);font-weight:600">Noon</td><td>CPR</td><td>1 Mar 2026</td><td class="mono" style="color:var(--red);font-weight:700">Expired</td><td><span class="b br">❌ Expired</span></td><td>Sara H.</td></tr>
+          <tr><td><b>Ali Hassan</b></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Passport</td><td>22 Mar 2026</td><td class="mono" style="color:var(--amber);font-weight:700">14 days</td><td><span class="b ba">🟡 Warning</span></td><td>Omar K.</td></tr>
+        </tbody></table>
       </div>`;
-    mkBar('hrBar',['Passport','Visa','CPR','License','Insurance','Contract'],[
-      {label:'Expiring',data:[8,12,5,7,9,3],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:4},
-      {label:'Expired',data:[2,4,3,1,2,0],backgroundColor:'rgba(239,68,68,0.7)',borderRadius:4},
-    ]);
-    mkLine('hrLine',['Mar 1','Mar 5','Mar 8','Mar 10','Mar 12','Mar 15','Mar 8'],[
-      {label:'Active Alerts',data:[18,22,25,28,30,34,34],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.05)',tension:0.4,fill:true}
-    ]);
+    mkBar('hrBar',['Passport','Visa','CPR','License','Insurance','Contract'],[{label:'Expiring',data:[8,12,5,7,9,3],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:4},{label:'Expired',data:[2,4,3,1,2,0],backgroundColor:'rgba(239,68,68,0.7)',borderRadius:4}]);
+    mkLine('hrLine',['Mar 1','Mar 5','Mar 8','Mar 10','Mar 12','Mar 15','Mar 8'],[{label:'Active Alerts',data:[18,22,25,28,30,34,34],borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.05)',tension:0.4,fill:true}]);
     return;
   }
-
-  // ── DRIVERS SECTION ──
   if(section==='drivers'){
     const filter=role==='supervisor'?'Keeta':role==='account-mgr'?'Keeta':null;
-    const restriction=role==='supervisor'?`<div class="restricted">🔒 You are viewing your assigned drivers only (Keeta · Supervisor Hassan). You cannot see drivers from other platforms or supervisors.</div>`:
-      role==='account-mgr'?`<div class="restricted">🔒 You are viewing Keeta platform drivers only. Other platforms are not visible to your role.</div>`:'';
+    const restriction=role==='supervisor'?`<div class="restricted">🔒 You are viewing your assigned drivers only (Keeta · Supervisor Hassan). You cannot see drivers from other platforms or supervisors.</div>`:role==='account-mgr'?`<div class="restricted">🔒 You are viewing Keeta platform drivers only. Other platforms are not visible to your role.</div>`:'';
     el.innerHTML=`
       <div class="sec-header">
         <div><div class="sec-title">Driver Management</div><div class="sec-sub">${filter?`${filter} platform only`:'All platforms · 1,247 total drivers'}</div></div>
@@ -1054,51 +810,30 @@ function renderContent(role,section,title){
       </div>
       <div class="panel">
         <div class="ph"><div class="ph-title">Driver List</div><div class="ph-link" onclick="openForm('add-driver')">+ Add Driver</div></div>
-        <table class="tbl">
-          <thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Type</th><th>Performance</th><th>COD Today</th><th>Documents</th><th>Status</th></tr></thead>
-          <tbody>${driverTableRows(filter)}</tbody>
-        </table>
+        <table class="tbl"><thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Type</th><th>Performance</th><th>COD Today</th><th>Documents</th><th>Status</th></tr></thead>
+        <tbody>${driverTableRows(filter)}</tbody></table>
         <div style="padding:12px 18px;border-top:1px solid var(--border);font-size:0.72rem;color:var(--text3)">Click any driver row to view full profile</div>
       </div>`;
     return;
   }
-
-  // ── EMPLOYEES SECTION ──
   if(section==='employees'){
     el.innerHTML=`
       <div class="sec-header">
         <div><div class="sec-title">Employees</div><div class="sec-sub">Internal staff · All departments</div></div>
         <button class="tb-btn primary" onclick="openForm('add-employee')">+ Add Employee</button>
       </div>
-      <div class="panel">
-        <div class="ph"><div class="ph-title">Staff Directory</div></div>
-        <table class="tbl">
-          <thead><tr><th>Employee</th><th>Title</th><th>Department</th><th>Level</th><th>Reports To</th><th>Status</th><th>System Access</th></tr></thead>
-          <tbody>
-            ${[
-              {name:'Fatima Al-Ahmad',title:'Finance Controller',dept:'Finance',level:'L3',rep:'GM',access:'Finance + COD'},
-              {name:'Sara Al-Nasser',title:'HR Ops & Compliance Lead',dept:'HR',level:'L3',rep:'GM',access:'Full HR'},
-              {name:'Waleed Al-Hamdan',title:'Head of Operations',dept:'Operations',level:'L3',rep:'GM',access:'All Ops'},
-              {name:'Omar Mohammed',title:'HR Compliance Officer',dept:'HR',level:'L4',rep:'HR Lead',access:'HR Compliance'},
-              {name:'Khalid Al-Rashid',title:'COD Reconciliation Officer',dept:'Finance',level:'L4',rep:'Finance Ctrl',access:'COD Only'},
-              {name:'Ziad Al-Ahmad',title:'OCT Lead',dept:'OCT',level:'L3',rep:'GM',access:'WhatsApp + COD'},
-            ].map(e=>`<tr onclick="viewEmployeeProfile('${e.name}','${e.title}','${e.dept}','${e.level}')" style="cursor:pointer">
-              <td><div style="font-weight:600">${e.name}</div></td>
-              <td>${e.title}</td>
-              <td><span class="b bp">${e.dept}</span></td>
-              <td><span class="b bb">${e.level}</span></td>
-              <td style="color:var(--text2)">${e.rep}</td>
-              <td><span class="b bg">Active</span></td>
-              <td style="font-size:0.72rem;color:var(--text2)">${e.access}</td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
+      <div class="panel"><div class="ph"><div class="ph-title">Staff Directory</div></div>
+        <table class="tbl"><thead><tr><th>Employee</th><th>Title</th><th>Department</th><th>Level</th><th>Reports To</th><th>Status</th><th>System Access</th></tr></thead>
+        <tbody>
+          ${[{name:'Fatima Al-Ahmad',title:'Finance Controller',dept:'Finance',level:'L3',rep:'GM',access:'Finance + COD'},{name:'Sara Al-Nasser',title:'HR Ops & Compliance Lead',dept:'HR',level:'L3',rep:'GM',access:'Full HR'},{name:'Waleed Al-Hamdan',title:'Head of Operations',dept:'Operations',level:'L3',rep:'GM',access:'All Ops'},{name:'Omar Mohammed',title:'HR Compliance Officer',dept:'HR',level:'L4',rep:'HR Lead',access:'HR Compliance'},{name:'Khalid Al-Rashid',title:'COD Reconciliation Officer',dept:'Finance',level:'L4',rep:'Finance Ctrl',access:'COD Only'},{name:'Ziad Al-Ahmad',title:'OCT Lead',dept:'OCT',level:'L3',rep:'GM',access:'WhatsApp + COD'}]
+          .map(e=>`<tr onclick="viewEmployeeProfile('${e.name}','${e.title}','${e.dept}','${e.level}')" style="cursor:pointer">
+            <td><div style="font-weight:600">${e.name}</div></td><td>${e.title}</td><td><span class="b bp">${e.dept}</span></td><td><span class="b bb">${e.level}</span></td><td style="color:var(--text2)">${e.rep}</td><td><span class="b bg">Active</span></td><td style="font-size:0.72rem;color:var(--text2)">${e.access}</td>
+          </tr>`).join('')}
+        </tbody></table>
         <div style="padding:12px 18px;border-top:1px solid var(--border);font-size:0.72rem;color:var(--text3)">Click any employee row to view full profile</div>
       </div>`;
     return;
   }
-
-  // ── SUPERVISOR DASHBOARD ──
   if(section==='dashboard'&&role==='supervisor'){
     el.innerHTML=`
       <div class="restricted">🔒 You are viewing your assigned driver group only. Keeta · Supervisor Hassan · 120 drivers assigned.</div>
@@ -1108,21 +843,16 @@ function renderContent(role,section,title){
         ${kpiHTML('COD Submitted','89','View only · no edit','var(--blue)',[60,65,70,75,80,85,89])}
         ${kpiHTML('Warnings Today','2','auto escalated','var(--amber)',[0,1,1,2,2,2,2])}
       </div>
-      <div class="panel">
-        <div class="ph"><div class="ph-title">🚴 My Drivers — Live Status</div><div class="tb-live"><span class="live-dot"></span>Live</div></div>
-        <table class="tbl">
-          <thead><tr><th>Driver</th><th>Last Login</th><th>Shift Status</th><th>Orders</th><th>Score</th><th>COD</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr onclick="viewDriverProfile('Ahmed Al-Rashidi','DRV-0041','Keeta','--keeta','Sup. Hassan',87)" style="cursor:pointer"><td><b>Ahmed Al-Rashidi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0041</span></td><td class="mono">08:32 AM</td><td><span class="b bg">On Shift</span></td><td class="mono">14</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-label">87%</div></div></td><td><span class="b bg">✓ Submitted</span></td><td><span class="b bg">Active</span></td></tr>
-            <tr onclick="viewDriverProfile('Ali Hassan','DRV-0271','Keeta','--keeta','Sup. Hassan',78)" style="cursor:pointer"><td><b>Ali Hassan</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0271</span></td><td class="mono">10:17 AM</td><td><span class="b bg">On Shift</span></td><td class="mono">9</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:78%;background:var(--amber)"></div></div><div class="score-label">78%</div></div></td><td><span class="b bg">✓ Submitted</span></td><td><span class="b ba">Warning</span></td></tr>
-            <tr><td><b>Nasser Al-Khaldi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0299</span></td><td class="mono" style="color:var(--red)">Yesterday</td><td><span class="b br">Not In</span></td><td class="mono">0</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:55%;background:var(--red)"></div></div><div class="score-label">55%</div></div></td><td><span class="b br">✕ Missing</span></td><td><span class="b br">Absent</span></td></tr>
-          </tbody>
-        </table>
+      <div class="panel"><div class="ph"><div class="ph-title">🚴 My Drivers — Live Status</div><div class="tb-live"><span class="live-dot"></span>Live</div></div>
+        <table class="tbl"><thead><tr><th>Driver</th><th>Last Login</th><th>Shift Status</th><th>Orders</th><th>Score</th><th>COD</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr onclick="viewDriverProfile('Ahmed Al-Rashidi','DRV-0041','Keeta','--keeta','Sup. Hassan',87)" style="cursor:pointer"><td><b>Ahmed Al-Rashidi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0041</span></td><td class="mono">08:32 AM</td><td><span class="b bg">On Shift</span></td><td class="mono">14</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:87%;background:var(--green)"></div></div><div class="score-label">87%</div></div></td><td><span class="b bg">✓ Submitted</span></td><td><span class="b bg">Active</span></td></tr>
+          <tr onclick="viewDriverProfile('Ali Hassan','DRV-0271','Keeta','--keeta','Sup. Hassan',78)" style="cursor:pointer"><td><b>Ali Hassan</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0271</span></td><td class="mono">10:17 AM</td><td><span class="b bg">On Shift</span></td><td class="mono">9</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:78%;background:var(--amber)"></div></div><div class="score-label">78%</div></div></td><td><span class="b bg">✓ Submitted</span></td><td><span class="b ba">Warning</span></td></tr>
+          <tr><td><b>Nasser Al-Khaldi</b><br><span class="mono" style="font-size:0.62rem;color:var(--text3)">DRV-0299</span></td><td class="mono" style="color:var(--red)">Yesterday</td><td><span class="b br">Not In</span></td><td class="mono">0</td><td><div class="score"><div class="score-track"><div class="score-fill" style="width:55%;background:var(--red)"></div></div><div class="score-label">55%</div></div></td><td><span class="b br">✕ Missing</span></td><td><span class="b br">Absent</span></td></tr>
+        </tbody></table>
       </div>`;
     return;
   }
-
-  // ── OCT DASHBOARD ──
   if(section==='dashboard'&&role==='oct-lead'){
     el.innerHTML=`
       <div class="g4">
@@ -1135,15 +865,10 @@ function renderContent(role,section,title){
         <div class="panel"><div class="ph"><div class="ph-title">🤖 Automation vs Human — 7 Days</div></div><div class="pb"><div class="chart-wrap"><canvas id="octBar"></canvas></div></div></div>
         <div class="panel"><div class="ph"><div class="ph-title">📈 Message Volume Trend</div></div><div class="pb"><div class="chart-wrap"><canvas id="octLine"></canvas></div></div></div>
       </div>`;
-    mkBar('octBar',DAYS,[
-      {label:'Auto-resolved',data:[980,1100,1050,1200,1150,1300,1089],backgroundColor:'rgba(16,185,129,0.7)',borderRadius:5},
-      {label:'Human handled',data:[140,160,150,180,165,190,158],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:5},
-    ]);
+    mkBar('octBar',DAYS,[{label:'Auto-resolved',data:[980,1100,1050,1200,1150,1300,1089],backgroundColor:'rgba(16,185,129,0.7)',borderRadius:5},{label:'Human handled',data:[140,160,150,180,165,190,158],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:5}]);
     mkLine('octLine',DAYS,[{label:'Total Messages',data:[1120,1260,1200,1380,1315,1490,1247],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.07)',tension:0.4,fill:true}]);
     return;
   }
-
-  // ── LEGAL DASHBOARD ──
   if(section==='dashboard'&&role==='legal'){
     el.innerHTML=`
       <div class="restricted">🔒 Read-only access. You can view compliance data but cannot make operational or financial changes.</div>
@@ -1153,19 +878,11 @@ function renderContent(role,section,title){
         ${kpiHTML('Driver Compliance','91.5%','<span class="dn">34 alerts</span>','var(--green)',[88,89,90,90,91,91,91.5])}
         ${kpiHTML('Expiring Licenses','7','within 30 days','var(--red)',[3,4,5,5,6,7,7])}
       </div>
-      <div class="panel">
-        <div class="ph"><div class="ph-title">📄 Compliance Overview (Read Only)</div></div>
-        <div class="pb">
-          <div style="padding:20px;text-align:center;color:var(--text2)">
-            <div style="font-size:2rem;margin-bottom:8px">📋</div>
-            <div style="font-size:0.85rem">Compliance data is available in the HR & Legal modules.<br>You have read-only access to regulatory documentation.</div>
-          </div>
-        </div>
+      <div class="panel"><div class="ph"><div class="ph-title">📄 Compliance Overview (Read Only)</div></div>
+        <div class="pb"><div style="padding:20px;text-align:center;color:var(--text2)"><div style="font-size:2rem;margin-bottom:8px">📋</div><div style="font-size:0.85rem">Compliance data is available in the HR & Legal modules.<br>You have read-only access to regulatory documentation.</div></div></div>
       </div>`;
     return;
   }
-
-  // ── ACCOUNT MANAGER DASHBOARD ──
   if(section==='dashboard'&&role==='account-mgr'){
     el.innerHTML=`
       ${platformBanner('Keeta','🔶','Tariq Khalid','340','#f97316')}
@@ -1178,16 +895,14 @@ function renderContent(role,section,title){
       </div>
       <div class="g2">
         <div class="panel"><div class="ph"><div class="ph-title">👥 Supervisors — Keeta</div></div><div class="pb">
-          ${[{n:'Supervisor Ahmed',d:'120',a:'116',s:'94%',c:'#f97316'},{n:'Supervisor Hassan',d:'118',a:'109',s:'81%',c:'#fb923c'},{n:'Supervisor Rami',d:'102',a:'88',s:'71%',c:'#ef4444'}].map((s,i)=>`
-          <div class="top-item"><div class="ti-rank">${i+1}</div><div class="ti-av" style="background:linear-gradient(135deg,${s.c},${s.c}99)">${s.n.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div class="ti-info"><div class="ti-name">${s.n}</div><div class="ti-sub">${s.a}/${s.d} active</div></div><div class="ti-val" style="color:${parseFloat(s.s)>=80?'var(--green)':parseFloat(s.s)>=70?'var(--amber)':'var(--red)'}">${s.s}</div></div>`).join('')}
+          ${[{n:'Supervisor Ahmed',d:'120',a:'116',s:'94%',c:'#f97316'},{n:'Supervisor Hassan',d:'118',a:'109',s:'81%',c:'#fb923c'},{n:'Supervisor Rami',d:'102',a:'88',s:'71%',c:'#ef4444'}]
+          .map((s,i)=>`<div class="top-item"><div class="ti-rank">${i+1}</div><div class="ti-av" style="background:linear-gradient(135deg,${s.c},${s.c}99)">${s.n.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div class="ti-info"><div class="ti-name">${s.n}</div><div class="ti-sub">${s.a}/${s.d} active</div></div><div class="ti-val" style="color:${parseFloat(s.s)>=80?'var(--green)':parseFloat(s.s)>=70?'var(--amber)':'var(--red)'}">${s.s}</div></div>`).join('')}
         </div></div>
         <div class="panel"><div class="ph"><div class="ph-title">📈 Keeta COD — This Week</div></div><div class="pb"><div class="chart-wrap"><canvas id="keetaChart"></canvas></div></div></div>
       </div>`;
     mkLine('keetaChart',DAYS,[{label:'BD',data:[2800,3400,3100,4200,3900,5100,4230],borderColor:'#f97316',backgroundColor:'rgba(249,115,22,0.07)',tension:0.4,fill:true}]);
     return;
   }
-
-  // ── DEFAULT FALLBACK ──
   el.innerHTML=`<div class="sec-header"><div class="sec-title">${title}</div></div>
     <div class="panel"><div class="ph"><div class="ph-title">${title}</div></div>
     <div class="pb" style="padding:40px;text-align:center;color:var(--text2)">
@@ -1195,8 +910,6 @@ function renderContent(role,section,title){
       <div style="font-size:0.88rem">${title} module content for ${ROLES[role]?.label||role}</div>
     </div></div>`;
 }
-
-// ── PLATFORM FILTER ──
 const PLATFORM_DATA={
   all:{drivers:'1,247',cod:'BD 18.4K',alerts:'34',perf:'82%'},
   keeta:{drivers:'340',cod:'BD 4.2K',alerts:'6',perf:'84%'},
@@ -1214,126 +927,104 @@ function filterPtab(el,p){
     kpiHTML('Compliance Alerts',d.alerts,`<span class="dn">expiring this week</span>`,'var(--red)',[20,25,28,30,32,33,34])+
     kpiHTML('Avg Performance',d.perf,`<span class="up">↑ 3%</span> vs last week`,'var(--green)',[70,72,75,76,79,80,82]);
 }
-
-// ── FORMS ──
 function openForm(type){
   const overlay=document.getElementById('formOverlay');
   const card=document.getElementById('formCard');
   overlay.style.display='flex';
-
-  if(type==='add-driver'||type==='hr-recruitment'){
-    card.innerHTML=driverFormHTML(1);
-  } else if(type==='add-employee'){
-    card.innerHTML=employeeFormHTML(1);
-  }
+  if(type==='add-driver'||type==='hr-recruitment'){card.innerHTML=driverFormHTML(1);}
+  else if(type==='add-employee'){card.innerHTML=employeeFormHTML(1);}
 }
-
-function closeForm(){
-  document.getElementById('formOverlay').style.display='none';
-}
-
+function closeForm(){document.getElementById('formOverlay').style.display='none';}
 function driverFormHTML(step){
   const steps=['Personal Info','Platform & Assignment','Documents','Review'];
-  const stepsHTML=steps.map((s,i)=>`
-    <div class="fstep">
-      <div class="fstep-num ${i+1<step?'done':i+1===step?'active':'pending'}">${i+1<step?'✓':i+1}</div>
-      <div class="fstep-label ${i+1===step?'active':'pending'}">${s}</div>
-      ${i<steps.length-1?`<div class="fstep-line ${i+1<step?'done':''}"></div>`:''}
-    </div>`).join('');
-
+  const stepsHTML=steps.map((s,i)=>`<div class="fstep"><div class="fstep-num ${i+1<step?'done':i+1===step?'active':'pending'}">${i+1<step?'✓':i+1}</div><div class="fstep-label ${i+1===step?'active':'pending'}">${s}</div>${i<steps.length-1?`<div class="fstep-line ${i+1<step?'done':''}"></div>`:''}</div>`).join('');
   let body='';
-  if(step===1){
-    body=`
-      <div class="form-section-title">Personal Information</div>
-      <div class="form-row">
-        <div class="field required"><label>First Name</label><input type="text" placeholder="Ahmed"></div>
-        <div class="field required"><label>Last Name</label><input type="text" placeholder="Al-Rashidi"></div>
+  if(step===1){body=`
+    <div class="form-section-title">Personal Information</div>
+    <div class="form-row"><div class="field required"><label>First Name</label><input type="text" placeholder="Ahmed"></div><div class="field required"><label>Last Name</label><input type="text" placeholder="Al-Rashidi"></div></div>
+    <div class="form-row"><div class="field required"><label>Nationality</label><select><option>Select...</option><option>Bahraini</option><option>Saudi</option><option>Indian</option><option>Pakistani</option><option>Filipino</option></select></div><div class="field required"><label>Driver Type</label><select><option>Select...</option><option>Local</option><option>Offshore</option></select></div></div>
+    <div class="form-row"><div class="field required"><label>Phone Number</label><input type="tel" placeholder="+973 3300 XXXX"></div><div class="field"><label>CPR / ID Number</label><input type="text" placeholder="XXXXXX-XXXX"></div></div>
+    <div class="form-row single"><div class="field"><label>Notes</label><textarea rows="2" placeholder="Any additional notes..."></textarea></div></div>`;}
+  else if(step===2){body=`
+    <div class="form-section-title">Platform & Assignment</div>
+    <div class="form-row"><div class="field required"><label>Platform</label><select><option>Select Platform...</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select></div><div class="field required"><label>Supervisor</label><select><option>Select Supervisor...</option><option>Supervisor Ahmed (Keeta)</option><option>Supervisor Hassan (Keeta)</option><option>Supervisor Mohammed (Jahez)</option></select></div></div>
+    <div class="form-row"><div class="field required"><label>Contract Type</label><select><option>Local Contract</option><option>Offshore Contract</option></select></div><div class="field required"><label>Employment Start Date</label><input type="date"></div></div>
+    <div class="form-section-title" style="margin-top:8px">Bike Information</div>
+    <div class="form-row"><div class="field required"><label>Bike Type</label><select><option>Lease-to-Own</option><option>Rental</option><option>Personal</option></select></div><div class="field"><label>Bike Model</label><input type="text" placeholder="Honda CB200"></div></div>
+    <div class="form-row"><div class="field"><label>Plate Number</label><input type="text" placeholder="BH XXXX X"></div><div class="field"><label>Registration Expiry</label><input type="date"></div></div>`;}
+  else if(step===3){body=`
+    <div class="form-section-title">Upload Documents</div>
+    ${['Passport','Visa','CPR / ID','Driving License','Insurance','Contract'].map(d=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-size:0.8rem;font-weight:600">${d}</div><div style="font-size:0.65rem;color:var(--text3);margin-top:2px">PDF or image · max 5MB</div></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="date" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:5px 10px;font-size:0.72rem;color:var(--text2);font-family:'DM Sans',sans-serif;outline:none">
+        <button class="btn btn-ghost" style="font-size:0.7rem;padding:5px 12px" onclick="this.textContent='✓ Uploaded';this.classList.replace('btn-ghost','btn-success')">Upload</button>
       </div>
-      <div class="form-row">
-        <div class="field required"><label>Nationality</label><select><option>Select...</option><option>Bahraini</option><option>Saudi</option><option>Indian</option><option>Pakistani</option><option>Filipino</option></select></div>
-        <div class="field required"><label>Driver Type</label><select><option>Select...</option><option>Local</option><option>Offshore</option></select></div>
-      </div>
-      <div class="form-row">
-        <div class="field required"><label>Phone Number</label><input type="tel" placeholder="+973 3300 XXXX"></div>
-        <div class="field"><label>CPR / ID Number</label><input type="text" placeholder="XXXXXX-XXXX"></div>
-      </div>
-      <div class="form-row single">
-        <div class="field"><label>Notes</label><textarea rows="2" placeholder="Any additional notes..."></textarea></div>
-
-```
-  </div>`;
-```
-
-} else if(step===2){
-body=` <div class="form-section-title">Platform & Assignment</div> <div class="form-row"> <div class="field required"><label>Platform</label><select><option>Select Platform...</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select></div> <div class="field required"><label>Supervisor</label><select><option>Select Supervisor...</option><option>Supervisor Ahmed (Keeta)</option><option>Supervisor Hassan (Keeta)</option><option>Supervisor Mohammed (Jahez)</option></select></div> </div> <div class="form-row"> <div class="field required"><label>Contract Type</label><select><option>Local Contract</option><option>Offshore Contract</option></select></div> <div class="field required"><label>Employment Start Date</label><input type="date"></div> </div> <div class="form-section-title" style="margin-top:8px">Bike Information</div> <div class="form-row"> <div class="field required"><label>Bike Type</label><select><option>Lease-to-Own</option><option>Rental</option><option>Personal</option></select></div> <div class="field"><label>Bike Model</label><input type="text" placeholder="Honda CB200"></div> </div> <div class="form-row"> <div class="field"><label>Plate Number</label><input type="text" placeholder="BH XXXX X"></div> <div class="field"><label>Registration Expiry</label><input type="date"></div> </div>`;
-} else if(step===3){
-body=` <div class="form-section-title">Upload Documents</div> ${['Passport','Visa','CPR / ID','Driving License','Insurance','Contract'].map(d=>`
-<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
-<div>
-<div style="font-size:0.8rem;font-weight:600">${d}</div>
-<div style="font-size:0.65rem;color:var(--text3);margin-top:2px">PDF or image · max 5MB</div>
-</div>
-<div style="display:flex;align-items:center;gap:8px">
-<input type="date" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:5px 10px;font-size:0.72rem;color:var(--text2);font-family:'DM Sans',sans-serif;outline:none" placeholder="Expiry date">
-<button class="btn btn-ghost" style="font-size:0.7rem;padding:5px 12px" onclick="this.textContent='✓ Uploaded';this.classList.replace('btn-ghost','btn-success')">Upload</button>
-</div>
-</div>`).join('')}`;
-} else if(step===4){
-body=` <div class="success-card"> <div class="sc-icon">✅</div> <div><div class="sc-title">Ready to Create Driver</div><div class="sc-sub">All required information has been filled in. Review below and confirm.</div></div> </div> <div class="panel" style="margin-bottom:0"> <div class="ph"><div class="ph-title">Summary</div></div> <div class="pb"> <div class="info-grid"> <div class="ig-item"><div class="ig-label">Name</div><div class="ig-val">Ahmed Al-Rashidi</div></div> <div class="ig-item"><div class="ig-label">Platform</div><div class="ig-val" style="color:var(--keeta)">Keeta</div></div> <div class="ig-item"><div class="ig-label">Supervisor</div><div class="ig-val">Supervisor Ahmed</div></div> <div class="ig-item"><div class="ig-label">Driver Type</div><div class="ig-val">Local</div></div> <div class="ig-item"><div class="ig-label">Documents</div><div class="ig-val"><span class="b bg">6 uploaded</span></div></div> <div class="ig-item"><div class="ig-label">Status</div><div class="ig-val"><span class="b ba">Onboarding</span></div></div> </div> </div> </div>`;
+    </div>`).join('')}`;}
+  else if(step===4){body=`
+    <div class="success-card"><div class="sc-icon">✅</div><div><div class="sc-title">Ready to Create Driver</div><div class="sc-sub">All required information has been filled in. Review below and confirm.</div></div></div>
+    <div class="panel" style="margin-bottom:0"><div class="ph"><div class="ph-title">Summary</div></div><div class="pb"><div class="info-grid">
+      <div class="ig-item"><div class="ig-label">Name</div><div class="ig-val">Ahmed Al-Rashidi</div></div>
+      <div class="ig-item"><div class="ig-label">Platform</div><div class="ig-val" style="color:var(--keeta)">Keeta</div></div>
+      <div class="ig-item"><div class="ig-label">Supervisor</div><div class="ig-val">Supervisor Ahmed</div></div>
+      <div class="ig-item"><div class="ig-label">Driver Type</div><div class="ig-val">Local</div></div>
+      <div class="ig-item"><div class="ig-label">Documents</div><div class="ig-val"><span class="b bg">6 uploaded</span></div></div>
+      <div class="ig-item"><div class="ig-label">Status</div><div class="ig-val"><span class="b ba">Onboarding</span></div></div>
+    </div></div></div>`;}
+  return`<div class="form-header"><div class="form-title">➕ Add New Driver</div><div class="form-close" onclick="closeForm()">✕</div></div>
+    <div class="form-steps">${stepsHTML}</div>
+    <div class="form-body">${body}</div>
+    <div class="form-footer">
+      <button class="btn btn-ghost" onclick="${step>1?`document.getElementById('formCard').innerHTML=driverFormHTML(${step-1})`:`closeForm()`}">${step>1?'← Back':'Cancel'}</button>
+      <div style="font-size:0.72rem;color:var(--text3)">Step ${step} of ${steps.length}</div>
+      <button class="btn btn-primary" onclick="${step<steps.length?`document.getElementById('formCard').innerHTML=driverFormHTML(${step+1})`:`driverSubmitSuccess()`}">${step<steps.length?'Next →':'✓ Create Driver'}</button>
+    </div>`;
 }
-
-return` <div class="form-header"> <div class="form-title">➕ Add New Driver</div> <div class="form-close" onclick="closeForm()">✕</div> </div> <div class="form-steps">${stepsHTML}</div> <div class="form-body">${body}</div> <div class="form-footer"> <button class="btn btn-ghost" onclick="${step>1?`document.getElementById(‘formCard’).innerHTML=driverFormHTML(${step-1})`:`closeForm()`}">${step>1?'← Back':'Cancel'}</button> <div style="font-size:0.72rem;color:var(--text3)">Step ${step} of ${steps.length}</div> <button class="btn btn-primary" onclick="${step<steps.length?`document.getElementById(‘formCard’).innerHTML=driverFormHTML(${step+1})`:`driverSubmitSuccess()`}">${step<steps.length?'Next →':'✓ Create Driver'}</button> </div>`;
-}
-
 function employeeFormHTML(step){
-const steps=[‘Personal Info’,‘Role & Department’,‘System Access’];
-const stepsHTML=steps.map((s,i)=>` <div class="fstep"> <div class="fstep-num ${i+1<step?'done':i+1===step?'active':'pending'}">${i+1<step?'✓':i+1}</div> <div class="fstep-label ${i+1===step?'active':'pending'}">${s}</div> ${i<steps.length-1?`<div class="fstep-line ${i+1<step?'done':''}"></div>`:''} </div>`).join(’’);
-
-let body=’’;
-if(step===1){
-body=` <div class="form-section-title">Personal Information</div> <div class="form-row"> <div class="field required"><label>First Name</label><input type="text" placeholder="Sara"></div> <div class="field required"><label>Last Name</label><input type="text" placeholder="Al-Nasser"></div> </div> <div class="form-row"> <div class="field required"><label>CPR / ID</label><input type="text" placeholder="XXXXXX-XXXX"></div> <div class="field required"><label>Phone</label><input type="tel" placeholder="+973 3X XX XXXX"></div> </div> <div class="form-row"> <div class="field required"><label>Work Email</label><input type="email" placeholder="sara@courierx.com"></div> <div class="field required"><label>Employment Type</label><select><option>Full-time</option><option>Part-time</option><option>Consultant</option><option>External</option></select></div> </div> <div class="form-row"> <div class="field"><label>Contract Start</label><input type="date"></div> <div class="field"><label>Contract End</label><input type="date"></div> </div>`;
-} else if(step===2){
-body=` <div class="form-section-title">Role & Department</div> <div class="form-row"> <div class="field required"><label>Job Title</label><input type="text" placeholder="Finance Controller"></div> <div class="field required"><label>Department</label><select><option>Finance</option><option>HR</option><option>Operations</option><option>OCT</option><option>Legal</option></select></div> </div> <div class="form-row"> <div class="field required"><label>Reports To</label><select><option>CEO / Owner</option><option>General Manager</option><option>Finance Controller</option><option>HR Lead</option><option>Head of Operations</option></select></div> <div class="field required"><label>Work Location</label><select><option>Office — Manama</option><option>Field</option><option>Hybrid</option><option>Remote</option></select></div> </div>`;
-} else if(step===3){
-body=` <div class="form-section-title">System Access Level</div> <div style="display:grid;gap:10px"> ${[ {l:'Level 3 — Department Lead',d:'Full access to assigned department module. No cross-department data.',v:'l3'}, {l:'Level 4 — Officer / Specialist',d:'Limited to specific tasks within one module. No approval authority.',v:'l4'}, {l:'View Only',d:'Can see dashboards relevant to role. Cannot take any action.',v:'view'}, ].map(o=>`
-<label style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);cursor:pointer">
-<input type="radio" name="access" value="${o.v}" style="margin-top:3px;accent-color:var(--blue)">
-<div><div style="font-size:0.8rem;font-weight:600">${o.l}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:3px">${o.d}</div></div>
-</label>`).join('')} </div> <div style="margin-top:14px"> <div class="form-section-title">Notify Employee</div> <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--blue)"><span style="font-size:0.8rem">Send welcome email with login credentials</span></label> </div>`;
+  const steps=['Personal Info','Role & Department','System Access'];
+  const stepsHTML=steps.map((s,i)=>`<div class="fstep"><div class="fstep-num ${i+1<step?'done':i+1===step?'active':'pending'}">${i+1<step?'✓':i+1}</div><div class="fstep-label ${i+1===step?'active':'pending'}">${s}</div>${i<steps.length-1?`<div class="fstep-line ${i+1<step?'done':''}"></div>`:''}</div>`).join('');
+  let body='';
+  if(step===1){body=`
+    <div class="form-section-title">Personal Information</div>
+    <div class="form-row"><div class="field required"><label>First Name</label><input type="text" placeholder="Sara"></div><div class="field required"><label>Last Name</label><input type="text" placeholder="Al-Nasser"></div></div>
+    <div class="form-row"><div class="field required"><label>CPR / ID</label><input type="text" placeholder="XXXXXX-XXXX"></div><div class="field required"><label>Phone</label><input type="tel" placeholder="+973 3X XX XXXX"></div></div>
+    <div class="form-row"><div class="field required"><label>Work Email</label><input type="email" placeholder="sara@courierx.com"></div><div class="field required"><label>Employment Type</label><select><option>Full-time</option><option>Part-time</option><option>Consultant</option><option>External</option></select></div></div>
+    <div class="form-row"><div class="field"><label>Contract Start</label><input type="date"></div><div class="field"><label>Contract End</label><input type="date"></div></div>`;}
+  else if(step===2){body=`
+    <div class="form-section-title">Role & Department</div>
+    <div class="form-row"><div class="field required"><label>Job Title</label><input type="text" placeholder="Finance Controller"></div><div class="field required"><label>Department</label><select><option>Finance</option><option>HR</option><option>Operations</option><option>OCT</option><option>Legal</option></select></div></div>
+    <div class="form-row"><div class="field required"><label>Reports To</label><select><option>CEO / Owner</option><option>General Manager</option><option>Finance Controller</option><option>HR Lead</option><option>Head of Operations</option></select></div><div class="field required"><label>Work Location</label><select><option>Office — Manama</option><option>Field</option><option>Hybrid</option><option>Remote</option></select></div></div>`;}
+  else if(step===3){body=`
+    <div class="form-section-title">System Access Level</div>
+    <div style="display:grid;gap:10px">
+      ${[{l:'Level 3 — Department Lead',d:'Full access to assigned department module. No cross-department data.',v:'l3'},{l:'Level 4 — Officer / Specialist',d:'Limited to specific tasks within one module. No approval authority.',v:'l4'},{l:'View Only',d:'Can see dashboards relevant to role. Cannot take any action.',v:'view'}]
+      .map(o=>`<label style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);cursor:pointer"><input type="radio" name="access" value="${o.v}" style="margin-top:3px;accent-color:var(--blue)"><div><div style="font-size:0.8rem;font-weight:600">${o.l}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:3px">${o.d}</div></div></label>`).join('')}
+    </div>
+    <div style="margin-top:14px"><div class="form-section-title">Notify Employee</div>
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--blue)"><span style="font-size:0.8rem">Send welcome email with login credentials</span></label></div>`;}
+  return`<div class="form-header"><div class="form-title">➕ Add New Employee</div><div class="form-close" onclick="closeForm()">✕</div></div>
+    <div class="form-steps">${stepsHTML}</div>
+    <div class="form-body">${body}</div>
+    <div class="form-footer">
+      <button class="btn btn-ghost" onclick="${step>1?`document.getElementById('formCard').innerHTML=employeeFormHTML(${step-1})`:`closeForm()`}">${step>1?'← Back':'Cancel'}</button>
+      <div style="font-size:0.72rem;color:var(--text3)">Step ${step} of ${steps.length}</div>
+      <button class="btn btn-primary" onclick="${step<steps.length?`document.getElementById('formCard').innerHTML=employeeFormHTML(${step+1})`:`employeeSubmitSuccess()`}">${step<steps.length?'Next →':'✓ Create Employee'}</button>
+    </div>`;
 }
-
-return` <div class="form-header"> <div class="form-title">➕ Add New Employee</div> <div class="form-close" onclick="closeForm()">✕</div> </div> <div class="form-steps">${stepsHTML}</div> <div class="form-body">${body}</div> <div class="form-footer"> <button class="btn btn-ghost" onclick="${step>1?`document.getElementById(‘formCard’).innerHTML=employeeFormHTML(${step-1})`:`closeForm()`}">${step>1?'← Back':'Cancel'}</button> <div style="font-size:0.72rem;color:var(--text3)">Step ${step} of ${steps.length}</div> <button class="btn btn-primary" onclick="${step<steps.length?`document.getElementById(‘formCard’).innerHTML=employeeFormHTML(${step+1})`:`employeeSubmitSuccess()`}">${step<steps.length?'Next →':'✓ Create Employee'}</button> </div>`;
-}
-
 function driverSubmitSuccess(){
-closeForm();
-const content=document.getElementById(‘mainContent’);
-const successBanner=`<div class="success-card">
-<div class="sc-icon">🎉</div>
-<div><div class="sc-title">Driver Created Successfully</div><div class="sc-sub">Ahmed Al-Rashidi · DRV-1248 · Keeta · Supervisor Ahmed · Status: Onboarding · Welcome WhatsApp sent automatically.</div></div>
-<button class="btn btn-ghost" style="margin-left:auto;white-space:nowrap" onclick="this.parentElement.remove()">Dismiss</button>
-
-  </div>`;
-  content.insertAdjacentHTML('afterbegin',successBanner);
+  closeForm();
+  const content=document.getElementById('mainContent');
+  content.insertAdjacentHTML('afterbegin',`<div class="success-card"><div class="sc-icon">🎉</div><div><div class="sc-title">Driver Created Successfully</div><div class="sc-sub">Ahmed Al-Rashidi · DRV-1248 · Keeta · Supervisor Ahmed · Status: Onboarding · Welcome WhatsApp sent automatically.</div></div><button class="btn btn-ghost" style="margin-left:auto;white-space:nowrap" onclick="this.parentElement.remove()">Dismiss</button></div>`);
   content.scrollTop=0;
 }
-
 function employeeSubmitSuccess(){
-closeForm();
-const content=document.getElementById(‘mainContent’);
-const successBanner=`<div class="success-card">
-<div class="sc-icon">🎉</div>
-<div><div class="sc-title">Employee Created Successfully</div><div class="sc-sub">Sara Al-Nasser · Finance · Level 3 · System credentials sent to sara@courierx.com</div></div>
-<button class="btn btn-ghost" style="margin-left:auto;white-space:nowrap" onclick="this.parentElement.remove()">Dismiss</button>
-
-  </div>`;
-  content.insertAdjacentHTML('afterbegin',successBanner);
+  closeForm();
+  const content=document.getElementById('mainContent');
+  content.insertAdjacentHTML('afterbegin',`<div class="success-card"><div class="sc-icon">🎉</div><div><div class="sc-title">Employee Created Successfully</div><div class="sc-sub">Sara Al-Nasser · Finance · Level 3 · System credentials sent to sara@courierx.com</div></div><button class="btn btn-ghost" style="margin-left:auto;white-space:nowrap" onclick="this.parentElement.remove()">Dismiss</button></div>`);
   content.scrollTop=0;
 }
-
-// ── INIT ──
-setRole(‘ceo’,document.querySelector(’.role-pill’));
+setRole('ceo',document.querySelector('.role-pill'));
 </script>
-
 </body>
 </html>
