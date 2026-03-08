@@ -662,7 +662,126 @@ const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const HRS=['08','09','10','11','12','13','14','15'];
 let currentRole='ceo';
 let currentSection='dashboard';
+let currentPlatform='all'; // 'all','keeta','jahez','ninja','noon'
 let chartInstances={};
+
+// ===================== PLATFORM DATA =====================
+const PLATFORM_DATA={
+  keeta:{
+    name:'Keeta',emoji:'🔶',color:'#ea580c',colorVar:'var(--keeta)',colorDim:'var(--keeta-dim)',colorLight:'var(--keeta-light)',
+    supervisors:[
+      {name:'Ahmed Hassan',id:'SUP-001',initials:'AH',drivers:42,active:38,orders:1240,cod:'BD 18,420',rating:4.8},
+      {name:'Mohammed Al-Fardan',id:'SUP-002',initials:'MF',drivers:38,active:35,orders:1100,cod:'BD 16,200',rating:4.7},
+    ],
+    drivers:[
+      {name:'Ahmed Al-Rashidi',id:'DRV-0041',sup:'Ahmed Hassan',type:'Local',status:'Active',sc:'bg',orders:28,cod:'BD 124.500',docs:'bg'},
+      {name:'Khalid Hassan',id:'DRV-0048',sup:'Ahmed Hassan',type:'Local',status:'Active',sc:'bg',orders:22,cod:'BD 98.000',docs:'bg'},
+      {name:'Ali Al-Sayed',id:'DRV-0071',sup:'Mohammed Al-Fardan',type:'Local',status:'Active',sc:'bg',orders:19,cod:'BD 87.000',docs:'ba'},
+      {name:'Yousef Mansour',id:'DRV-0082',sup:'Mohammed Al-Fardan',type:'Offshore',status:'Suspended',sc:'br',orders:0,cod:'BD 0',docs:'br'},
+      {name:'Faris Al-Nasser',id:'DRV-0095',sup:'Ahmed Hassan',type:'Local',status:'Active',sc:'bg',orders:25,cod:'BD 110.000',docs:'bg'},
+    ],
+    cod:{pending:64,approved:180,flagged:8,total:'BD 18,420',week:'BD 86,400'},
+    performance:{orders:6420,ontime:'87%',accuracy:'96%',rating:4.7},
+    reports:[
+      {title:'Keeta Weekly Summary',date:'Mar 1–8, 2026',icon:'📊'},
+      {title:'Keeta COD Reconciliation',date:'Feb 2026',icon:'💰'},
+      {title:'Keeta Driver Performance',date:'Q1 2026',icon:'🏆'},
+    ],
+    docAlerts:[
+      {name:'Ali Al-Sayed',doc:'Visa',days:'7 days',sc:'br'},
+      {name:'Faris Al-Nasser',doc:'CPR',days:'Expired',sc:'br'},
+    ],
+    kpis:{drivers:340,cod:'BD 18,420',performance:'87%',alerts:12},
+    chart7d:{orders:[3200,4100,3800,5200,4700,6100,4230],cod:[12400,16800,15200,18900,17400,22100,18420]},
+  },
+  jahez:{
+    name:'Jahez',emoji:'🟣',color:'#7c3aed',colorVar:'var(--jahez)',colorDim:'var(--jahez-dim)',colorLight:'var(--jahez-light)',
+    supervisors:[
+      {name:'Sara Khalid',id:'SUP-003',initials:'SK',drivers:51,active:48,orders:1580,cod:'BD 24,600',rating:4.9},
+      {name:'Hassan Al-Mutairi',id:'SUP-004',initials:'HM',drivers:46,active:44,orders:1420,cod:'BD 22,100',rating:4.8},
+    ],
+    drivers:[
+      {name:'Faris Ghamdi',id:'DRV-0089',sup:'Sara Khalid',type:'Local',status:'Active',sc:'bg',orders:31,cod:'BD 156.000',docs:'bg'},
+      {name:'Mohammed Al-Zahra',id:'DRV-0621',sup:'Sara Khalid',type:'Offshore',status:'Active',sc:'bg',orders:26,cod:'BD 118.000',docs:'br'},
+      {name:'Tariq Al-Dosari',id:'DRV-0210',sup:'Hassan Al-Mutairi',type:'Local',status:'Active',sc:'bg',orders:29,cod:'BD 134.000',docs:'bg'},
+      {name:'Bilal Hassan',id:'DRV-0331',sup:'Hassan Al-Mutairi',type:'Offshore',status:'Onboarding',sc:'ba',orders:0,cod:'BD 0',docs:'ba'},
+    ],
+    cod:{pending:91,approved:240,flagged:11,total:'BD 24,600',week:'BD 112,000'},
+    performance:{orders:8420,ontime:'91%',accuracy:'97%',rating:4.8},
+    reports:[
+      {title:'Jahez Weekly Summary',date:'Mar 1–8, 2026',icon:'📊'},
+      {title:'Jahez COD Reconciliation',date:'Feb 2026',icon:'💰'},
+      {title:'Jahez Driver Performance',date:'Q1 2026',icon:'🏆'},
+    ],
+    docAlerts:[
+      {name:'Mohammed Al-Zahra',doc:'Visa',days:'7 days',sc:'br'},
+    ],
+    kpis:{drivers:512,cod:'BD 24,600',performance:'91%',alerts:8},
+    chart7d:{orders:[4800,5200,6100,5800,7200,6400,6870],cod:[19200,21400,24600,22800,27100,25600,24600]},
+  },
+  ninja:{
+    name:'Ninja',emoji:'🔵',color:'#0891b2',colorVar:'var(--ninja)',colorDim:'var(--ninja-dim)',colorLight:'var(--ninja-light)',
+    supervisors:[
+      {name:'Hassan Mohammed',id:'SUP-005',initials:'HM',drivers:30,active:28,orders:820,cod:'BD 9,800',rating:4.6},
+    ],
+    drivers:[
+      {name:'Raj Kumar Singh',id:'DRV-0156',sup:'Hassan Mohammed',type:'Offshore',status:'Active',sc:'bg',orders:20,cod:'BD 87.000',docs:'ba'},
+      {name:'Priya Nair',id:'DRV-0312',sup:'Hassan Mohammed',type:'Offshore',status:'Active',sc:'bg',orders:18,cod:'BD 63.500',docs:'bg'},
+      {name:'Arjun Patel',id:'DRV-0445',sup:'Hassan Mohammed',type:'Offshore',status:'Active',sc:'bg',orders:22,cod:'BD 94.000',docs:'bg'},
+    ],
+    cod:{pending:42,approved:148,flagged:5,total:'BD 9,800',week:'BD 44,200'},
+    performance:{orders:3640,ontime:'88%',accuracy:'95%',rating:4.6},
+    reports:[
+      {title:'Ninja Weekly Summary',date:'Mar 1–8, 2026',icon:'📊'},
+      {title:'Ninja COD Reconciliation',date:'Feb 2026',icon:'💰'},
+    ],
+    docAlerts:[
+      {name:'Raj Kumar Singh',doc:'Driving License',days:'10 days',sc:'br'},
+      {name:'Priya Nair',doc:'Insurance',days:'20 days',sc:'ba'},
+    ],
+    kpis:{drivers:218,cod:'BD 9,800',performance:'88%',alerts:7},
+    chart7d:{orders:[1800,2100,2400,2200,3100,2800,2940],cod:[7200,8600,9200,8800,11400,10200,9800]},
+  },
+  noon:{
+    name:'Noon',emoji:'🟡',color:'#ca8a04',colorVar:'var(--noon)',colorDim:'var(--noon-dim)',colorLight:'var(--noon-light)',
+    supervisors:[
+      {name:'Omar Ali',id:'SUP-006',initials:'OA',drivers:28,active:25,orders:680,cod:'BD 7,180',rating:4.5},
+    ],
+    drivers:[
+      {name:'Khalid Al-Dosari',id:'DRV-0188',sup:'Omar Ali',type:'Offshore',status:'Onboarding',sc:'ba',orders:0,cod:'BD 0',docs:'ba'},
+      {name:'Faisal Al-Mutairi',id:'DRV-0847',sup:'Omar Ali',type:'Local',status:'Active',sc:'bg',orders:16,cod:'BD 72.000',docs:'br'},
+      {name:'Ahmed Al-Nouri',id:'DRV-0512',sup:'Omar Ali',type:'Local',status:'Active',sc:'bg',orders:21,cod:'BD 91.000',docs:'bg'},
+    ],
+    cod:{pending:38,approved:118,flagged:4,total:'BD 7,180',week:'BD 32,600'},
+    performance:{orders:2610,ontime:'81%',accuracy:'93%',rating:4.5},
+    reports:[
+      {title:'Noon Weekly Summary',date:'Mar 1–8, 2026',icon:'📊'},
+      {title:'Noon COD Reconciliation',date:'Feb 2026',icon:'💰'},
+    ],
+    docAlerts:[
+      {name:'Faisal Al-Mutairi',doc:'CPR',days:'Expired',sc:'br'},
+    ],
+    kpis:{drivers:177,cod:'BD 7,180',performance:'81%',alerts:7},
+    chart7d:{orders:[1400,1700,1900,2100,1800,2300,2110],cod:[5600,6800,7400,8200,7100,8900,7180]},
+  },
+};
+
+function getPlatforms(){ // returns filtered list based on currentPlatform
+  return currentPlatform==='all' ? Object.values(PLATFORM_DATA) : [PLATFORM_DATA[currentPlatform]];
+}
+function getPD(){ // single platform or null
+  return currentPlatform==='all' ? null : PLATFORM_DATA[currentPlatform];
+}
+function aggKPI(key){ // aggregate numeric KPI across selected platforms
+  return getPlatforms().reduce((sum,p)=>{
+    const v=p.kpis[key];
+    if(typeof v==='number') return sum+v;
+    // strip 'BD ' and commas for money
+    const n=parseFloat(String(v).replace(/BD |,/g,''));
+    return sum+(isNaN(n)?0:n);
+  },0);
+}
+function fmtBD(n){ return 'BD '+n.toLocaleString('en-BH',{minimumFractionDigits:0,maximumFractionDigits:3}); }
 let calendarDate=new Date(2026,2,1); // March 2026
 let calendarEvents={
   '2026-3-8':[{t:'Morning Shift',type:'shift'},{t:'Sara Leave',type:'holiday'}],
@@ -872,6 +991,7 @@ function renderSidebar(roleKey){
 function selectRole(roleKey, el){
   closeRoleDropdown();
   currentRole=roleKey;
+  currentPlatform='all'; // reset platform filter on role switch
   currentSection='dashboard';
   document.querySelectorAll('.rd-item').forEach(i=>i.classList.remove('active'));
   if(el)el.classList.add('active');
@@ -896,6 +1016,12 @@ function toggleRoleDropdown(){
 function closeRoleDropdown(){
   document.getElementById('roleDropdown').classList.remove('show');
   document.getElementById('rsArrow').classList.remove('open');
+}
+
+function switchPlatform(platform, el){
+  currentPlatform=platform;
+  // Re-render current section with new platform filter
+  renderContent(currentRole, currentSection, document.getElementById('pageTitle').textContent);
 }
 
 function navTo(section,el,title){
@@ -1180,45 +1306,81 @@ function renderContent(role,section,title){
 
   // ---- DASHBOARDS ----
   if(section==='dashboard'&&(role==='ceo'||role==='gm')){
-    el.innerHTML=`
-      <div class="ptabs">
-        <div class="ptab active" onclick="filterPtab(this,'all')">🏢 All Platforms</div>
-        <div class="ptab" onclick="filterPtab(this,'keeta')">🔶 Keeta</div>
-        <div class="ptab" onclick="filterPtab(this,'jahez')">🟣 Jahez</div>
-        <div class="ptab" onclick="filterPtab(this,'ninja')">🔵 Ninja</div>
-        <div class="ptab" onclick="filterPtab(this,'noon')">🟡 Noon</div>
-      </div>
+    const plats=getPlatforms();
+    const pd=getPD();
+    const totalDrivers=getPlatforms().reduce((s,p)=>s+p.kpis.drivers,0);
+    const totalCOD=fmtBD(aggKPI('cod'));
+    const totalAlerts=getPlatforms().reduce((s,p)=>s+p.kpis.alerts,0);
+    const avgPerf=Math.round(getPlatforms().reduce((s,p)=>s+parseInt(p.kpis.performance),0)/plats.length)+'%';
+    const platTabs=`<div class="ptabs" id="mainPtabs">
+      <div class="ptab${currentPlatform==='all'?' active':''}" onclick="switchPlatform('all',this)">🏢 All Platforms</div>
+      ${Object.entries(PLATFORM_DATA).map(([k,p])=>`<div class="ptab${currentPlatform===k?' active':''}" onclick="switchPlatform('${k}',this)">${p.emoji} ${p.name}</div>`).join('')}
+    </div>`;
+    const bannerHTML= pd ? `<div style="background:${pd.colorLight};border:1px solid ${pd.colorDim};border-radius:var(--r-sm);padding:10px 16px;font-size:0.78rem;color:${pd.color};margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+      ${pd.emoji} <strong>Viewing: ${pd.name} platform only</strong> — ${pd.kpis.drivers} drivers · ${pd.supervisors.length} supervisors
+    </div>` : '';
+    el.innerHTML=platTabs+bannerHTML+`
       <div class="g4">
-        ${kpiHTML('Active Drivers','1,247','<span class="up">↑ 23</span> from yesterday','#2563eb',[50,55,60,65,70,75,80])}
-        ${kpiHTML('COD Outstanding','BD 18.4K','<span class="dn">BD 2.1K</span> unsettled','#d97706',[80,70,75,85,80,90,88])}
-        ${kpiHTML('Compliance Alerts','34','<span class="dn">7</span> expiring this week','#dc2626',[20,25,28,30,32,33,34])}
-        ${kpiHTML('Avg Performance','82%','<span class="up">↑ 3%</span> vs last week','#059669',[70,72,75,76,79,80,82])}
+        ${kpiHTML('Active Drivers',totalDrivers.toLocaleString(),'<span class="up">↑ 23</span> from yesterday','#2563eb',[50,55,60,65,70,75,80])}
+        ${kpiHTML('COD Outstanding',totalCOD,'<span class="dn">'+totalAlerts+' alerts</span>','#d97706',[80,70,75,85,80,90,88])}
+        ${kpiHTML('Compliance Alerts',totalAlerts,'<span class="dn">7</span> expiring this week','#dc2626',[20,25,28,30,32,33,34])}
+        ${kpiHTML('Avg Performance',avgPerf,'<span class="up">↑ 3%</span> vs last week','#059669',[70,72,75,76,79,80,82])}
       </div>
+      ${currentPlatform==='all' ? `
+      <div class="g4" style="margin-bottom:0">
+        ${Object.entries(PLATFORM_DATA).map(([k,p])=>`
+        <div class="panel" style="cursor:pointer;border-top:3px solid ${p.color};" onclick="switchPlatform('${k}',null)">
+          <div class="ph"><div class="ph-title">${p.emoji} ${p.name}</div><span class="b" style="background:${p.colorLight||p.colorDim};color:${p.color};border:none;">${p.kpis.performance}</span></div>
+          <div class="pb" style="padding-top:0">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="background:var(--surface2);border-radius:var(--r-sm);padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:${p.color};">${p.kpis.drivers}</div><div style="font-size:0.62rem;color:var(--text3);">Drivers</div></div>
+              <div style="background:var(--surface2);border-radius:var(--r-sm);padding:8px;text-align:center;"><div style="font-size:0.82rem;font-weight:700;color:var(--green);">${p.cod.total}</div><div style="font-size:0.62rem;color:var(--text3);">COD Today</div></div>
+            </div>
+            <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:0.7rem;color:var(--text3);">${p.supervisors.length} supervisors · ${p.docAlerts.length} doc alerts</span>
+              <span style="font-size:0.68rem;font-weight:600;color:${p.color};">View →</span>
+            </div>
+          </div>
+        </div>`).join('')}
+      </div>
+      ` : ''}
       <div class="g2-1">
-        <div class="panel"><div class="ph"><div class="ph-title">📈 COD Revenue — Last 7 Days</div><div class="ph-link">Export</div></div><div class="pb"><div class="chart-wrap"><canvas id="mainLine"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">📈 Orders — Last 7 Days</div></div><div class="pb"><div class="chart-wrap"><canvas id="mainLine"></canvas></div></div></div>
         <div class="panel"><div class="ph"><div class="ph-title">🍩 Drivers by Platform</div></div><div class="pb"><div class="chart-wrap"><canvas id="mainDonut"></canvas></div></div></div>
       </div>
       <div class="g3">
         <div class="panel"><div class="ph"><div class="ph-title">🏆 Top Supervisors</div></div><div class="pb">${topSupervisors()}</div></div>
         <div class="panel"><div class="ph"><div class="ph-title">⭐ Top Drivers</div></div><div class="pb">${topDrivers()}</div></div>
-        <div class="panel"><div class="ph"><div class="ph-title">🚨 Live Alerts</div><div class="ph-link">View all</div></div><div class="pb">${alertsHTML()}</div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">🚨 Live Alerts</div></div><div class="pb">${alertsHTML()}</div></div>
       </div>
+      ${role==='ceo'?`
       <div class="g3">
+        <div class="panel"><div class="ph"><div class="ph-title">👥 Employees Overview</div><div class="ph-link" onclick="navTo('employees',null,'Employees')">View All →</div></div><div class="pb">
+          ${[['Executive','2','#2563eb'],['Finance','5','#059669'],['HR','4','#0891b2'],['Operations','8','#ea580c'],['OCT','4','#dc2626'],['Legal','2','#7c3aed'],['Account Mgmt','3','#ca8a04']].map(d=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);"><div style="width:8px;height:8px;border-radius:50%;background:${d[2]};"></div><span style="flex:1;font-size:0.78rem;">${d[0]}</span><span style="font-weight:700;font-size:0.78rem;color:${d[2]};">${d[1]}</span></div>`).join('')}
+        </div></div>
         <div class="panel"><div class="ph"><div class="ph-title">⚡ Platform Performance</div></div><div class="pb"><div class="chart-wrap"><canvas id="perfBar"></canvas></div></div></div>
         <div class="panel"><div class="ph"><div class="ph-title">📊 Driver Status</div></div><div class="pb"><div class="chart-wrap"><canvas id="statusDonut"></canvas></div></div></div>
-        <div class="panel"><div class="ph"><div class="ph-title">🕐 Hourly Orders</div></div><div class="pb"><div class="chart-wrap"><canvas id="hourlyArea"></canvas></div></div></div>
-      </div>`;
+      </div>`:''}`;
+
     setTimeout(()=>{
-      mkLine('mainLine',DAYS,[
-        {label:'Keeta',data:[3200,4100,3800,5200,4700,6100,4230],borderColor:'#ea580c',tension:0.4,backgroundColor:'rgba(234,88,12,0.05)',fill:true},
-        {label:'Jahez',data:[4800,5200,6100,5800,7200,6400,6870],borderColor:'#7c3aed',tension:0.4,backgroundColor:'rgba(124,58,237,0.05)',fill:true},
-        {label:'Ninja',data:[1800,2100,2400,2200,3100,2800,2940],borderColor:'#0891b2',tension:0.4},
-        {label:'Noon',data:[1400,1700,1900,2100,1800,2300,2110],borderColor:'#ca8a04',tension:0.4},
-      ],170);
-      mkDoughnut('mainDonut',['Keeta','Jahez','Ninja','Noon'],[340,512,218,177],['#ea580c','#7c3aed','#0891b2','#ca8a04'],160);
-      mkBar('perfBar',['Keeta','Jahez','Ninja','Noon'],[{label:'Performance %',data:[84,79,88,81],backgroundColor:['rgba(234,88,12,0.7)','rgba(124,58,237,0.7)','rgba(8,145,178,0.7)','rgba(202,138,4,0.7)'],borderRadius:6}],160);
-      mkDoughnut('statusDonut',['Active','Warning','Suspended','Onboarding'],[1141,63,18,25],['#059669','#d97706','#dc2626','#2563eb'],160);
-      mkLine('hourlyArea',HRS,[{label:'Orders',data:[12,45,89,142,168,201,189,178],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,0.06)',tension:0.4,fill:true}],160);
+      const plats=getPlatforms();
+      if(currentPlatform==='all'){
+        mkLine('mainLine',DAYS,[
+          {label:'Keeta',data:PLATFORM_DATA.keeta.chart7d.orders,borderColor:'#ea580c',tension:0.4,backgroundColor:'rgba(234,88,12,0.05)',fill:false},
+          {label:'Jahez',data:PLATFORM_DATA.jahez.chart7d.orders,borderColor:'#7c3aed',tension:0.4,fill:false},
+          {label:'Ninja',data:PLATFORM_DATA.ninja.chart7d.orders,borderColor:'#0891b2',tension:0.4},
+          {label:'Noon',data:PLATFORM_DATA.noon.chart7d.orders,borderColor:'#ca8a04',tension:0.4},
+        ],170);
+        mkDoughnut('mainDonut',plats.map(p=>p.name),plats.map(p=>p.kpis.drivers),plats.map(p=>p.color),160);
+      } else {
+        const p=PLATFORM_DATA[currentPlatform];
+        mkLine('mainLine',DAYS,[{label:'Orders',data:p.chart7d.orders,borderColor:p.color,tension:0.4,backgroundColor:p.color+'18',fill:true},{label:'COD (BD)',data:p.chart7d.cod.map(v=>Math.round(v/100)),borderColor:'#059669',tension:0.4}],170);
+        mkDoughnut('mainDonut',['Active','Onboarding','Suspended'],[Math.round(p.kpis.drivers*0.88),Math.round(p.kpis.drivers*0.08),Math.round(p.kpis.drivers*0.04)],['#059669','#2563eb','#dc2626'],160);
+      }
+      if(role==='ceo'){
+        mkBar('perfBar',Object.values(PLATFORM_DATA).map(p=>p.name),[{label:'Performance %',data:Object.values(PLATFORM_DATA).map(p=>parseInt(p.kpis.performance)),backgroundColor:Object.values(PLATFORM_DATA).map(p=>p.color+'b3'),borderRadius:6}],160);
+        mkDoughnut('statusDonut',['Active','Warning','Suspended','Onboarding'],[1141,63,18,25],['#059669','#d97706','#dc2626','#2563eb'],160);
+      }
     },50);
     return;
   }
@@ -1490,60 +1652,101 @@ function renderContent(role,section,title){
 
   // ---- FINANCE OVERVIEW ----
   if(section==='finance'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">Finance Overview</div><div class="sec-sub">All platforms · March 2026</div></div>
-        <div style="display:flex;gap:8px"><select class="sel"><option>March 2026</option><option>February 2026</option></select><button class="btn btn-primary">📥 Export</button></div>
-      </div>
+    const plats=getPlatforms();
+    const pd=getPD();
+    const platFilter=`<div class="ptabs">
+      <div class="ptab${currentPlatform==='all'?' active':''}" onclick="switchPlatform('all',this)">🏢 All</div>
+      ${Object.entries(PLATFORM_DATA).map(([k,p])=>`<div class="ptab${currentPlatform===k?' active':''}" onclick="switchPlatform('${k}',this)">${p.emoji} ${p.name}</div>`).join('')}
+    </div>`;
+    const totalCODToday=fmtBD(aggKPI('cod'));
+    el.innerHTML=platFilter+`
+      <div class="sec-header"><div><div class="sec-title">Finance Overview</div><div class="sec-sub">${currentPlatform==='all'?'All platforms consolidated':'Platform: '+(pd?pd.name:'')}</div></div></div>
       <div class="g4">
-        ${kpiHTML('Total Collected','BD 161,400','this month','#2563eb',[120000,130000,140000,145000,150000,155000,161400])}
-        ${kpiHTML('Settled','BD 142,300','<span class="up">88.2%</span> rate','#059669',[100000,110000,120000,125000,130000,138000,142300])}
-        ${kpiHTML('Pending','BD 14,800','<span class="dn">awaiting</span>','#d97706',[8000,9000,10000,11000,12000,14000,14800])}
-        ${kpiHTML('Flagged','BD 4,300','<span class="dn">under review</span>','#dc2626',[2000,2500,3000,3500,4000,4200,4300])}
+        ${kpiHTML('COD Today',totalCODToday,'across selected platforms','#059669',[60,70,80,75,90,100,95])}
+        ${kpiHTML('Pending Review',getPlatforms().reduce((s,p)=>s+p.cod.pending,0)+'','awaiting approval','#d97706',[60,70,80,75,90,100,95])}
+        ${kpiHTML('Flagged',getPlatforms().reduce((s,p)=>s+p.cod.flagged,0)+'','need attention','#dc2626',[2,3,4,5,4,6,5])}
+        ${kpiHTML('Approved Today',getPlatforms().reduce((s,p)=>s+p.cod.approved,0)+'','<span class="up">↑ 24</span> vs yesterday','#2563eb',[200,220,250,280,300,310,312])}
       </div>
-      <div class="cod-timeline">
-        ${['Collected','Reviewed','Approved','Settled','Deposited'].map((s,i)=>`<div class="ct-stage ${i<4?'done':''}"><div class="ct-dot">${i<4?'✓':i+1}</div><div class="ct-lbl">${s}</div><div class="ct-count">${['BD 161K','BD 147K','BD 142K','BD 138K','BD 95K'][i]}</div></div>`).join('')}
+      <div class="g2-1">
+        <div class="panel"><div class="ph"><div class="ph-title">📈 COD Revenue — 7 Days</div></div><div class="pb"><div class="chart-wrap"><canvas id="finLine"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">🍩 COD by Platform</div></div><div class="pb"><div class="chart-wrap"><canvas id="finDonut"></canvas></div></div></div>
       </div>
-      <div class="g2">
-        <div class="panel"><div class="ph"><div class="ph-title">💰 Revenue by Platform — MTD</div></div><div class="pb"><div class="chart-wrap"><canvas id="finOvBar"></canvas></div></div></div>
-        <div class="panel"><div class="ph"><div class="ph-title">📈 Daily Collection Trend</div></div><div class="pb"><div class="chart-wrap"><canvas id="finOvLine"></canvas></div></div></div>
-      </div>`;
+      <div class="panel"><div class="ph"><div class="ph-title">💰 Platform COD Breakdown</div></div><div class="pb">
+        <table class="tbl"><thead><tr><th>Platform</th><th>Pending</th><th>Approved</th><th>Flagged</th><th>Total Today</th><th>Weekly</th><th>Status</th></tr></thead>
+        <tbody>
+          ${plats.map(p=>`<tr>
+            <td><span style="font-weight:700;color:${p.color};">${p.emoji} ${p.name}</span></td>
+            <td class="mono" style="color:var(--amber);">${p.cod.pending}</td>
+            <td class="mono" style="color:var(--green);">${p.cod.approved}</td>
+            <td class="mono" style="color:var(--red);">${p.cod.flagged}</td>
+            <td class="mono" style="font-weight:700;">${p.cod.total}</td>
+            <td class="mono">${p.cod.week}</td>
+            <td><span class="b bg">✓ Active</span></td>
+          </tr>`).join('')}
+        </tbody></table>
+      </div></div>`;
     setTimeout(()=>{
-      mkBar('finOvBar',['Keeta','Jahez','Ninja','Noon'],[{label:'Collected (BD)',data:[42300,68700,29400,21000],backgroundColor:['rgba(234,88,12,0.7)','rgba(124,58,237,0.7)','rgba(8,145,178,0.7)','rgba(202,138,4,0.7)'],borderRadius:6}]);
-      mkLine('finOvLine',['W1','W2','W3','W4'],[{label:'Keeta',data:[10200,11400,10800,9900],borderColor:'#ea580c',tension:0.4},{label:'Jahez',data:[16800,17200,18100,16600],borderColor:'#7c3aed',tension:0.4},{label:'Ninja',data:[7200,7400,7800,7000],borderColor:'#0891b2',tension:0.4},{label:'Noon',data:[5100,5200,5600,5100],borderColor:'#ca8a04',tension:0.4}]);
+      if(currentPlatform==='all'){
+        mkLine('finLine',DAYS,Object.values(PLATFORM_DATA).map(p=>({label:p.name,data:p.chart7d.cod,borderColor:p.color,tension:0.4})),170);
+        const codVals=Object.values(PLATFORM_DATA).map(p=>parseFloat(p.cod.total.replace('BD ','')));
+        mkDoughnut('finDonut',Object.values(PLATFORM_DATA).map(p=>p.name),codVals,Object.values(PLATFORM_DATA).map(p=>p.color),160);
+      } else {
+        const p=PLATFORM_DATA[currentPlatform];
+        mkLine('finLine',DAYS,[{label:'COD (BD)',data:p.chart7d.cod,borderColor:p.color,backgroundColor:p.color+'18',tension:0.4,fill:true}],170);
+        mkDoughnut('finDonut',['Approved','Pending','Flagged'],[p.cod.approved,p.cod.pending,p.cod.flagged],['#059669','#d97706','#dc2626'],160);
+      }
     },50);
     return;
   }
-
   // ---- COD REVIEW QUEUE ----
   if(section==='cod-queue'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">COD Review Queue</div><div class="sec-sub">147 entries pending · Sorted by submission time</div></div>
-        <div style="display:flex;gap:8px">
-          <select class="sel"><option>All Platforms</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select>
-          <select class="sel"><option>All Status</option><option>Pending</option><option>Flagged</option><option>Approved</option></select>
-          <button class="btn btn-primary" onclick="openForm('add-cod')">+ Submit COD</button>
+    const plats=getPlatforms();
+    const pd=getPD();
+    const totalPending=plats.reduce((s,p)=>s+p.cod.pending,0);
+    const totalApproved=plats.reduce((s,p)=>s+p.cod.approved,0);
+    const totalFlagged=plats.reduce((s,p)=>s+p.cod.flagged,0);
+    const platFilter=`<div class="ptabs">
+      <div class="ptab${currentPlatform==='all'?' active':''}" onclick="switchPlatform('all',this)">🏢 All</div>
+      ${Object.entries(PLATFORM_DATA).map(([k,p])=>`<div class="ptab${currentPlatform===k?' active':''}" onclick="switchPlatform('${k}',this)">${p.emoji} ${p.name}</div>`).join('')}
+    </div>`;
+    el.innerHTML=platFilter+`
+      <div class="sec-header">
+        <div><div class="sec-title">COD Review Queue</div>
+          <div class="sec-sub">${currentPlatform==='all'?'All platforms':'Platform: '+(pd?pd.name:'')}</div>
         </div>
+        <button class="btn btn-primary" onclick="openForm('add-cod')">+ Submit COD</button>
       </div>
       <div class="stat-row">
-        <div class="stat-box"><div class="stat-val" style="color:var(--amber)">147</div><div class="stat-lbl">Pending</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:var(--red)">23</div><div class="stat-lbl">Flagged</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:var(--green)">312</div><div class="stat-lbl">Approved</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:var(--blue)">2,890</div><div class="stat-lbl">Settled</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--amber)">${totalPending}</div><div class="stat-lbl">Pending Review</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--green)">${totalApproved}</div><div class="stat-lbl">Approved Today</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--red)">${totalFlagged}</div><div class="stat-lbl">Flagged</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--blue)">${fmtBD(aggKPI('cod'))}</div><div class="stat-lbl">Total COD</div></div>
       </div>
-      <div class="panel"><div class="ph"><div class="ph-title">Queue</div></div>
-        <table class="tbl"><thead><tr><th>#</th><th>Driver</th><th>Platform</th><th>Amount</th><th>Submitted</th><th>Screenshot</th><th>Status</th><th>Assigned To</th><th>Actions</th></tr></thead>
-        <tbody>
-          ${[['DRV-0041','Ahmed Al-Rashidi','Keeta','keeta','BD 124.500','08:32 AM','✓ Uploaded','bg','⏳ Pending','ba','COD Officer A'],
-            ['DRV-0156','Raj Kumar Singh','Ninja','ninja','BD 87.000','09:14 AM','✓ Uploaded','bg','⚠ Flagged','br','COD Officer B'],
-            ['DRV-0271','Ali Hassan','Keeta','keeta','BD 210.000','10:02 AM','✕ Missing','br','⚠ No Screenshot','br','COD Officer A'],
-            ['DRV-0312','Priya Nair','Ninja','ninja','BD 63.500','10:45 AM','✓ Uploaded','bg','⏳ Pending','ba','COD Officer B'],
-            ['DRV-0089','Faris Ghamdi','Jahez','jahez','BD 156.000','11:20 AM','✓ Uploaded','bg','✓ Approved','bg','COD Officer C'],
-          ].map((r,i)=>`<tr onclick="showCODDetail('${r[1]}','${r[4]}','${r[2]}','${r[8].replace('⏳ ','').replace('⚠ ','').replace('✓ ','')}')">${[i+1,`<b>${r[1]}</b><br><span class="mono" style="font-size:0.6rem;color:var(--text3)">${r[0]}</span>`,`<span style="color:var(--${r[3]});font-weight:600">${r[2]}</span>`,`<span class="mono" style="font-weight:700">${r[4]}</span>`,r[5],`<span class="b ${r[6]==='✓ Uploaded'?'bg':'br'}">${r[6]}</span>`,`<span class="b ${r[8].includes('Approved')?'bg':r[8].includes('Flagged')||r[8].includes('Screenshot')?'br':'ba'}">${r[8]}</span>`,r[10]].map(c=>`<td>${c}</td>`).join('')}<td><div style="display:flex;gap:4px">${r[8].includes('Pending')?`<button class="btn btn-success btn-sm" onclick="event.stopPropagation();this.textContent='✓'">Approve</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation()">Flag</button>`:`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">Review</button>`}</div></td></tr>`).join('')}
-        </tbody></table>
-      </div>`;
+      <div class="panel"><div class="pb">
+        ${plats.map(p=>`
+          <div style="margin-bottom:14px;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:2px solid ${p.color}40;margin-bottom:8px;">
+              <span style="font-size:1rem;">${p.emoji}</span>
+              <span style="font-weight:700;color:${p.color};">${p.name}</span>
+              <span class="b" style="background:${p.colorDim||p.color+'22'};color:${p.color};border:none;">Pending: ${p.cod.pending}</span>
+              <span class="b bg" style="margin-left:auto;">Approved: ${p.cod.approved}</span>
+              <span class="b br">Flagged: ${p.cod.flagged}</span>
+            </div>
+            ${p.drivers.filter(d=>d.status==='Active').slice(0,3).map(d=>`
+              <div class="intake-row">
+                <div><b>${d.name}</b><br><span class="mono" style="font-size:0.6rem;color:var(--text3);">${d.id}</span></div>
+                <div class="mono" style="font-weight:700;color:var(--text);">${d.cod}</div>
+                <div><span class="b bg">✓ Uploaded</span></div>
+                <div><span class="b ba">⏳ Pending</span></div>
+                <div style="display:flex;gap:4px;">
+                  <button class="btn btn-success btn-sm" onclick="showFlash('✅','Approved','COD approved for ${d.name}')">Approve</button>
+                  <button class="btn btn-danger btn-sm" onclick="showFlash('🚩','Flagged','COD flagged for review')">Flag</button>
+                </div>
+              </div>`).join('')}
+          </div>`).join('')}
+      </div></div>`;
     return;
   }
-
   // ---- COD VIEW & LIST ----
   if(section==='cod-list'){
     const isSup=(role==='supervisor'||role==='account-mgr');
@@ -1606,32 +1809,27 @@ function renderContent(role,section,title){
 
   // ---- FINANCIAL REPORTS ----
   if(section==='fin-reports'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">Financial Reports</div></div>
-        <button class="btn btn-primary">📥 Export All</button>
+    const plats=getPlatforms();
+    const platFilter=`<div class="ptabs">
+      <div class="ptab${currentPlatform==='all'?' active':''}" onclick="switchPlatform('all',this)">🏢 All</div>
+      ${Object.entries(PLATFORM_DATA).map(([k,p])=>`<div class="ptab${currentPlatform===k?' active':''}" onclick="switchPlatform('${k}',this)">${p.emoji} ${p.name}</div>`).join('')}
+    </div>`;
+    const reports=currentPlatform==='all'
+      ? [{title:'Consolidated COD Report',date:'Mar 2026',icon:'💰'},{title:'Platform Comparison',date:'Q1 2026',icon:'📊'},{title:'Outstanding Deposits',date:'Mar 8, 2026',icon:'🏦'},{title:'Driver Payment Summary',date:'Feb 2026',icon:'💵'}]
+      : PLATFORM_DATA[currentPlatform].reports;
+    el.innerHTML=platFilter+`
+      <div class="sec-header"><div><div class="sec-title">Financial Reports</div><div class="sec-sub">${currentPlatform==='all'?'Consolidated across all platforms':PLATFORM_DATA[currentPlatform].name+' platform reports'}</div></div>
+        <button class="btn btn-ghost" onclick="showFlash('📥','Export','Reports exported.')">📥 Export All</button>
       </div>
-      <div class="g3">
-        ${[
-          {i:'📊',t:'Monthly COD Summary',d:'Full breakdown by platform, driver, and status','date':'8 Mar 2026'},
-          {i:'📈',t:'Settlement Report',d:'Settled vs pending vs flagged analysis','date':'7 Mar 2026'},
-          {i:'💵',t:'Driver Earnings Report',d:'Individual driver COD collection performance','date':'7 Mar 2026'},
-          {i:'🏦',t:'Bank Reconciliation',d:'Deposits matched against bank statements','date':'6 Mar 2026'},
-          {i:'🧾',t:'Invoice Summary',d:'Platform invoices and fee deductions','date':'5 Mar 2026'},
-          {i:'📑',t:'Tax & VAT Report',d:'Monthly VAT calculations for compliance','date':'1 Mar 2026'},
-        ].map(r=>`<div class="report-card" onclick="showFlash('${r.i}','Report Opened','${r.t} downloaded')"><div class="rc-icon">${r.i}</div><div class="rc-title">${r.t}</div><div class="rc-desc">${r.d}</div><div class="rc-date">Generated: ${r.date}</div></div>`).join('')}
-      </div>
-      <div class="panel"><div class="ph"><div class="ph-title">📈 Month-over-Month Comparison</div></div>
-        <div class="pb"><div class="chart-wrap" style="height:200px"><canvas id="momBar"></canvas></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
+        ${reports.map(r=>`<div class="report-card" onclick="showFlash('📊','Opening','Loading report...')">
+          <div class="rc-icon">${r.icon}</div>
+          <div class="rc-title">${r.title}</div>
+          <div class="rc-date">${r.date}</div>
+        </div>`).join('')}
       </div>`;
-    setTimeout(()=>mkBar('momBar',['Jan','Feb','Mar'],[
-      {label:'Keeta',data:[38000,40000,43000],backgroundColor:'rgba(234,88,12,0.7)',borderRadius:4},
-      {label:'Jahez',data:[52000,56000,63000],backgroundColor:'rgba(124,58,237,0.7)',borderRadius:4},
-      {label:'Ninja',data:[28000,30000,33000],backgroundColor:'rgba(8,145,178,0.7)',borderRadius:4},
-      {label:'Noon',data:[19000,20000,24000],backgroundColor:'rgba(202,138,4,0.7)',borderRadius:4},
-    ],200),50);
     return;
   }
-
   // ---- HR DASHBOARD ----
   if(section==='hr-dashboard'){
     renderContent(role,'dashboard','HR Dashboard');
@@ -1960,757 +2158,123 @@ function renderContent(role,section,title){
   // ---- DRIVERS ----
   if(section==='drivers'){
     const isRestricted=(role==='supervisor'||role==='account-mgr');
-    el.innerHTML=`
-      ${isRestricted?`<div class="restricted">🔒 You are viewing assigned drivers only (Keeta · ${ROLES[role].name}). Other platforms are not visible.</div>`:''}
-      <div class="sec-header"><div><div class="sec-title">Driver Management</div><div class="sec-sub">${isRestricted?'Keeta · 42 drivers':'All platforms · 1,247 total drivers'}</div></div>
-        <div style="display:flex;gap:8px">
+    const plats=getPlatforms();
+    const allDrivers=plats.flatMap(p=>p.drivers.map(d=>({...d,platform:p.name,platformColor:p.color,platformEmoji:p.emoji})));
+    const platFilter= (role==='ceo'||role==='gm'||role==='head-ops'||role==='finance-ctrl') ? `
+      <div class="ptabs" id="drvPtabs">
+        <div class="ptab${currentPlatform==='all'?' active':''}" onclick="switchPlatform('all',this)">🏢 All Platforms</div>
+        ${Object.entries(PLATFORM_DATA).map(([k,p])=>`<div class="ptab${currentPlatform===k?' active':''}" onclick="switchPlatform('${k}',this)">${p.emoji} ${p.name}</div>`).join('')}
+      </div>` : '';
+    el.innerHTML=platFilter+`
+      <div class="sec-header">
+        <div><div class="sec-title">Driver Management</div>
+          <div class="sec-sub">${allDrivers.length} drivers${currentPlatform!=='all'?' — '+PLATFORM_DATA[currentPlatform].name+' platform':' across all platforms'}</div>
+        </div>
+        <div style="display:flex;gap:8px;">
           <input class="search-input" placeholder="🔍 Search driver, ID...">
           <select class="sel"><option>All Status</option><option>Active</option><option>Suspended</option><option>Onboarding</option></select>
-          <button class="btn btn-primary" onclick="openForm('add-driver')">+ Add Driver</button>
+          ${(!isRestricted&&ROLES[currentRole].addBtn)?`<button class="btn btn-primary" onclick="openForm('add-driver')">+ Add Driver</button>`:''}
         </div>
       </div>
-      <div class="g4">
-        ${kpiHTML(isRestricted?'My Drivers':'Total Drivers',isRestricted?'42':'1,247',isRestricted?'Keeta':'All platforms','#2563eb',[1100,1120,1150,1170,1190,1220,1247])}
-        ${kpiHTML('Active',isRestricted?'38':'1,141','<span class="up">91%</span>','#059669',[900,950,1000,1050,1080,1120,1141])}
-        ${kpiHTML('Documents Expiring',isRestricted?'3':'34','<span class="dn">needs action</span>','#dc2626',[20,25,28,30,32,33,34])}
-        ${kpiHTML('Onboarding',isRestricted?'2':'25','in progress','#2563eb',[15,17,19,20,22,24,25])}
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val" style="color:var(--blue)">${allDrivers.length}</div><div class="stat-lbl">Total</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--green)">${allDrivers.filter(d=>d.status==='Active').length}</div><div class="stat-lbl">Active</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--amber)">${allDrivers.filter(d=>d.status==='Onboarding').length}</div><div class="stat-lbl">Onboarding</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--red)">${allDrivers.filter(d=>d.status==='Suspended').length}</div><div class="stat-lbl">Suspended</div></div>
       </div>
-      <div class="panel"><div class="ph"><div class="ph-title">Driver List</div><div class="ph-link">Export</div></div>
-        <table class="tbl"><thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Type</th><th>Status</th><th>COD Today</th><th>Docs</th><th>Actions</th></tr></thead>
+      <div class="panel"><div class="pb">
+        <table class="tbl"><thead><tr><th>Driver</th><th>Platform</th><th>Supervisor</th><th>Type</th><th>Status</th><th>Orders</th><th>COD Today</th><th>Docs</th><th>Action</th></tr></thead>
         <tbody>
-          ${[
-            ['Ahmed Al-Rashidi','DRV-0041','Keeta','keeta','Sup. Ahmed','Local','Active','bg','BD 124.500','✓ Valid','bg'],
-            ['Raj Kumar Singh','DRV-0156','Ninja','ninja','Sup. Hassan','Offshore','Active','bg','BD 87.000','⚠ Expiring','ba'],
-            ['Ali Hassan','DRV-0271','Keeta','keeta','Sup. Ahmed','Local','Suspended','br','BD 0','❌ Expired','br'],
-            ['Priya Nair','DRV-0312','Ninja','ninja','Sup. Hassan','Offshore','Active','bg','BD 63.500','✓ Valid','bg'],
-            ['Faris Al-Ghamdi','DRV-0089','Jahez','jahez','Sup. Mohammed','Local','Active','bg','BD 156.000','✓ Valid','bg'],
-            ['Khalid Al-Dosari','DRV-0188','Noon','noon','Sup. Omar','Offshore','Onboarding','ba','BD 0','📋 Pending','ba'],
-          ].map(r=>`<tr onclick="showDriverDetail('${r[0]}','${r[2]}','${r[3]}','${r[6]}')"><td><b>${r[0]}</b><br><span class="mono" style="font-size:0.6rem;color:var(--text3)">${r[1]}</span></td><td style="color:var(--${r[3]});font-weight:600">${r[2]}</td><td>${r[4]}</td><td><span class="b ${r[5]==='Local'?'bb':'bp'}">${r[5]}</span></td><td><span class="b ${r[7]}">${r[6]}</span></td><td class="mono">${r[8]}</td><td><span class="b ${r[10]}">${r[9]}</span></td><td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">Edit</button><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">COD</button></div></td></tr>`).join('')}
+          ${allDrivers.map(d=>`<tr onclick="showDriverDetail('${d.name}','${d.platform}','${d.platformColor}','${d.status}')">
+            <td><div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:28px;height:28px;border-radius:50%;background:${d.platformColor};display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:white;">${d.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+              <div><div style="font-weight:600;">${d.name}</div><div style="font-size:0.62rem;color:var(--text3);">${d.id}</div></div>
+            </div></td>
+            <td><span style="font-size:0.72rem;font-weight:600;color:${d.platformColor};">${d.platformEmoji} ${d.platform}</span></td>
+            <td style="font-size:0.75rem;">${d.sup}</td>
+            <td style="font-size:0.75rem;">${d.type}</td>
+            <td><span class="b ${d.sc}">${d.status}</span></td>
+            <td style="font-family:'JetBrains Mono';">${d.orders}</td>
+            <td style="font-family:'JetBrains Mono';font-weight:600;">${d.cod}</td>
+            <td><span class="b ${d.docs}">${d.docs==='bg'?'✓ Valid':d.docs==='ba'?'⚠ Alert':'❌ Expired'}</span></td>
+            <td><div style="display:flex;gap:4px;" onclick="event.stopPropagation()">
+              <button class="btn btn-ghost btn-sm" onclick="showDriverDetail('${d.name}','${d.platform}','${d.platformColor}','${d.status}')">View</button>
+            </div></td>
+          </tr>`).join('')}
         </tbody></table>
-      </div>`;
+      </div></div>`;
     return;
   }
 
   // ---- PERFORMANCE ----
   if(section==='performance'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">Performance</div><div class="sec-sub">Platform performance metrics · This month</div></div>
-        <select class="sel"><option>All Platforms</option><option>Keeta</option><option>Jahez</option><option>Ninja</option><option>Noon</option></select>
-      </div>
-      <div class="g4">
-        ${kpiHTML('Avg Orders/Driver','124','this month','#2563eb',[100,105,110,115,118,120,124])}
-        ${kpiHTML('Top Performer','156 orders','Ahmed Al-Rashidi','#059669',[0,0,0,0,0,0,1])}
-        ${kpiHTML('On-Time Rate','91%','<span class="up">↑ 2%</span>','#059669',[85,86,87,88,89,90,91])}
-        ${kpiHTML('Incidents','18','<span class="dn">per 1000 orders</span>','#dc2626',[25,24,23,22,21,20,18])}
-      </div>
+    const plats=getPlatforms();
+    const platFilter=`<div class="ptabs">
+      <div class="ptab${currentPlatform==='all'?' active':''}" onclick="switchPlatform('all',this)">🏢 All</div>
+      ${Object.entries(PLATFORM_DATA).map(([k,p])=>`<div class="ptab${currentPlatform===k?' active':''}" onclick="switchPlatform('${k}',this)">${p.emoji} ${p.name}</div>`).join('')}
+    </div>`;
+    el.innerHTML=platFilter+`
+      <div class="sec-header"><div><div class="sec-title">Performance</div><div class="sec-sub">Driver & platform metrics${currentPlatform!=='all'?' — '+PLATFORM_DATA[currentPlatform].name:''}</div></div></div>
+      ${currentPlatform==='all'?`
+      <div class="g4" style="margin-bottom:14px;">
+        ${Object.entries(PLATFORM_DATA).map(([k,p])=>`
+        <div class="panel" style="border-top:3px solid ${p.color};">
+          <div class="ph"><div class="ph-title">${p.emoji} ${p.name}</div></div>
+          <div class="pb" style="padding-top:0;">
+            <div style="font-family:'Syne';font-size:1.6rem;font-weight:800;color:${p.color};">${p.performance.ontime}</div>
+            <div style="font-size:0.7rem;color:var(--text3);margin-bottom:8px;">On-Time Rate</div>
+            ${[['Orders',p.performance.orders.toLocaleString()],['COD Accuracy',p.performance.accuracy],['Rating',p.performance.rating+' ⭐']].map(r=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:0.75rem;"><span style="color:var(--text2);">${r[0]}</span><strong>${r[1]}</strong></div>`).join('')}
+          </div>
+        </div>`).join('')}
+      </div>` : `
+      <div class="g4" style="margin-bottom:14px;">
+        ${[['Orders This Week',getPD().performance.orders.toLocaleString(),'#2563eb'],['On-Time Rate',getPD().performance.ontime,'#059669'],['COD Accuracy',getPD().performance.accuracy,'#d97706'],['Avg Rating',getPD().performance.rating+' ⭐','#7c3aed']].map(k=>`<div class="panel"><div class="pb" style="text-align:center;"><div style="font-family:'Syne';font-size:1.8rem;font-weight:800;color:${k[2]};">${k[1]}</div><div style="font-size:0.72rem;color:var(--text3);">${k[0]}</div></div></div>`).join('')}
+      </div>`}
       <div class="g2">
-        <div class="panel"><div class="ph"><div class="ph-title">📊 Platform Comparison</div></div><div class="pb"><div class="chart-wrap"><canvas id="perfCompare"></canvas></div></div></div>
-        <div class="panel"><div class="ph"><div class="ph-title">📈 Performance Trend</div></div><div class="pb"><div class="chart-wrap"><canvas id="perfTrend"></canvas></div></div></div>
-      </div>
-      <div class="panel"><div class="ph"><div class="ph-title">🏆 Driver Performance Leaderboard</div></div>
-        <div class="pb">
-          ${[['Ahmed Al-Rashidi','Keeta','#ea580c',156,'94%',5],['Faris Al-Ghamdi','Jahez','#7c3aed',148,'91%',12],['Raj Kumar Singh','Ninja','#0891b2',141,'88%',8],['Priya Nair','Ninja','#0891b2',138,'92%',3],['Khalid Hassan','Keeta','#ea580c',135,'89%',7]].map((d,i)=>`
-          <div class="perf-bar" style="align-items:flex-start;flex-direction:row;margin-bottom:14px">
-            <div style="width:24px;height:24px;background:${i===0?'#ca8a04':i===1?'#94a3b8':i===2?'#b45309':'var(--surface3)'};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:white;flex-shrink:0">${i+1}</div>
-            <div style="flex:1;margin-left:10px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-                <span style="font-size:0.78rem;font-weight:600">${d[0]}</span>
-                <span style="color:${d[2]};font-size:0.72rem;font-weight:600">${d[1]}</span>
-                <span style="font-family:'JetBrains Mono';font-size:0.78rem;font-weight:700;color:var(--blue)">${d[3]} orders</span>
-                <span class="b bg">${d[4]} on-time</span>
-              </div>
-              <div class="pb-track"><div class="pb-fill" style="width:${Math.round(d[3]/156*100)}%;background:${d[2]}"></div></div>
-            </div>
-          </div>`).join('')}
-        </div>
+        <div class="panel"><div class="ph"><div class="ph-title">🏆 Top Drivers</div></div><div class="pb">${topDrivers()}</div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">📈 Orders Trend</div></div><div class="pb"><div class="chart-wrap"><canvas id="perfLine"></canvas></div></div></div>
       </div>`;
     setTimeout(()=>{
-      mkBar('perfCompare',['Keeta','Jahez','Ninja','Noon'],[
-        {label:'Avg Orders',data:[134,128,141,121],backgroundColor:['rgba(234,88,12,0.7)','rgba(124,58,237,0.7)','rgba(8,145,178,0.7)','rgba(202,138,4,0.7)'],borderRadius:6},
-      ]);
-      mkLine('perfTrend',DAYS,[
-        {label:'Keeta',data:[125,130,128,134,132,138,134],borderColor:'#ea580c',tension:0.4},
-        {label:'Jahez',data:[120,124,126,128,130,128,128],borderColor:'#7c3aed',tension:0.4},
-        {label:'Ninja',data:[135,138,140,142,141,143,141],borderColor:'#0891b2',tension:0.4},
-      ]);
+      if(currentPlatform==='all'){
+        mkLine('perfLine',DAYS,Object.values(PLATFORM_DATA).map(p=>({label:p.name,data:p.chart7d.orders,borderColor:p.color,tension:0.4})),160);
+      } else {
+        const p=PLATFORM_DATA[currentPlatform];
+        mkLine('perfLine',DAYS,[{label:p.name+' Orders',data:p.chart7d.orders,borderColor:p.color,backgroundColor:p.color+'18',tension:0.4,fill:true}],160);
+      }
     },50);
     return;
   }
-
   // ---- SUPERVISORS ----
   if(section==='supervisors'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">Supervisors</div><div class="sec-sub">Field supervisors across all platforms</div></div>
+    const plats=getPlatforms();
+    const allSups=plats.flatMap(p=>p.supervisors.map(s=>({...s,platform:p.name,color:p.color,emoji:p.emoji})));
+    const platFilter=`<div class="ptabs">
+      <div class="ptab${currentPlatform==='all'?' active':''}" onclick="switchPlatform('all',this)">🏢 All</div>
+      ${Object.entries(PLATFORM_DATA).map(([k,p])=>`<div class="ptab${currentPlatform===k?' active':''}" onclick="switchPlatform('${k}',this)">${p.emoji} ${p.name}</div>`).join('')}
+    </div>`;
+    el.innerHTML=platFilter+`
+      <div class="sec-header">
+        <div><div class="sec-title">Supervisors</div><div class="sec-sub">${allSups.length} supervisors${currentPlatform!=='all'?' on '+PLATFORM_DATA[currentPlatform].name:''}</div></div>
         <button class="btn btn-primary" onclick="openForm('add-employee')">+ Add Supervisor</button>
       </div>
-      <div class="g2">
-        <div class="calendar-wrap"><div class="cal-header"><div class="cal-title" style="font-size:0.85rem">Supervisor Calendar</div><div style="font-size:0.72rem;color:var(--text3)">Click to add shifts</div></div><div id="supCal"></div></div>
-        <div class="panel" style="margin-bottom:0">
-          <div class="ph"><div class="ph-title">👷 Supervisor Teams</div></div>
-          <div class="pb">
-            ${[['Ahmed Hassan','Keeta','#ea580c','42 drivers','94%','bg','Active'],['Sara Khalid','Jahez','#7c3aed','56 drivers','91%','bg','Active'],['Hassan Mohammed','Ninja','#0891b2','32 drivers','89%','bg','Active'],['Omar Ali','Noon','#ca8a04','24 drivers','85%','bg','Active']].map(s=>`
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="showFlash('👷','Supervisor Selected','${s[0]} — ${s[1]}')">
-              <div style="width:36px;height:36px;border-radius:50%;background:${s[2]};display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:white">${s[0].split(' ').map(x=>x[0]).join('')}</div>
-              <div style="flex:1"><div style="font-size:0.8rem;font-weight:600">${s[0]}</div><div style="font-size:0.68rem;color:var(--text3)">${s[2]===s[2]?s[1]:''} · ${s[3]}</div></div>
-              <span style="font-family:'JetBrains Mono';font-size:0.78rem;font-weight:700;color:${s[2]}">${s[4]}</span>
-              <span class="b ${s[5]}">${s[6]}</span>
-            </div>`).join('')}
-          </div>
-        </div>
-      </div>`;
-    setTimeout(()=>renderCalendar('supCal',true),100);
-    return;
-  }
-
-  // ---- CRM & TICKETS ----
-  if(section==='crm'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">CRM & Tickets</div><div class="sec-sub">Customer & partner relations</div></div>
-        <button class="btn btn-primary">+ New Ticket</button>
-      </div>
-      <div class="g4">
-        ${kpiHTML('Open Tickets','47','<span class="dn">12 urgent</span>','#dc2626',[30,32,35,38,40,44,47])}
-        ${kpiHTML('Resolved Today','18','<span class="up">↑ 5</span>','#059669',[10,12,14,15,16,17,18])}
-        ${kpiHTML('Avg Response','2.4 hrs','<span class="up">improved</span>','#059669',[4,3.8,3.5,3.2,3,2.6,2.4])}
-        ${kpiHTML('Satisfaction','4.2/5','<span class="up">↑ 0.2</span>','#059669',[3.8,3.9,4.0,4.0,4.1,4.1,4.2])}
-      </div>
-      <div class="panel"><div class="ph"><div class="ph-title">🎫 Active Tickets</div></div>
-        ${[
-          {id:'TKT-1089',t:'COD Discrepancy — Driver DRV-0156',plat:'Ninja','sc':'br',pri:'🔴 Urgent',agent:'COD Officer B',time:'2h ago'},
-          {id:'TKT-1088',t:'Driver Complaint — Late delivery',plat:'Keeta','sc':'ba',pri:'🟡 Medium',agent:'Account Mgr A',time:'4h ago'},
-          {id:'TKT-1087',t:'Document renewal assistance',plat:'Jahez','sc':'bb',pri:'🔵 Low',agent:'HR Officer',time:'Yesterday'},
-          {id:'TKT-1086',t:'Platform integration issue',plat:'Noon','sc':'bp',pri:'🟣 High',agent:'OCT Lead',time:'Yesterday'},
-        ].map(t=>`<div class="ticket"><div style="display:flex;align-items:center;justify-content:space-between"><span class="ticket-id">${t.id}</span><span class="b ${t.sc}">${t.pri}</span></div><div class="ticket-title">${t.t}</div><div class="ticket-meta"><span class="b bb">${t.plat}</span><span style="font-size:0.68rem;color:var(--text3)">${t.agent}</span><span style="font-size:0.68rem;color:var(--text3);margin-left:auto">${t.time}</span></div></div>`).join('')}
-      </div>`;
-    return;
-  }
-
-  // ---- ESCALATIONS ----
-  if(section==='escalations'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">Escalations</div><div class="sec-sub">Active escalations requiring management attention</div></div>
-        <button class="btn btn-primary">+ Raise Escalation</button>
-      </div>
-      <div class="stat-row">
-        <div class="stat-box"><div class="stat-val" style="color:var(--red)">7</div><div class="stat-lbl">Open</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:var(--amber)">4</div><div class="stat-lbl">In Progress</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:var(--green)">23</div><div class="stat-lbl">Resolved (Month)</div></div>
-        <div class="stat-box"><div class="stat-val" style="color:var(--blue)">18h</div><div class="stat-lbl">Avg Resolution</div></div>
-      </div>
-      ${[
-        {t:'COD Dispute — DRV-0156 Raj Kumar',s:'Screenshot shows BD 87.000 but system records BD 112.000. Under review by Finance Controller.',level:'high',by:'Supervisor Hassan',time:'2h ago',sc:'br'},
-        {t:'Driver Absent Without Notice — DRV-0271',s:'Ali Hassan absent 3 consecutive days. Contract review required. HR notified.',level:'medium',by:'Supervisor Ahmed',time:'5h ago',sc:'ba'},
-        {t:'Platform Integration Down — Noon',s:'API connection to Noon platform dropped at 14:00. Orders not syncing. OCT investigating.',level:'high',by:'OCT Lead',time:'1h ago',sc:'br'},
-        {t:'Document Overdue — 3 Drivers',s:'Faisal, Mohammed, and Priya have expired documents. HR escalated to Management.',level:'medium',by:'HR Lead',time:'Yesterday',sc:'ba'},
-      ].map(e=>`<div class="escalation-card ${e.level}">
-        <div style="display:flex;align-items:center;justify-content:space-between"><div class="esc-title">${e.t}</div><span class="b ${e.sc}">${e.level==='high'?'🔴 High':'🟡 Medium'}</span></div>
-        <div class="esc-sub">${e.s}</div>
-        <div class="esc-meta"><span style="font-size:0.68rem;color:var(--text3)">Raised by: ${e.by}</span><span style="font-size:0.68rem;color:var(--text3)">${e.time}</span><button class="btn btn-ghost btn-sm" style="margin-left:auto">Assign</button><button class="btn btn-primary btn-sm">Resolve</button></div>
-      </div>`).join('')}`;
-    return;
-  }
-
-  // ---- WHATSAPP FLOW ----
-  if(section==='whatsapp'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">WhatsApp Flow</div><div class="sec-sub">COD Intake Monitor · Automation Analytics</div></div>
-        <div class="tb-live" style="padding:6px 12px;font-size:0.75rem"><div class="live-dot"></div>Live Monitor</div>
-      </div>
-      <div class="g4">
-        ${kpiHTML('Messages Today','1,847','<span class="up">↑ 12%</span>','#25d366',[1200,1400,1500,1600,1700,1800,1847])}
-        ${kpiHTML('COD Intakes','312','via WhatsApp','#2563eb',[200,220,250,280,300,310,312])}
-        ${kpiHTML('Auto-Resolved','89%','<span class="up">↑ 3%</span>','#059669',[82,83,84,85,86,87,89])}
-        ${kpiHTML('Escalated to Human','34','<span class="dn">need review</span>','#dc2626',[20,25,28,30,32,33,34])}
-      </div>
-      <div class="g2">
-        <div class="wa-card">
-          <div class="wa-header"><div class="wa-icon">💬</div><div><div class="wa-title">COD Intake Monitor</div><div class="wa-sub">Live incoming messages</div></div></div>
-          <div style="max-height:300px;overflow-y:auto">
-            ${[
-              {name:'Ahmed Al-Rashidi',msg:'Deposited BD 124.500 in Ahli United Bank. Receipt attached.',time:'08:32',out:false},
-              {name:'Bot Response',msg:'✅ COD received. Forwarded to Finance Officer for verification. Ref: COD-20260308-0041',time:'08:32',out:true},
-              {name:'Raj Kumar',msg:'BD 87.000 transferred. Screenshot uploaded.',time:'09:14',out:false},
-              {name:'Bot Response',msg:'⚠️ Amount mismatch detected. Please re-upload clear screenshot.',time:'09:14',out:true},
-              {name:'Ali Hassan',msg:'How do I submit my COD?',time:'10:02',out:false},
-              {name:'Bot Response',msg:'📋 To submit COD: 1) Transfer amount 2) Take screenshot 3) Reply with screenshot + amount. I will process it automatically.',time:'10:02',out:true},
-            ].map(m=>`<div style="margin-bottom:8px"><div style="font-size:0.65rem;color:var(--text3);${m.out?'text-align:right':''}margin-bottom:3px">${m.name} · ${m.time}</div><div class="wa-bubble${m.out?' out':''}">${m.msg}</div></div>`).join('')}
-          </div>
-        </div>
-        <div>
-          <div class="panel" style="margin-bottom:12px"><div class="ph"><div class="ph-title">🤖 Automation Analytics</div></div>
-            <div class="pb">
-              <div class="chart-wrap"><canvas id="waBar"></canvas></div>
+      <div class="g${Math.min(allSups.length,4)}" style="margin-bottom:14px;">
+        ${allSups.map(s=>`
+        <div class="panel" style="border-top:3px solid ${s.color};">
+          <div class="ph"><div class="ph-title">${s.emoji} ${s.platform}</div><span class="b bg">Active</span></div>
+          <div class="pb" style="padding-top:0;text-align:center;">
+            <div style="width:48px;height:48px;border-radius:50%;background:${s.color};display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:700;color:white;margin:0 auto 8px;">${s.initials}</div>
+            <div style="font-size:0.85rem;font-weight:700;">${s.name}</div>
+            <div style="font-size:0.65rem;color:var(--text3);margin-bottom:8px;">${s.id}</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
+              <div style="background:var(--surface2);border-radius:6px;padding:6px;"><div style="font-weight:700;font-size:0.9rem;">${s.drivers}</div><div style="font-size:0.6rem;color:var(--text3);">Drivers</div></div>
+              <div style="background:var(--surface2);border-radius:6px;padding:6px;"><div style="font-weight:700;font-size:0.9rem;color:var(--green);">${s.active}</div><div style="font-size:0.6rem;color:var(--text3);">Active</div></div>
+              <div style="background:var(--surface2);border-radius:6px;padding:6px;"><div style="font-weight:700;font-size:0.82rem;">${s.orders.toLocaleString()}</div><div style="font-size:0.6rem;color:var(--text3);">Orders/mo</div></div>
+              <div style="background:var(--surface2);border-radius:6px;padding:6px;"><div style="font-weight:700;font-size:0.7rem;color:var(--green);">${s.cod}</div><div style="font-size:0.6rem;color:var(--text3);">COD</div></div>
             </div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:4px;font-size:0.75rem;font-weight:700;">⭐ ${s.rating}</div>
           </div>
-          <div class="panel" style="margin-bottom:0"><div class="ph"><div class="ph-title">⚡ Flow Triggers Today</div></div>
-            <div class="pb">
-              ${[['COD Submission','🟢',312],['Document Expiry Alert','🟡',47],['Escalation Raised','🔴',7],['Welcome Message','🔵',3]].map(f=>`<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)"><span>${f[1]}</span><span style="flex:1;font-size:0.78rem">${f[0]}</span><span style="font-family:'JetBrains Mono';font-weight:700">${f[2]}</span></div>`).join('')}
-            </div>
-          </div>
-        </div>
-      </div>`;
-    setTimeout(()=>mkBar('waBar',DAYS,[{label:'Messages',data:[1600,1700,1750,1800,1820,1840,1847],backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4},{label:'COD Intakes',data:[250,270,280,295,300,308,312],backgroundColor:'rgba(37,179,99,0.7)',borderRadius:4}]),50);
-    return;
-  }
-
-  // ---- ALERTS ----
-  if(section==='alerts'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">Alerts</div><div class="sec-sub">System-wide alerts requiring attention</div></div>
-        <button class="btn btn-ghost">Mark All Read</button>
-      </div>
-      <div class="g4">
-        ${kpiHTML('Critical','7','<span class="dn">immediate</span>','#dc2626',[3,4,5,5,6,7,7])}
-        ${kpiHTML('Warning','12','<span class="dn">review soon</span>','#d97706',[8,9,10,10,11,12,12])}
-        ${kpiHTML('Info','18','informational','#2563eb',[10,12,14,15,16,17,18])}
-        ${kpiHTML('Resolved Today','34','<span class="up">↑ 8</span>','#059669',[20,22,24,26,28,30,34])}
-      </div>
-      <div class="panel"><div class="ph"><div class="ph-title">🚨 All Alerts</div></div>
-        <div class="pb">
-          ${[
-            {c:'a-red',i:'🚨',t:'COD Mismatch — DRV-0156',s:'Raj Kumar Singh deposited BD 87K but system shows BD 112K. Finance review required.',time:'2 min ago'},
-            {c:'a-red',i:'❌',t:'Document Expired — Faisal Al-Mutairi',s:'CPR expired on 1 Mar 2026. Driver suspended from operations.',time:'1h ago'},
-            {c:'a-amber',i:'⚠️',t:'Visa Expiry Warning — Mohammed Al-Zahra',s:'Visa expires in 7 days. HR Officer notified for renewal.',time:'2h ago'},
-            {c:'a-amber',i:'⏰',t:'Late Check-in — 3 Drivers',s:'Ali Al-Sayed, Hassan Yusuf, Priya Kumar are 45+ minutes late. Supervisor notified.',time:'3h ago'},
-            {c:'a-blue',i:'ℹ️',t:'New Driver Onboarded',s:'Khalid Hassan (DRV-1248) completed onboarding. Assigned to Keeta · Supervisor Ahmed.',time:'4h ago'},
-            {c:'a-blue',i:'📊',t:'Weekly Report Generated',s:'Executive Performance Report Week 9 is ready for review.',time:'Yesterday'},
-            {c:'a-green',i:'✅',t:'Jahez Batch Settlement Complete',s:'BD 68,700 settled to National Bank. All drivers paid.',time:'Yesterday'},
-          ].map(a=>`<div class="alert-item ${a.c}"><div class="ai-icon">${a.i}</div><div style="flex:1"><div class="ai-title">${a.t}</div><div class="ai-sub">${a.s}</div><div class="ai-time">${a.time}</div></div><button class="btn btn-ghost btn-sm">Dismiss</button></div>`).join('')}
-        </div>
+        </div>`).join('')}
       </div>`;
     return;
   }
 
-  // ---- ADMIN PANEL ----
-  if(section==='admin'){
-    el.innerHTML=`
-      <div class="sec-header"><div><div class="sec-title">Admin Panel</div><div class="sec-sub">System configuration & user management</div></div>
-        <button class="btn btn-primary" onclick="openForm('add-employee')">+ Add User</button>
-      </div>
-      <div class="g3">
-        <div class="panel"><div class="ph"><div class="ph-title">👥 User Management</div><div class="ph-link">View All</div></div>
-          <div class="pb">
-            ${[['Fahad Al-Mansoori','CEO / Owner','FA','#2563eb','bg','Active'],['Omar Al-Khaled','General Manager','OK','#7c3aed','bg','Active'],['Nadia Al-Hammadi','Finance Controller','NA','#059669','bg','Active'],['Sara Al-Hassan','HR Lead','SH','#0891b2','bg','Active'],['Hassan Al-Zayani','COD Officer','HZ','#ca8a04','ba','Inactive']].map(u=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="width:28px;height:28px;border-radius:50%;background:${u[3]};display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:700;color:white">${u[2]}</div><div style="flex:1"><div style="font-size:0.76rem;font-weight:600">${u[0]}</div><div style="font-size:0.64rem;color:var(--text3)">${u[1]}</div></div><span class="b ${u[4]}">${u[5]}</span></div>`).join('')}
-          </div>
-        </div>
-        <div class="panel"><div class="ph"><div class="ph-title">⚙️ System Settings</div></div>
-          <div class="pb">
-            ${[['WhatsApp Automation','Enabled',true],['Auto COD Alerts','Enabled',true],['Email Notifications','Enabled',true],['2FA Required','Disabled',false],['Maintenance Mode','Off',false]].map(s=>`<div class="setting-row"><div class="sr-info"><div class="sr-title">${s[0]}</div><div class="sr-desc">${s[1]}</div></div><div class="toggle ${s[2]?'on':''}" onclick="this.classList.toggle('on')"></div></div>`).join('')}
-          </div>
-        </div>
-        <div class="panel"><div class="ph"><div class="ph-title">🔑 Access Levels</div></div>
-          <div class="pb">
-            ${[['Level 1 — Executive','CEO, Founder','Full System Access'],['Level 2 — Management','GM, Head of Ops','All modules'],['Level 3 — Lead','Dept Heads','Own module full'],['Level 4 — Officer','Specialists','Limited tasks'],['Supervisor','Field','Assigned drivers'],['View Only','Read access','No actions']].map(l=>`<div style="padding:8px 0;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:0.78rem;font-weight:600">${l[0]}</span><span class="b bb" style="font-size:0.6rem">${l[1]}</span></div><div style="font-size:0.68rem;color:var(--text3);margin-top:2px">${l[2]}</div></div>`).join('')}
-          </div>
-        </div>
-      </div>
-      <div class="g2">
-        <div class="panel"><div class="ph"><div class="ph-title">📊 System Usage</div></div><div class="pb"><div class="chart-wrap"><canvas id="adminBar"></canvas></div></div></div>
-        <div class="panel"><div class="ph"><div class="ph-title">🔒 Security Log</div></div>
-          <div class="pb">
-            ${[['Login','Fahad Al-Mansoori','CEO','2 min ago'],['Login','Nadia Al-Hammadi','Finance','5 min ago'],['Action','Hassan Al-Zayani','COD Approved','12 min ago'],['Export','Omar Al-Khaled','Report Download','30 min ago'],['Login','Sara Al-Hassan','HR Lead','1h ago']].map(l=>`<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:0.72rem"><span class="b bb" style="font-size:0.6rem">${l[0]}</span><span style="font-weight:600">${l[1]}</span><span style="color:var(--text3)">${l[2]}</span><span style="margin-left:auto;color:var(--text3)">${l[3]}</span></div>`).join('')}
-          </div>
-        </div>
-      </div>`;
-    setTimeout(()=>mkBar('adminBar',['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],[{label:'Active Users',data:[18,22,24,20,19,8,5],backgroundColor:'rgba(37,99,235,0.7)',borderRadius:4}]),50);
-    return;
-  }
-
-  // Fallback
-  el.innerHTML=`<div class="access-denied"><div class="ad-icon">🚧</div><div class="ad-title">Coming Soon</div><div class="ad-sub">This section is under construction</div></div>`;
-}
-
-// ===================== EMPLOYEE HELPERS =====================
-const EMPLOYEES = [
-  {id:'EMP-001',name:'Fahad Al-Mansoori',title:'CEO / Owner',dept:'Executive',reportsTo:'—',email:'fahad@courierx.com',phone:'+973 3300 1100',status:'Active',join:'1 Jan 2023',initials:'FA',color:'#2563eb',level:'L1'},
-  {id:'EMP-002',name:'Omar Al-Khaled',title:'General Manager',dept:'Executive',reportsTo:'Fahad Al-Mansoori',email:'omar@courierx.com',phone:'+973 3300 1101',status:'Active',join:'15 Feb 2023',initials:'OK',color:'#7c3aed',level:'L2'},
-  {id:'EMP-003',name:'Nadia Al-Hammadi',title:'Finance Controller',dept:'Finance',reportsTo:'Omar Al-Khaled',email:'nadia@courierx.com',phone:'+973 3300 1110',status:'Active',join:'1 Mar 2023',initials:'NA',color:'#059669',level:'L3'},
-  {id:'EMP-004',name:'Hassan Al-Zayani',title:'COD Officer',dept:'Finance',reportsTo:'Nadia Al-Hammadi',email:'hassan@courierx.com',phone:'+973 3300 1111',status:'Active',join:'10 Apr 2023',initials:'HZ',color:'#ca8a04',level:'L4'},
-  {id:'EMP-005',name:'Layla Al-Mansoori',title:'Finance Analyst',dept:'Finance',reportsTo:'Nadia Al-Hammadi',email:'layla@courierx.com',phone:'+973 3300 1112',status:'Active',join:'5 May 2023',initials:'LM',color:'#059669',level:'L4'},
-  {id:'EMP-006',name:'Sara Al-Hassan',title:'HR Lead',dept:'HR',reportsTo:'Omar Al-Khaled',email:'sara@courierx.com',phone:'+973 3300 1120',status:'Active',join:'1 Mar 2023',initials:'SH',color:'#0891b2',level:'L3'},
-  {id:'EMP-007',name:'Khalid Al-Dosari',title:'HR Officer',dept:'HR',reportsTo:'Sara Al-Hassan',email:'khalid@courierx.com',phone:'+973 3300 1121',status:'Active',join:'20 Apr 2023',initials:'KD',color:'#0891b2',level:'L4'},
-  {id:'EMP-008',name:'Mona Al-Fardan',title:'HR Recruitment',dept:'HR',reportsTo:'Sara Al-Hassan',email:'mona@courierx.com',phone:'+973 3300 1122',status:'Active',join:'1 Mar 2026',initials:'MF',color:'#0891b2',level:'L4'},
-  {id:'EMP-009',name:'Ahmad Al-Mahmoud',title:'Head of Operations',dept:'Operations',reportsTo:'Omar Al-Khaled',email:'ahmad@courierx.com',phone:'+973 3300 1130',status:'Active',join:'15 Feb 2023',initials:'AM',color:'#ea580c',level:'L2'},
-  {id:'EMP-010',name:'Mohammed Hassan',title:'Supervisor — Keeta',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'mhosn@courierx.com',phone:'+973 3300 1131',status:'Active',join:'1 Jun 2023',initials:'MH',color:'#ea580c',level:'L4'},
-  {id:'EMP-011',name:'Jassim Al-Ali',title:'Account Mgr — Keeta',dept:'Account Management',reportsTo:'Ahmad Al-Mahmoud',email:'jassim@courierx.com',phone:'+973 3300 1132',status:'Active',join:'1 Jun 2023',initials:'JA',color:'#ca8a04',level:'L3'},
-  {id:'EMP-012',name:'Ahmed Hassan',title:'Supervisor — Keeta',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'ahmd@courierx.com',phone:'+973 3300 1133',status:'Active',join:'10 Jul 2023',initials:'AH',color:'#ea580c',level:'L4'},
-  {id:'EMP-013',name:'Sara Khalid',title:'Supervisor — Jahez',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'skhld@courierx.com',phone:'+973 3300 1134',status:'Active',join:'10 Jul 2023',initials:'SK',color:'#7c3aed',level:'L4'},
-  {id:'EMP-014',name:'Hassan Mohammed',title:'Supervisor — Ninja',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'hsnmhd@courierx.com',phone:'+973 3300 1135',status:'On Leave',join:'15 Aug 2023',initials:'HM',color:'#0891b2',level:'L4'},
-  {id:'EMP-015',name:'Omar Ali',title:'Supervisor — Noon',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'omarali@courierx.com',phone:'+973 3300 1136',status:'Active',join:'15 Aug 2023',initials:'OA',color:'#ca8a04',level:'L4'},
-  {id:'EMP-016',name:'Yusuf Al-Rashid',title:'OCT Lead',dept:'OCT',reportsTo:'Omar Al-Khaled',email:'yusuf@courierx.com',phone:'+973 3300 1140',status:'Active',join:'1 Apr 2023',initials:'YR',color:'#dc2626',level:'L3'},
-  {id:'EMP-017',name:'Reem Al-Sayed',title:'OCT Officer',dept:'OCT',reportsTo:'Yusuf Al-Rashid',email:'reem@courierx.com',phone:'+973 3300 1141',status:'Active',join:'1 Jun 2023',initials:'RS',color:'#dc2626',level:'L4'},
-  {id:'EMP-018',name:'Ali Al-Noaimi',title:'OCT Analyst',dept:'OCT',reportsTo:'Yusuf Al-Rashid',email:'ali@courierx.com',phone:'+973 3300 1142',status:'Active',join:'1 Sep 2023',initials:'AN',color:'#dc2626',level:'L4'},
-  {id:'EMP-019',name:'Fatima Al-Sayyad',title:'Legal & Gov Affairs',dept:'Legal',reportsTo:'Fahad Al-Mansoori',email:'fatima@courierx.com',phone:'+973 3300 1150',status:'Active',join:'1 Mar 2023',initials:'FS',color:'#7c3aed',level:'L3'},
-  {id:'EMP-020',name:'Tariq Al-Hamad',title:'Legal Officer',dept:'Legal',reportsTo:'Fatima Al-Sayyad',email:'tariq@courierx.com',phone:'+973 3300 1151',status:'On Leave',join:'15 May 2023',initials:'TH',color:'#7c3aed',level:'L4'},
-];
-
-function empGridHTML(){
-  return`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;">
-    ${EMPLOYEES.map(e=>`<div onclick="showEmployeeDetail('${e.id}')" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='';this.style.boxShadow=''">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="width:42px;height:42px;border-radius:50%;background:${e.color};display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;color:white;flex-shrink:0;">${e.initials}</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:0.8rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.name}</div>
-          <div style="font-size:0.65rem;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.title}</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:0.65rem;background:${e.color}18;color:${e.color};padding:2px 7px;border-radius:10px;font-weight:600;">${e.dept}</span>
-        <span class="b ${e.status==='Active'?'bg':e.status==='On Leave'?'ba':'br'}" style="font-size:0.6rem;">${e.status}</span>
-      </div>
-      <div style="font-size:0.65rem;color:var(--text3);margin-top:6px;">Reports to: ${e.reportsTo==='—'?'<em>Top Level</em>':e.reportsTo}</div>
-    </div>`).join('')}
-  </div>`;
-}
-
-function empListHTML(){
-  return`<table class="tbl"><thead><tr><th>Employee</th><th>Department</th><th>Job Title</th><th>Reports To</th><th>Level</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
-  <tbody>${EMPLOYEES.map(e=>`<tr onclick="showEmployeeDetail('${e.id}')">
-    <td><div style="display:flex;align-items:center;gap:8px;">
-      <div style="width:30px;height:30px;border-radius:50%;background:${e.color};display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:700;color:white;flex-shrink:0;">${e.initials}</div>
-      <div><div style="font-weight:600;">${e.name}</div><div style="font-size:0.62rem;color:var(--text3);">${e.id}</div></div>
-    </div></td>
-    <td><span style="font-size:0.7rem;background:${e.color}18;color:${e.color};padding:2px 7px;border-radius:10px;font-weight:600;">${e.dept}</span></td>
-    <td>${e.title}</td>
-    <td style="font-size:0.75rem;color:var(--text2);">${e.reportsTo}</td>
-    <td><span class="b bb">${e.level}</span></td>
-    <td style="font-size:0.72rem;color:var(--text3);">${e.join}</td>
-    <td><span class="b ${e.status==='Active'?'bg':e.status==='On Leave'?'ba':'br'}">${e.status}</span></td>
-    <td><div style="display:flex;gap:4px;" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm">Edit</button></div></td>
-  </tr>`).join('')}</tbody></table>`;
-}
-
-function switchSettingsTab(tab, el){
-  document.querySelectorAll('.settings-nav-item').forEach(t=>t.classList.remove('active'));
-  if(el) el.classList.add('active');
-  document.getElementById('settingsContent').innerHTML = settingsTabHTML(tab);
-}
-
-function settingsTabHTML(tab){
-  const r=ROLES[currentRole];
-  if(tab==='profile') return `
-    <div class="panel">
-      <div class="ph"><div class="ph-title">👤 My Profile</div></div>
-      <div class="pb" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="settings-field"><label>Full Name</label><input type="text" value="${r.name}"></div>
-        <div class="settings-field"><label>Job Title</label><input type="text" value="${r.label}" disabled></div>
-        <div class="settings-field"><label>Email Address</label><input type="email" value="${r.email}"></div>
-        <div class="settings-field"><label>Phone Number</label><input type="tel" value="+973 3300 1100"></div>
-        <div class="settings-field"><label>Department</label><input type="text" value="${r.dept||'Executive'}" disabled></div>
-        <div class="settings-field"><label>Employee ID</label><input type="text" value="EMP-001" disabled></div>
-        <div class="settings-field" style="grid-column:span 2"><label>Work Location</label><input type="text" value="Manama, Bahrain"></div>
-        <div class="settings-field" style="grid-column:span 2"><label>Profile Photo</label>
-          <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--surface2);border:1px dashed var(--border2);border-radius:8px;">
-            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:white;">${r.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
-            <div><div style="font-size:0.78rem;font-weight:600;">Upload new photo</div><div style="font-size:0.68rem;color:var(--text3);">JPG, PNG · max 2MB</div></div>
-            <button class="btn btn-ghost btn-sm" style="margin-left:auto">Browse</button>
-          </div>
-        </div>
-      </div>
-      <div style="padding:0 20px 16px;display:flex;justify-content:flex-end;gap:8px;">
-        <button class="btn btn-ghost" onclick="navTo('dashboard',null,'Dashboard')">Cancel</button>
-        <button class="btn btn-primary" onclick="showFlash('✅','Saved','Profile updated successfully.')">Save Changes</button>
-      </div>
-    </div>`;
-
-  if(tab==='security') return `
-    <div class="panel">
-      <div class="ph"><div class="ph-title">🔒 Security</div></div>
-      <div class="pb" style="max-width:480px;">
-        <div class="settings-section-title">Change Password</div>
-        <div class="settings-field"><label>Current Password</label><input type="password" placeholder="Enter current password"></div>
-        <div class="settings-field"><label>New Password</label><input type="password" placeholder="Minimum 8 characters"></div>
-        <div class="settings-field"><label>Confirm New Password</label><input type="password" placeholder="Repeat new password"></div>
-        <div style="background:var(--blue-light);border:1px solid rgba(37,99,235,0.15);border-radius:8px;padding:12px;font-size:0.75rem;color:var(--blue);margin:4px 0 16px;">
-          🔒 Your password is encrypted. Never share it with anyone.
-        </div>
-        <button class="btn btn-primary" onclick="showFlash('🔒','Updated','Password changed successfully.')">Update Password</button>
-        <div class="settings-section-title" style="margin-top:24px;">Active Sessions</div>
-        ${[['Chrome · Windows · Manama','Now — Current session','bg'],['Mobile App · iOS · Manama','2 hours ago','bg'],['Chrome · MacOS · Manama','Yesterday','ba']].map(s=>`
-          <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface2);border-radius:8px;margin-bottom:6px;">
-            <div style="font-size:1.2rem;">💻</div>
-            <div style="flex:1;"><div style="font-size:0.78rem;font-weight:600;">${s[0]}</div><div style="font-size:0.65rem;color:var(--text3);">${s[1]}</div></div>
-            <span class="b ${s[2]}">${s[2]==='bg'?'Active':'Old'}</span>
-            ${s[2]==='ba'?`<button class="btn btn-ghost btn-sm" onclick="showFlash('🚪','Signed Out','Session revoked.')">Revoke</button>`:''}
-          </div>`).join('')}
-      </div>
-    </div>`;
-
-  if(tab==='payroll') return `
-    <div class="panel">
-      <div class="ph"><div class="ph-title">💵 My Payroll</div></div>
-      <div class="pb">
-        <div style="background:linear-gradient(135deg,var(--green),#047857);border-radius:var(--r);padding:20px;color:white;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
-          <div>
-            <div style="font-size:0.72rem;opacity:0.8;margin-bottom:4px;">Net Salary — March 2026</div>
-            <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;">BD 1,600</div>
-            <div style="font-size:0.72rem;opacity:0.8;margin-top:4px;">✓ Paid on 1 Mar 2026</div>
-          </div>
-          <div style="font-size:3rem;opacity:0.3;">💵</div>
-        </div>
-        <div class="settings-section-title">Salary Breakdown</div>
-        ${[['Base Salary','BD 1,800',''],['Housing Allowance','BD 200',''],['Transport Allowance','BD 100',''],['Advance Deduction','− BD 300','neg'],['Penalty Deduction','− BD 200','neg'],['Net Pay','BD 1,600','pos']].map((r,i)=>`
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);${i===5?'font-weight:700;border-top:2px solid var(--border2);margin-top:4px;':''}">
-            <span style="font-size:0.82rem;">${r[0]}</span>
-            <span style="font-family:'JetBrains Mono';font-weight:700;color:${r[2]==='neg'?'var(--red)':r[2]==='pos'?'var(--green)':'var(--text)'};">${r[1]}</span>
-          </div>`).join('')}
-        <div class="settings-section-title" style="margin-top:20px;">Payment History</div>
-        <table class="tbl"><thead><tr><th>Month</th><th>Gross</th><th>Deductions</th><th>Net</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-          ${[['March 2026','BD 2,100','BD 500','BD 1,600','bg','Paid'],['February 2026','BD 2,100','BD 350','BD 1,750','bg','Paid'],['January 2026','BD 2,100','BD 500','BD 1,600','bg','Paid'],['December 2025','BD 2,100','BD 300','BD 1,800','bg','Paid']].map(r=>`
-            <tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono" style="color:var(--red);">${r[2]}</td><td class="mono" style="font-weight:700;color:var(--green);">${r[3]}</td><td><span class="b ${r[4]}">${r[5]}</span></td><td><button class="btn btn-ghost btn-sm" onclick="showFlash('📥','Downloaded','Payslip downloaded.')">📥 Payslip</button></td></tr>`).join('')}
-        </tbody></table>
-        <div style="margin-top:14px;background:var(--amber-light);border:1px solid var(--amber-dim);border-radius:8px;padding:12px;font-size:0.75rem;color:var(--amber);display:flex;align-items:center;gap:8px;">
-          💡 To dispute your salary, go to <strong style="cursor:pointer;text-decoration:underline;" onclick="switchSettingsTab('ticket',document.querySelectorAll('.settings-nav-item')[4])">Submit Ticket</strong>
-        </div>
-      </div>
-    </div>`;
-
-  if(tab==='leave') return `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
-      <div class="panel">
-        <div class="ph"><div class="ph-title">🏖️ Apply for Leave</div></div>
-        <div class="pb">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
-            ${[['Annual','18 days','var(--blue)'],['Sick','30 days','var(--green)'],['Used','12 days','var(--red)']].map(b=>`
-              <div style="background:var(--surface2);border-radius:var(--r-sm);padding:12px;text-align:center;border:1px solid var(--border);">
-                <div style="font-size:1.2rem;font-weight:800;color:${b[2]};">${b[1]}</div>
-                <div style="font-size:0.65rem;color:var(--text3);margin-top:2px;">${b[0]}</div>
-              </div>`).join('')}
-          </div>
-          <div class="settings-field"><label>Leave Type</label>
-            <select><option>Annual Leave</option><option>Sick Leave</option><option>Emergency Leave</option><option>Unpaid Leave</option><option>Compassionate Leave</option></select>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div class="settings-field"><label>Start Date</label><input type="date"></div>
-            <div class="settings-field"><label>End Date</label><input type="date"></div>
-          </div>
-          <div class="settings-field"><label>Reason</label><textarea rows="3" placeholder="Briefly describe the reason..."></textarea></div>
-          <div style="background:var(--amber-light);border:1px solid var(--amber-dim);border-radius:8px;padding:10px;font-size:0.72rem;color:var(--amber);margin-bottom:14px;">
-            ⏳ Request goes to HR Lead for approval
-          </div>
-          <button class="btn btn-primary" style="width:100%;" onclick="showFlash('🏖️','Request Sent','Leave request submitted to HR Lead.')">Submit Request</button>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="ph"><div class="ph-title">📋 My Leave History</div></div>
-        <div class="pb">
-          ${[['Annual Leave','20–24 Jan 2026','5 days','bg','Approved'],['Sick Leave','5 Feb 2026','1 day','ba','Pending'],['Annual Leave','10–14 Dec 2025','5 days','bg','Approved'],['Emergency Leave','3 Nov 2025','2 days','bg','Approved']].map(l=>`
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
-              <div style="flex:1;"><div style="font-size:0.8rem;font-weight:600;">${l[0]}</div><div style="font-size:0.65rem;color:var(--text3);margin-top:2px;">${l[1]} · ${l[2]}</div></div>
-              <span class="b ${l[3]}">${l[4]}</span>
-            </div>`).join('')}
-        </div>
-      </div>
-    </div>`;
-
-  if(tab==='ticket') return `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
-      <div class="panel">
-        <div class="ph"><div class="ph-title">🎫 Submit a Ticket</div></div>
-        <div class="pb">
-          <div class="settings-field"><label>Ticket Type</label>
-            <select><option>Salary Dispute / Issue</option><option>Payroll Error</option><option>Leave Not Approved</option><option>Document Update Request</option><option>HR Complaint</option><option>System Access Issue</option><option>Other</option></select>
-          </div>
-          <div class="settings-field"><label>Subject</label><input type="text" placeholder="Brief subject"></div>
-          <div class="settings-field"><label>Priority</label>
-            <select><option>Normal</option><option>Urgent</option><option>Low</option></select>
-          </div>
-          <div class="settings-field"><label>Description</label><textarea rows="5" placeholder="Describe the issue in detail..."></textarea></div>
-          <div class="settings-field"><label>Attachment (optional)</label><input type="file" style="padding:6px;"></div>
-          <div style="background:var(--blue-light);border:1px solid rgba(37,99,235,0.15);border-radius:8px;padding:10px;font-size:0.72rem;color:var(--blue);margin-bottom:14px;">
-            📋 Ticket is sent to HR Lead and your department manager
-          </div>
-          <button class="btn btn-primary" style="width:100%;" onclick="showFlash('🎫','Ticket Submitted','Your ticket has been sent to HR Lead.')">Submit Ticket</button>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="ph"><div class="ph-title">📂 My Open Tickets</div></div>
-        <div class="pb">
-          ${[['TKT-0041','Salary Dispute — Mar','Urgent','br','Open'],['TKT-0038','Leave Not Approved','Normal','ba','Under Review'],['TKT-0031','CPR Update Request','Low','bg','Resolved'],['TKT-0028','Payroll Error Jan','Normal','bg','Resolved']].map(t=>`
-            <div style="padding:10px;background:var(--surface2);border-radius:var(--r-sm);margin-bottom:6px;border:1px solid var(--border);">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                <span style="font-family:'JetBrains Mono';font-size:0.65rem;color:var(--text3);">${t[0]}</span>
-                <span class="b ${t[3]}" style="margin-left:auto;">${t[4]}</span>
-              </div>
-              <div style="font-size:0.78rem;font-weight:600;">${t[1]}</div>
-              <div style="font-size:0.65rem;color:var(--text3);margin-top:2px;">Priority: ${t[2]}</div>
-            </div>`).join('')}
-        </div>
-      </div>
-    </div>`;
-
-  if(tab==='docs') return `
-    <div class="panel">
-      <div class="ph"><div class="ph-title">📄 My Documents</div><div class="ph-actions"><button class="btn btn-primary btn-sm" onclick="showFlash('📄','Upload','Select a file to upload.')">+ Upload Document</button></div></div>
-      <div class="pb">
-        ${[
-          {name:'CPR / National ID',num:'841022-1234',exp:'20 Jun 2027',sc:'bg',s:'✓ Valid'},
-          {name:'Passport',num:'BH12345678',exp:'15 Oct 2028',sc:'bg',s:'✓ Valid'},
-          {name:'Employment Contract',num:'CTR-2025-0001',exp:'31 Dec 2026',sc:'bg',s:'✓ Signed'},
-          {name:'LMRA Work Permit',num:'WP-2025-4411',exp:'1 Apr 2026',sc:'ba',s:'⚠ Renewing'},
-          {name:'Driving License',num:'DL-BH-00001',exp:'5 Aug 2027',sc:'bg',s:'✓ Valid'},
-        ].map(d=>`
-          <div style="display:flex;align-items:center;gap:14px;padding:14px;border-bottom:1px solid var(--border);">
-            <div style="font-size:2rem;">${d.sc==='bg'?'✅':'⚠️'}</div>
-            <div style="flex:1;">
-              <div style="font-size:0.85rem;font-weight:700;">${d.name}</div>
-              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">${d.num} · Expires: ${d.exp}</div>
-            </div>
-            <span class="b ${d.sc}">${d.s}</span>
-            <button class="btn btn-ghost btn-sm">Update</button>
-            <button class="btn btn-ghost btn-sm">📥</button>
-          </div>`).join('')}
-      </div>
-    </div>`;
-
-  return '';
-}
-
-function empToggleView(view){
-  document.getElementById('empContainer').innerHTML = view==='grid' ? empGridHTML() : empListHTML();
-  document.getElementById('viewGrid').style.fontWeight = view==='grid'?'700':'400';
-  document.getElementById('viewList').style.fontWeight = view==='list'?'700':'400';
-}
-
-function filterEmpDept(dept){
-  // Filter is done by re-rendering — in real app would filter EMPLOYEES array
-}
-
-function showEmployeeDetail(id){
-  const e=EMPLOYEES.find(x=>x.id===id);
-  if(!e)return;
-  const reports=EMPLOYEES.filter(x=>x.reportsTo===e.name);
-  openDetail(`
-    <div class="form-header"><div class="form-title">👤 ${e.name}</div><div class="form-close" onclick="closeDetail()">✕</div></div>
-    <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface2);">
-      <div style="width:56px;height:56px;border-radius:50%;background:${e.color};display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:white;flex-shrink:0;">${e.initials}</div>
-      <div style="flex:1;">
-        <div style="font-size:1rem;font-weight:700;">${e.name}</div>
-        <div style="font-size:0.72rem;color:var(--text3);margin-top:2px;">${e.title} · <span style="color:${e.color};font-weight:600;">${e.dept}</span></div>
-        <div style="font-size:0.68rem;color:var(--text3);margin-top:1px;">${e.email} · ${e.phone}</div>
-      </div>
-      <div style="text-align:right;">
-        <span class="b ${e.status==='Active'?'bg':e.status==='On Leave'?'ba':'br'}" style="margin-bottom:4px;display:block;">${e.status}</span>
-        <span class="b bb">${e.level}</span>
-      </div>
-    </div>
-    <div style="padding:16px 20px;max-height:480px;overflow-y:auto;">
-      <div class="info-grid" style="margin-bottom:16px;">
-        <div class="ig-item"><div class="ig-label">Employee ID</div><div class="ig-val mono">${e.id}</div></div>
-        <div class="ig-item"><div class="ig-label">Department</div><div class="ig-val" style="color:${e.color};">${e.dept}</div></div>
-        <div class="ig-item"><div class="ig-label">Reports To</div><div class="ig-val">${e.reportsTo}</div></div>
-        <div class="ig-item"><div class="ig-label">Access Level</div><div class="ig-val">${e.level}</div></div>
-        <div class="ig-item"><div class="ig-label">Joined</div><div class="ig-val">${e.join}</div></div>
-        <div class="ig-item"><div class="ig-label">Work Email</div><div class="ig-val" style="font-size:0.72rem;">${e.email}</div></div>
-      </div>
-      ${reports.length>0?`
-      <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Direct Reports (${reports.length})</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
-        ${reports.map(r=>`<div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;" onclick="closeDetail();showEmployeeDetail('${r.id}')"><div style="width:24px;height:24px;border-radius:50%;background:${r.color};display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:white;">${r.initials}</div><div><div style="font-size:0.75rem;font-weight:600;">${r.name}</div><div style="font-size:0.62rem;color:var(--text3);">${r.title}</div></div></div>`).join('')}
-      </div>`:``}
-      <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Employment Details</div>
-      ${[['Employment Type','Full-time'],['Contract Status','Active'],['Work Location','Office — Manama'],['Probation','Completed'],['Notice Period','30 days']].map(r=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="font-size:0.78rem;color:var(--text2);">${r[0]}</span><span style="font-size:0.78rem;font-weight:600;">${r[1]}</span></div>`).join('')}
-      <div style="margin-top:14px;font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Documents</div>
-      ${[['CPR / National ID','bg','✓ Valid'],['Passport','bg','✓ Valid'],['Employment Contract','bg','✓ Signed'],['LMRA Work Permit','ba','⚠ Renewing']].map(d=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="font-size:0.78rem;">${d[0]}</span><div style="display:flex;gap:6px;align-items:center;"><span class="b ${d[1]}">${d[2]}</span><button class="btn btn-ghost btn-sm" onclick="">Update</button></div></div>`).join('')}
-    </div>
-    <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;">
-      <button class="btn btn-primary btn-sm" onclick="closeDetail();openForm('add-employee')">Edit Employee</button>
-      <button class="btn btn-ghost btn-sm" onclick="closeDetail();navTo('payroll',null,'Payroll & Salaries')">View Payroll</button>
-      <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="closeDetail()">Close</button>
-    </div>
-  `);
-}
-
-// ===================== DETAIL MODALS =====================
-function showCODDetail(name,amount,platform,status){
-  const platColor={'Keeta':'var(--keeta)','Ninja':'var(--ninja)','Jahez':'var(--jahez)','Noon':'var(--noon)'}[platform]||'var(--blue)';
-  const sc=status.includes('Approved')||status.includes('Settled')?'bg':status.includes('Flagged')||status.includes('Screenshot')||status.includes('Expired')?'br':'ba';
-  openDetail(`
-    <div class="form-header"><div class="form-title">💰 COD Detail — ${name}</div><div class="form-close" onclick="closeDetail()">✕</div></div>
-    <div style="padding:20px">
-      <div class="info-grid">
-        <div class="ig-item"><div class="ig-label">Driver</div><div class="ig-val">${name}</div></div>
-        <div class="ig-item"><div class="ig-label">Platform</div><div class="ig-val" style="color:${platColor}">${platform}</div></div>
-        <div class="ig-item"><div class="ig-label">Amount</div><div class="ig-val" style="font-size:1.1rem">${amount}</div></div>
-        <div class="ig-item"><div class="ig-label">Status</div><div class="ig-val"><span class="b ${sc}">${status}</span></div></div>
-        <div class="ig-item"><div class="ig-label">Submitted</div><div class="ig-val">08 Mar 2026</div></div>
-        <div class="ig-item"><div class="ig-label">Reference</div><div class="ig-val mono" style="font-size:0.75rem">COD-20260308-${Math.random().toString().slice(2,6)}</div></div>
-      </div>
-      <div style="background:var(--surface2);border:1px dashed var(--border2);border-radius:var(--r-sm);padding:24px;text-align:center;margin:14px 0">
-        <div style="font-size:2rem">📸</div><div style="font-size:0.82rem;font-weight:600;margin-top:8px">Payment Screenshot</div>
-        <div style="font-size:0.7rem;color:var(--text3);margin-top:4px">${status.includes('Screenshot')?'No screenshot uploaded':'Screenshot uploaded · click to view'}</div>
-      </div>
-      <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:8px">Timeline</div>
-      ${['Submitted 08:32 AM','Assigned to COD Officer A 08:35 AM','Under Review 09:00 AM'].map(t=>`<div style="display:flex;gap:8px;padding:6px 0;font-size:0.75rem;color:var(--text2);border-bottom:1px solid var(--border)"><span>•</span><span>${t}</span></div>`).join('')}
-      <div style="display:flex;gap:8px;margin-top:14px">
-        <button class="btn btn-success" style="flex:1" onclick="closeDetail();showFlash('✅','COD Approved','${name} — ${amount}')">Approve</button>
-        <button class="btn btn-danger" style="flex:1" onclick="closeDetail();showFlash('⚠️','COD Flagged','${name} — under review')">Flag</button>
-        <button class="btn btn-ghost" onclick="closeDetail()">Close</button>
-      </div>
-    </div>`);
-}
-
-function showDriverDetail(name,platform,platColor,status){
-  const platC={'Keeta':'var(--keeta)','Ninja':'var(--ninja)','Jahez':'var(--jahez)','Noon':'var(--noon)'}[platform]||'var(--blue)';
-  const initials=name.split(' ').map(x=>x[0]).join('').slice(0,2);
-  const sc=status==='Active'?'bg':status==='Suspended'?'br':'ba';
-  openDetail(`
-    <div class="form-header" style="padding:16px 20px;"><div class="form-title">🚗 ${name}</div><div class="form-close" onclick="closeDetail()">✕</div></div>
-    <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface2);">
-      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,${platC},var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:white;flex-shrink:0;">${initials}</div>
-      <div style="flex:1;">
-        <div style="font-size:1rem;font-weight:700;">${name}</div>
-        <div style="font-size:0.72rem;color:var(--text3);margin-top:3px;">DRV-0041 · <span style="color:${platC};font-weight:600;">${platform}</span> · Local · Supervisor Ahmed</div>
-      </div>
-      <span class="b ${sc}">${status}</span>
-    </div>
-    <div class="drv-tabs" id="drvTabs">
-      <div class="drv-tab active" onclick="switchDrvTab(this,'overview')">📊 Overview</div>
-      <div class="drv-tab" onclick="switchDrvTab(this,'docs')">📄 Documents</div>
-      <div class="drv-tab" onclick="switchDrvTab(this,'bike')">🏍️ Bike</div>
-      <div class="drv-tab" onclick="switchDrvTab(this,'perf')">🏆 Performance</div>
-      <div class="drv-tab" onclick="switchDrvTab(this,'cod')">💰 COD</div>
-      <div class="drv-tab" onclick="switchDrvTab(this,'payroll')">💵 Payroll</div>
-    </div>
-    <div id="drvBody" style="padding:16px 20px;max-height:420px;overflow-y:auto;">${drvOverviewHTML()}</div>
-    <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;">
-      <button class="btn btn-primary btn-sm">Edit Driver</button>
-      <button class="btn btn-ghost btn-sm" onclick="openForm('add-cod');closeDetail()">Submit COD</button>
-      <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="closeDetail()">Close</button>
-    </div>
-  `);
-}
-function switchDrvTab(el,tab){
-  document.querySelectorAll('#drvTabs .drv-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  const body=document.getElementById('drvBody');
-  if(tab==='overview')body.innerHTML=drvOverviewHTML();
-  else if(tab==='docs')body.innerHTML=drvDocsHTML();
-  else if(tab==='bike')body.innerHTML=drvBikeHTML();
-  else if(tab==='perf')body.innerHTML=drvPerfHTML();
-  else if(tab==='cod')body.innerHTML=drvCodHTML();
-  else if(tab==='payroll')body.innerHTML=drvPayrollHTML();
-}
-function drvOverviewHTML(){
-  return`<div class="info-grid" style="margin-bottom:14px;">
-    <div class="ig-item"><div class="ig-label">Driver ID</div><div class="ig-val mono">DRV-0041</div></div>
-    <div class="ig-item"><div class="ig-label">Nationality</div><div class="ig-val">Bahraini</div></div>
-    <div class="ig-item"><div class="ig-label">Phone</div><div class="ig-val">+973 3300 1122</div></div>
-    <div class="ig-item"><div class="ig-label">Contract Type</div><div class="ig-val">Local</div></div>
-    <div class="ig-item"><div class="ig-label">Orders Today</div><div class="ig-val" style="color:var(--blue);font-size:1rem;">28</div></div>
-    <div class="ig-item"><div class="ig-label">COD Today</div><div class="ig-val" style="color:var(--green);">BD 124.500</div></div>
-    <div class="ig-item"><div class="ig-label">Joined</div><div class="ig-val">1 Jan 2025</div></div>
-    <div class="ig-item"><div class="ig-label">Shift</div><div class="ig-val">AM 06:00–14:00</div></div>
-  </div>
-  <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Document Status Summary</div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;">
-    <span class="b bg">✓ Passport</span>
-    <span class="b ba">⚠ Visa (7d)</span>
-    <span class="b bg">✓ CPR</span>
-    <span class="b bg">✓ License</span>
-    <span class="b bg">✓ Insurance</span>
-    <span class="b bg">✓ Contract</span>
-  </div>`;
-}
-function drvDocsHTML(){
-  const docs=[
-    {name:'Passport',num:'BH12345678',expiry:'15 Oct 2028',days:null,sc:'bg',s:'✓ Valid'},
-    {name:'Visa',num:'VZ-2024-0041',expiry:'15 Mar 2026',days:7,sc:'br',s:'⚠ Expires in 7 days'},
-    {name:'CPR / National ID',num:'841022-1234',expiry:'20 Jun 2027',days:null,sc:'bg',s:'✓ Valid'},
-    {name:'Driving License',num:'DL-BH-90012',expiry:'5 Aug 2026',days:null,sc:'bg',s:'✓ Valid'},
-    {name:'Vehicle Insurance',num:'INS-2025-4411',expiry:'1 Jan 2027',days:null,sc:'bg',s:'✓ Valid'},
-    {name:'Employment Contract',num:'CTR-2025-0041',expiry:'31 Dec 2026',days:null,sc:'bg',s:'✓ Valid'},
-  ];
-  return`<div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Driver Documents</div>
-  ${docs.map(d=>`<div class="doc-row">
-    <div class="doc-icon">${d.sc==='bg'?'✅':d.sc==='br'?'❌':'⚠️'}</div>
-    <div class="doc-info">
-      <div class="doc-name">${d.name}</div>
-      <div class="doc-expiry">${d.num} · Expires: ${d.expiry}${d.days?` <span style="color:var(--red);font-weight:700;">(${d.days} days left)</span>`:''}</div>
-    </div>
-    <div class="doc-actions">
-      <span class="b ${d.sc}" style="font-size:0.6rem;">${d.s}</span>
-      <button class="btn btn-ghost btn-sm">Update</button>
-    </div>
-  </div>`).join('')}`;
-}
-function drvBikeHTML(){
-  return`<div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Bike Details</div>
-  <div class="info-grid" style="margin-bottom:14px;">
-    <div class="ig-item"><div class="ig-label">Bike Model</div><div class="ig-val">Honda CB200</div></div>
-    <div class="ig-item"><div class="ig-label">Plate Number</div><div class="ig-val mono">BH 4421 A</div></div>
-    <div class="ig-item"><div class="ig-label">Bike Type</div><div class="ig-val">Lease-to-Own</div></div>
-    <div class="ig-item"><div class="ig-label">Year</div><div class="ig-val">2024</div></div>
-    <div class="ig-item"><div class="ig-label">Color</div><div class="ig-val">Black / Red</div></div>
-    <div class="ig-item"><div class="ig-label">Engine CC</div><div class="ig-val">200cc</div></div>
-  </div>
-  <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Bike Documents</div>
-  ${[
-    {name:'Registration Card',expiry:'20 Dec 2026',sc:'bg',s:'✓ Valid'},
-    {name:'Insurance Certificate',expiry:'1 Jan 2027',sc:'bg',s:'✓ Valid'},
-    {name:'Vehicle Inspection',expiry:'5 Apr 2026',sc:'ba',s:'⚠ Due soon'},
-  ].map(d=>`<div class="doc-row">
-    <div class="doc-icon">${d.sc==='bg'?'✅':'⚠️'}</div>
-    <div class="doc-info"><div class="doc-name">${d.name}</div><div class="doc-expiry">Expires: ${d.expiry}</div></div>
-    <div class="doc-actions"><span class="b ${d.sc}">${d.s}</span><button class="btn btn-ghost btn-sm">Update</button></div>
-  </div>`).join('')}`;
-}
-function drvPerfHTML(){
-  return`<div class="info-grid" style="margin-bottom:14px;">
-    <div class="ig-item"><div class="ig-label">Orders This Month</div><div class="ig-val" style="font-size:1.2rem;color:var(--blue);">156</div></div>
-    <div class="ig-item"><div class="ig-label">On-Time Rate</div><div class="ig-val" style="font-size:1.2rem;color:var(--green);">94%</div></div>
-    <div class="ig-item"><div class="ig-label">COD Accuracy</div><div class="ig-val" style="color:var(--green);">98%</div></div>
-    <div class="ig-item"><div class="ig-label">Incidents</div><div class="ig-val" style="color:var(--red);">1</div></div>
-    <div class="ig-item"><div class="ig-label">Customer Rating</div><div class="ig-val">4.8 ⭐</div></div>
-    <div class="ig-item"><div class="ig-label">Platform Rank</div><div class="ig-val" style="color:var(--amber);">#1 Keeta</div></div>
-  </div>
-  <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">7-Day Performance</div>
-  ${[['Mon',22],['Tue',28],['Wed',24],['Thu',30],['Fri',26],['Sat',18],['Sun',8]].map(d=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="width:30px;font-size:0.7rem;color:var(--text3);">${d[0]}</span><div style="flex:1;height:10px;background:var(--surface3);border-radius:4px;overflow:hidden;"><div style="height:100%;background:var(--blue);border-radius:4px;width:${Math.round(d[1]/30*100)}%;"></div></div><span style="width:28px;font-size:0.7rem;font-weight:700;font-family:'JetBrains Mono';">${d[1]}</span></div>`).join('')}`;
-}
-function drvCodHTML(){
-  const entries=[
-    {date:'08 Mar',amt:'BD 124.500',plat:'Keeta',sc:'bg',s:'Approved'},
-    {date:'07 Mar',amt:'BD 98.000',plat:'Keeta',sc:'bg',s:'Settled'},
-    {date:'06 Mar',amt:'BD 142.000',plat:'Keeta',sc:'bg',s:'Settled'},
-    {date:'05 Mar',amt:'BD 87.500',plat:'Keeta',sc:'ba',s:'Pending'},
-    {date:'04 Mar',amt:'BD 110.000',plat:'Keeta',sc:'bg',s:'Settled'},
-  ];
-  const total=entries.reduce((a,e)=>a+parseFloat(e.amt.replace('BD ','')),0);
-  return`<div style="background:var(--surface2);border-radius:var(--r-sm);padding:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
-    <div><div style="font-size:0.68rem;color:var(--text3);">Total COD — March 2026</div><div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--green);">BD ${total.toFixed(3)}</div></div>
-    <button class="btn btn-primary btn-sm" onclick="openForm('add-cod');closeDetail()">+ Submit COD</button>
-  </div>
-  <table class="tbl"><thead><tr><th>Date</th><th>Amount</th><th>Platform</th><th>Status</th></tr></thead>
-  <tbody>${entries.map(e=>`<tr><td>${e.date}</td><td class="mono" style="font-weight:700;">${e.amt}</td><td style="color:var(--keeta);font-weight:600;">${e.plat}</td><td><span class="b ${e.sc}">${e.s}</span></td></tr>`).join('')}</tbody></table>`;
-}
-function drvPayrollHTML(){
-  return`<div style="background:var(--surface2);border-radius:var(--r-sm);padding:12px;margin-bottom:14px;text-align:center;">
-    <div style="font-size:0.68rem;color:var(--text3);">Net Earnings — March 2026</div>
-    <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--green);">BD 820.000</div>
-    <span class="b ba">⏳ Processing</span>
-  </div>
-  ${[['Platform Base Pay','BD 600.000',''],['COD Commission (2%)','BD 248.000',''],['Bike Deduction','- BD 28.000','negative']].map(r=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="font-size:0.78rem;">${r[0]}</span><span style="font-family:'JetBrains Mono';font-weight:700;color:${r[2]==='negative'?'var(--red)':'var(--text)'};">${r[1]}</span></div>`).join('')}
-  <div style="margin-top:12px;font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Previous Months</div>
-  ${[['February 2026','BD 790.000','bg','Paid'],['January 2026','BD 840.000','bg','Paid']].map(m=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);"><span style="flex:1;font-size:0.75rem;">${m[0]}</span><span style="font-family:'JetBrains Mono';font-size:0.75rem;font-weight:600;">${m[1]}</span><span class="b ${m[2]}">${m[3]}</span></div>`).join('')}`;
-}
-
-// ===================== PLATFORM FILTER =====================
-function filterPtab(el,plat){
-  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-}
-
-// ===================== CLOCK =====================
-function updateClock(){
-  const now=new Date();
-  document.getElementById('tbClock').textContent=now.toLocaleTimeString('en-GB');
-}
-setInterval(updateClock,1000);
-updateClock();
-
-// ===================== INIT =====================
-selectRole('ceo',document.querySelector('.rd-item'));
-</script>
-</body>
-</html>
