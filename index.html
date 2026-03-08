@@ -1222,7 +1222,6 @@ function renderContent(role,section,title){
   // ---- DASHBOARDS ----
   if(section==='dashboard'&&(role==='ceo'||role==='gm')){
     el.innerHTML=platTabs(currentPlatform)+
-`+platTabs(currentPlatform)+
       (getSPD()?`<div style="background:#fff7ed;border:1px solid ${getSPD().color}33;border-radius:var(--r-sm);padding:10px 16px;font-size:0.78rem;color:${getSPD().color};margin-bottom:12px;">${getSPD().emoji} <strong>${getSPD().name}</strong> — ${getSPD().kpis.drivers} drivers · ${getSPD().supervisors.length} supervisors</div>`:'')+`
       <div class="g4">
         ${kpiHTML('Active Drivers',getPlats().reduce((s,p)=>s+p.kpis.drivers,0).toLocaleString(),'<span class="up">↑ 23</span> from yesterday','#2563eb',[50,55,60,65,70,75,80])}
