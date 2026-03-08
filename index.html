@@ -678,7 +678,8 @@ const ROLES={
         {i:'📑',l:'Financial Reports',s:'fin-reports'},
       ]},
       {g:'HR & Compliance',items:[
-        {i:'👥',l:'HR Dashboard',s:'hr-dashboard'},
+        {i:'📊',l:'HR Dashboard',s:'hr-dashboard'},
+        {i:'👥',l:'Employees',s:'employees'},
         {i:'📅',l:'HR Calendar',s:'hr-calendar'},
         {i:'📋',l:'Attendance',s:'attendance'},
         {i:'💵',l:'Payroll & Salaries',s:'payroll'},
@@ -725,19 +726,20 @@ const ROLES={
   },
   'hr-lead':{label:'HR Lead',level:'Level 3 — Department Lead',access:'Full HR Module',name:'Sara Al-Hassan',initials:'SH',email:'sara@courierx.com',addBtn:'➕ Add Employee',
     nav:[
-      {g:'HR',items:[{i:'📊',l:'Dashboard',s:'dashboard'},{i:'📅',l:'HR Calendar',s:'hr-calendar'},{i:'📋',l:'Attendance',s:'attendance'},{i:'💵',l:'Payroll & Salaries',s:'payroll'},{i:'📄',l:'Documents & Alerts',s:'hr-docs'},{i:'⚖️',l:'HR Compliance',s:'hr-compliance'},{i:'📄',l:'Regulatory Docs',s:'reg-docs'}]},
+      {g:'HR',items:[{i:'📊',l:'Dashboard',s:'dashboard'},{i:'👥',l:'Employees',s:'employees'},{i:'📅',l:'HR Calendar',s:'hr-calendar'},{i:'📋',l:'Attendance',s:'attendance'},{i:'💵',l:'Payroll & Salaries',s:'payroll'},{i:'📄',l:'Documents & Alerts',s:'hr-docs'},{i:'⚖️',l:'HR Compliance',s:'hr-compliance'},{i:'📄',l:'Regulatory Docs',s:'reg-docs'}]},
       {g:'Recruitment',items:[{i:'🎯',l:'Recruitment Pipeline',s:'recruitment'},{i:'🚀',l:'Onboard Pipeline',s:'onboarding'}]},
       {g:'Supervisors',items:[{i:'👷',l:'Supervisors',s:'supervisors'}]},
     ]
   },
   'hr-officer':{label:'HR Officer',level:'Level 4 — Specialist',access:'Driver Document Management',name:'Khalid Al-Dosari',initials:'KD',email:'khalid@courierx.com',addBtn:'➕ Add Driver',
     nav:[
-      {g:'HR',items:[{i:'📊',l:'Dashboard',s:'dashboard'},{i:'📅',l:'HR Calendar',s:'hr-calendar'},{i:'📋',l:'Attendance',s:'attendance'},{i:'📄',l:'Driver Documents',s:'hr-docs'}]},
+      {g:'HR',items:[{i:'📊',l:'Dashboard',s:'dashboard'},{i:'👥',l:'Employees',s:'employees'},{i:'📅',l:'HR Calendar',s:'hr-calendar'},{i:'📋',l:'Attendance',s:'attendance'},{i:'📄',l:'Driver Documents',s:'hr-docs'}]},
     ]
   },
   'hr-recruitment':{label:'HR Recruitment',level:'Level 4 — Specialist',access:'Recruitment & Onboarding',name:'Mona Al-Fardan',initials:'MF',email:'mona@courierx.com',addBtn:'➕ Add Driver',
     nav:[
-      {g:'Recruitment',items:[{i:'📊',l:'Dashboard',s:'dashboard'},{i:'🎯',l:'Recruitment Pipeline',s:'recruitment'},{i:'🚀',l:'Onboard Pipeline',s:'onboarding'}]},
+      {g:'HR',items:[{i:'📊',l:'Dashboard',s:'dashboard'},{i:'👥',l:'Employees',s:'employees'}]},
+      {g:'Recruitment',items:[{i:'🎯',l:'Recruitment Pipeline',s:'recruitment'},{i:'🚀',l:'Onboard Pipeline',s:'onboarding'}]},
     ]
   },
   'head-ops':{label:'Head of Operations',level:'Level 2 — Senior',access:'Full Operations Module',name:'Ahmad Al-Mahmoud',initials:'AM',email:'ahmad@courierx.com',addBtn:'➕ Add Driver',
@@ -1250,27 +1252,69 @@ function renderContent(role,section,title){
   if(section==='dashboard'&&(role==='hr-lead'||role==='hr-officer'||role==='hr-recruitment')){
     el.innerHTML=`
       <div class="g4">
-        ${kpiHTML('Expired Docs','12','<span class="dn">Immediate action</span>','#dc2626',[5,6,8,9,10,11,12])}
-        ${kpiHTML('Expiring ≤14 days','22','HR Lead notified','#d97706',[15,17,18,20,21,22,22])}
-        ${kpiHTML('Active Drivers','1,166','<span class="up">Valid documents</span>','#059669',[1100,1110,1120,1130,1140,1160,1166])}
-        ${kpiHTML('Open Positions','8','Recruitment pipeline','#2563eb',[3,4,5,6,7,8,8])}
+        ${kpiHTML('Total Employees','28','<span class="up">+2</span> this month','#2563eb',[22,23,24,25,26,27,28])}
+        ${kpiHTML('On Leave Today','3','approved absences','#d97706',[1,2,2,3,3,3,3])}
+        ${kpiHTML('Open Positions','8','recruitment pipeline','#7c3aed',[3,4,5,6,7,8,8])}
+        ${kpiHTML('Doc Alerts','34','<span class="dn">12 critical</span>','#dc2626',[20,25,28,30,32,33,34])}
       </div>
       <div class="g2">
-        <div class="panel"><div class="ph"><div class="ph-title">📊 Doc Expiry by Type</div></div><div class="pb"><div class="chart-wrap"><canvas id="hrBar"></canvas></div></div></div>
-        <div class="panel"><div class="ph"><div class="ph-title">📈 Compliance Trend</div></div><div class="pb"><div class="chart-wrap"><canvas id="hrLine"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">👥 Employees by Department</div></div><div class="pb"><div class="chart-wrap"><canvas id="hrDeptBar"></canvas></div></div></div>
+        <div class="panel"><div class="ph"><div class="ph-title">📈 Headcount Trend</div></div><div class="pb"><div class="chart-wrap"><canvas id="hrHeadLine"></canvas></div></div></div>
       </div>
-      <div class="panel"><div class="ph"><div class="ph-title">🚨 Document Expiry Alerts</div>${role==='hr-lead'?`<button class="btn btn-primary btn-sm" onclick="openForm('add-employee')">+ Add Employee</button>`:''}</div>
-        <table class="tbl"><thead><tr><th>Driver</th><th>Platform</th><th>Document</th><th>Expiry</th><th>Days Left</th><th>Severity</th><th>HR Officer</th></tr></thead>
-        <tbody>
-          <tr><td><b>Mohammed Al-Zahra</b></td><td style="color:var(--jahez);font-weight:600">Jahez</td><td>Visa</td><td>15 Mar 2026</td><td class="mono" style="color:var(--red)">7 days</td><td><span class="b br">🔴 Critical</span></td><td>Sara H.</td></tr>
-          <tr><td><b>Priya Nair</b></td><td style="color:var(--ninja);font-weight:600">Ninja</td><td>Driving License</td><td>18 Mar 2026</td><td class="mono" style="color:var(--red)">10 days</td><td><span class="b br">🔴 Critical</span></td><td>Omar K.</td></tr>
-          <tr><td><b>Faisal Al-Mutairi</b></td><td style="color:var(--noon);font-weight:600">Noon</td><td>CPR</td><td>1 Mar 2026</td><td class="mono" style="color:var(--red)">Expired</td><td><span class="b br">❌ Expired</span></td><td>Sara H.</td></tr>
-          <tr><td><b>Ali Hassan</b></td><td style="color:var(--keeta);font-weight:600">Keeta</td><td>Passport</td><td>22 Mar 2026</td><td class="mono" style="color:var(--amber)">14 days</td><td><span class="b ba">🟡 Warning</span></td><td>Omar K.</td></tr>
-        </tbody></table>
+      <div class="g2">
+        <div class="panel"><div class="ph"><div class="ph-title">🗂️ Department Summary</div><div class="ph-link" onclick="navTo('employees',null,'Employees')">View All →</div></div>
+          <div class="pb">
+            ${[
+              {dept:'Executive',count:2,head:'Fahad Al-Mansoori',color:'#2563eb'},
+              {dept:'Finance',count:5,head:'Nadia Al-Hammadi',color:'#059669'},
+              {dept:'HR',count:4,head:'Sara Al-Hassan',color:'#0891b2'},
+              {dept:'Operations',count:8,head:'Ahmad Al-Mahmoud',color:'#ea580c'},
+              {dept:'OCT',count:4,head:'Yusuf Al-Rashid',color:'#dc2626'},
+              {dept:'Legal',count:2,head:'Fatima Al-Sayyad',color:'#7c3aed'},
+              {dept:'Account Management',count:3,head:'Jassim Al-Ali',color:'#ca8a04'},
+            ].map(d=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);">
+              <div style="width:8px;height:8px;border-radius:50%;background:${d.color};flex-shrink:0;"></div>
+              <div style="flex:1;">
+                <div style="font-size:0.8rem;font-weight:600;">${d.dept}</div>
+                <div style="font-size:0.65rem;color:var(--text3);">Head: ${d.head}</div>
+              </div>
+              <div style="font-family:'JetBrains Mono';font-size:0.82rem;font-weight:700;color:${d.color};">${d.count}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="panel"><div class="ph"><div class="ph-title">🚨 Document Expiry Alerts</div><div class="ph-link" onclick="navTo('hr-docs',null,'Driver Documents')">View All →</div></div>
+          <div class="pb">
+            ${[
+              {n:'Mohammed Al-Zahra',doc:'Visa',days:'7 days',sc:'br'},
+              {n:'Priya Nair',doc:'Driving License',days:'10 days',sc:'br'},
+              {n:'Faisal Al-Mutairi',doc:'CPR',days:'Expired',sc:'br'},
+              {n:'Ali Hassan',doc:'Passport',days:'14 days',sc:'ba'},
+            ].map(a=>`<div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);">
+              <div style="font-size:0.9rem;">${a.sc==='br'?'🔴':'🟡'}</div>
+              <div style="flex:1;"><div style="font-size:0.78rem;font-weight:600;">${a.n}</div><div style="font-size:0.65rem;color:var(--text3);">${a.doc}</div></div>
+              <span class="b ${a.sc}">${a.days}</span>
+            </div>`).join('')}
+            <div style="margin-top:10px;display:flex;gap:6px;">
+              ${role==='hr-lead'?`<button class="btn btn-primary btn-sm" style="flex:1" onclick="openForm('add-employee')">+ Add Employee</button>`:''}
+              <button class="btn btn-ghost btn-sm" style="flex:1" onclick="navTo('employees',null,'Employees')">View Employees</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="ph"><div class="ph-title">📋 Recent HR Activity</div></div>
+        <div class="pb">
+          ${[
+            {i:'✅',t:'Mona Al-Fardan joined HR Recruitment',time:'Today 09:00',c:'a-green'},
+            {i:'📄',t:'Khalid Al-Dosari — Contract renewed',time:'Today 10:30',c:'a-blue'},
+            {i:'🏖️',t:'Sara Al-Hassan leave request approved',time:'Yesterday',c:'a-green'},
+            {i:'⚠️',t:'Faisal Al-Mutairi CPR expired — action needed',time:'Yesterday',c:'a-red'},
+            {i:'🎯',t:'New candidate added to Recruitment pipeline',time:'2 days ago',c:'a-blue'},
+          ].map(a=>`<div class="alert-item ${a.c}"><div class="ai-icon">${a.i}</div><div style="flex:1;"><div class="ai-title">${a.t}</div><div class="ai-time">${a.time}</div></div></div>`).join('')}
+        </div>
       </div>`;
     setTimeout(()=>{
-      mkBar('hrBar',['Passport','Visa','CPR','License','Insurance','Contract'],[{label:'Expiring',data:[8,12,5,7,9,3],backgroundColor:'rgba(217,119,6,0.7)',borderRadius:4},{label:'Expired',data:[2,4,3,1,2,0],backgroundColor:'rgba(220,38,38,0.7)',borderRadius:4}]);
-      mkLine('hrLine',['Mar 1','Mar 5','Mar 8','Mar 10','Mar 12','Mar 15','Today'],[{label:'Active Alerts',data:[18,22,25,28,30,34,34],borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,0.05)',tension:0.4,fill:true}]);
+      mkBar('hrDeptBar',['Executive','Finance','HR','Operations','OCT','Legal','Account Mgmt'],[{label:'Employees',data:[2,5,4,8,4,2,3],backgroundColor:['#2563eb','#059669','#0891b2','#ea580c','#dc2626','#7c3aed','#ca8a04'],borderRadius:6}]);
+      mkLine('hrHeadLine',['Sep','Oct','Nov','Dec','Jan','Feb','Mar'],[{label:'Headcount',data:[22,22,24,24,25,27,28],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,0.06)',tension:0.4,fill:true}]);
     },50);
     return;
   }
@@ -1586,7 +1630,7 @@ function renderContent(role,section,title){
 
   // ---- HR DASHBOARD ----
   if(section==='hr-dashboard'){
-    renderContent(role,'dashboard',title);
+    renderContent(role,'dashboard','HR Dashboard');
     return;
   }
 
@@ -1824,6 +1868,48 @@ function renderContent(role,section,title){
             ['Faris Al-Ghamdi','DRV-1251','Noon','noon','Offer Signed','5/6','4 Mar 2026',75],
           ].map(r=>`<tr><td><b>${r[0]}</b><br><span class="mono" style="font-size:0.6rem;color:var(--text3)">${r[1]}</span></td><td style="color:var(--${r[3]});font-weight:600">${r[2]}</td><td>${r[4]}</td><td><span class="b bb">${r[5]}</span></td><td>${r[6]}</td><td><div style="width:80px"><div class="pb-track"><div class="pb-fill" style="width:${r[7]}%;background:${r[7]>70?'var(--green)':r[7]>40?'var(--amber)':'var(--red)'}"></div></div><div style="font-size:0.65rem;color:var(--text3);margin-top:2px">${r[7]}%</div></div></td><td><button class="btn btn-ghost btn-sm">View</button></td></tr>`).join('')}
         </tbody></table>
+      </div>`;
+    return;
+  }
+
+  // ---- EMPLOYEES ----
+  if(section==='employees'){
+    el.innerHTML=`
+      <div class="sec-header">
+        <div><div class="sec-title">Employees</div><div class="sec-sub">Internal staff · All departments · 28 total</div></div>
+        <div style="display:flex;gap:8px;">
+          <input class="search-input" placeholder="🔍 Search by name, dept, title...">
+          <select class="sel" onchange="filterEmpDept(this.value)">
+            <option value="">All Departments</option>
+            <option>Executive</option>
+            <option>Finance</option>
+            <option>HR</option>
+            <option>Operations</option>
+            <option>OCT</option>
+            <option>Legal</option>
+            <option>Account Management</option>
+          </select>
+          ${(role==='hr-lead'||role==='ceo'||role==='gm')?`<button class="btn btn-primary" onclick="openForm('add-employee')">+ Add Employee</button>`:''}
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val" style="color:var(--blue)">28</div><div class="stat-lbl">Total Staff</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--green)">25</div><div class="stat-lbl">Active</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--amber)">3</div><div class="stat-lbl">On Leave</div></div>
+        <div class="stat-box"><div class="stat-val" style="color:var(--purple)">8</div><div class="stat-lbl">Open Positions</div></div>
+      </div>
+      <div class="panel">
+        <div class="ph">
+          <div><div class="ph-title">👥 Employee Directory</div><div class="ph-sub">Click any employee to view full profile</div></div>
+          <div class="ph-actions">
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-ghost btn-sm" id="viewGrid" onclick="empToggleView('grid')" style="font-weight:600">⊞ Grid</button>
+              <button class="btn btn-ghost btn-sm" id="viewList" onclick="empToggleView('list')">≡ List</button>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="showFlash('📥','Export','Employee list exported to Excel')">📥 Export</button>
+          </div>
+        </div>
+        <div id="empContainer" class="pb">${empGridHTML()}</div>
       </div>`;
     return;
   }
@@ -2089,6 +2175,121 @@ function renderContent(role,section,title){
 
   // Fallback
   el.innerHTML=`<div class="access-denied"><div class="ad-icon">🚧</div><div class="ad-title">Coming Soon</div><div class="ad-sub">This section is under construction</div></div>`;
+}
+
+// ===================== EMPLOYEE HELPERS =====================
+const EMPLOYEES = [
+  {id:'EMP-001',name:'Fahad Al-Mansoori',title:'CEO / Owner',dept:'Executive',reportsTo:'—',email:'fahad@courierx.com',phone:'+973 3300 1100',status:'Active',join:'1 Jan 2023',initials:'FA',color:'#2563eb',level:'L1'},
+  {id:'EMP-002',name:'Omar Al-Khaled',title:'General Manager',dept:'Executive',reportsTo:'Fahad Al-Mansoori',email:'omar@courierx.com',phone:'+973 3300 1101',status:'Active',join:'15 Feb 2023',initials:'OK',color:'#7c3aed',level:'L2'},
+  {id:'EMP-003',name:'Nadia Al-Hammadi',title:'Finance Controller',dept:'Finance',reportsTo:'Omar Al-Khaled',email:'nadia@courierx.com',phone:'+973 3300 1110',status:'Active',join:'1 Mar 2023',initials:'NA',color:'#059669',level:'L3'},
+  {id:'EMP-004',name:'Hassan Al-Zayani',title:'COD Officer',dept:'Finance',reportsTo:'Nadia Al-Hammadi',email:'hassan@courierx.com',phone:'+973 3300 1111',status:'Active',join:'10 Apr 2023',initials:'HZ',color:'#ca8a04',level:'L4'},
+  {id:'EMP-005',name:'Layla Al-Mansoori',title:'Finance Analyst',dept:'Finance',reportsTo:'Nadia Al-Hammadi',email:'layla@courierx.com',phone:'+973 3300 1112',status:'Active',join:'5 May 2023',initials:'LM',color:'#059669',level:'L4'},
+  {id:'EMP-006',name:'Sara Al-Hassan',title:'HR Lead',dept:'HR',reportsTo:'Omar Al-Khaled',email:'sara@courierx.com',phone:'+973 3300 1120',status:'Active',join:'1 Mar 2023',initials:'SH',color:'#0891b2',level:'L3'},
+  {id:'EMP-007',name:'Khalid Al-Dosari',title:'HR Officer',dept:'HR',reportsTo:'Sara Al-Hassan',email:'khalid@courierx.com',phone:'+973 3300 1121',status:'Active',join:'20 Apr 2023',initials:'KD',color:'#0891b2',level:'L4'},
+  {id:'EMP-008',name:'Mona Al-Fardan',title:'HR Recruitment',dept:'HR',reportsTo:'Sara Al-Hassan',email:'mona@courierx.com',phone:'+973 3300 1122',status:'Active',join:'1 Mar 2026',initials:'MF',color:'#0891b2',level:'L4'},
+  {id:'EMP-009',name:'Ahmad Al-Mahmoud',title:'Head of Operations',dept:'Operations',reportsTo:'Omar Al-Khaled',email:'ahmad@courierx.com',phone:'+973 3300 1130',status:'Active',join:'15 Feb 2023',initials:'AM',color:'#ea580c',level:'L2'},
+  {id:'EMP-010',name:'Mohammed Hassan',title:'Supervisor — Keeta',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'mhosn@courierx.com',phone:'+973 3300 1131',status:'Active',join:'1 Jun 2023',initials:'MH',color:'#ea580c',level:'L4'},
+  {id:'EMP-011',name:'Jassim Al-Ali',title:'Account Mgr — Keeta',dept:'Account Management',reportsTo:'Ahmad Al-Mahmoud',email:'jassim@courierx.com',phone:'+973 3300 1132',status:'Active',join:'1 Jun 2023',initials:'JA',color:'#ca8a04',level:'L3'},
+  {id:'EMP-012',name:'Ahmed Hassan',title:'Supervisor — Keeta',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'ahmd@courierx.com',phone:'+973 3300 1133',status:'Active',join:'10 Jul 2023',initials:'AH',color:'#ea580c',level:'L4'},
+  {id:'EMP-013',name:'Sara Khalid',title:'Supervisor — Jahez',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'skhld@courierx.com',phone:'+973 3300 1134',status:'Active',join:'10 Jul 2023',initials:'SK',color:'#7c3aed',level:'L4'},
+  {id:'EMP-014',name:'Hassan Mohammed',title:'Supervisor — Ninja',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'hsnmhd@courierx.com',phone:'+973 3300 1135',status:'On Leave',join:'15 Aug 2023',initials:'HM',color:'#0891b2',level:'L4'},
+  {id:'EMP-015',name:'Omar Ali',title:'Supervisor — Noon',dept:'Operations',reportsTo:'Ahmad Al-Mahmoud',email:'omarali@courierx.com',phone:'+973 3300 1136',status:'Active',join:'15 Aug 2023',initials:'OA',color:'#ca8a04',level:'L4'},
+  {id:'EMP-016',name:'Yusuf Al-Rashid',title:'OCT Lead',dept:'OCT',reportsTo:'Omar Al-Khaled',email:'yusuf@courierx.com',phone:'+973 3300 1140',status:'Active',join:'1 Apr 2023',initials:'YR',color:'#dc2626',level:'L3'},
+  {id:'EMP-017',name:'Reem Al-Sayed',title:'OCT Officer',dept:'OCT',reportsTo:'Yusuf Al-Rashid',email:'reem@courierx.com',phone:'+973 3300 1141',status:'Active',join:'1 Jun 2023',initials:'RS',color:'#dc2626',level:'L4'},
+  {id:'EMP-018',name:'Ali Al-Noaimi',title:'OCT Analyst',dept:'OCT',reportsTo:'Yusuf Al-Rashid',email:'ali@courierx.com',phone:'+973 3300 1142',status:'Active',join:'1 Sep 2023',initials:'AN',color:'#dc2626',level:'L4'},
+  {id:'EMP-019',name:'Fatima Al-Sayyad',title:'Legal & Gov Affairs',dept:'Legal',reportsTo:'Fahad Al-Mansoori',email:'fatima@courierx.com',phone:'+973 3300 1150',status:'Active',join:'1 Mar 2023',initials:'FS',color:'#7c3aed',level:'L3'},
+  {id:'EMP-020',name:'Tariq Al-Hamad',title:'Legal Officer',dept:'Legal',reportsTo:'Fatima Al-Sayyad',email:'tariq@courierx.com',phone:'+973 3300 1151',status:'On Leave',join:'15 May 2023',initials:'TH',color:'#7c3aed',level:'L4'},
+];
+
+function empGridHTML(){
+  return`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;">
+    ${EMPLOYEES.map(e=>`<div onclick="showEmployeeDetail('${e.id}')" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='';this.style.boxShadow=''">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div style="width:42px;height:42px;border-radius:50%;background:${e.color};display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;color:white;flex-shrink:0;">${e.initials}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:0.8rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.name}</div>
+          <div style="font-size:0.65rem;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${e.title}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:0.65rem;background:${e.color}18;color:${e.color};padding:2px 7px;border-radius:10px;font-weight:600;">${e.dept}</span>
+        <span class="b ${e.status==='Active'?'bg':e.status==='On Leave'?'ba':'br'}" style="font-size:0.6rem;">${e.status}</span>
+      </div>
+      <div style="font-size:0.65rem;color:var(--text3);margin-top:6px;">Reports to: ${e.reportsTo==='—'?'<em>Top Level</em>':e.reportsTo}</div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function empListHTML(){
+  return`<table class="tbl"><thead><tr><th>Employee</th><th>Department</th><th>Job Title</th><th>Reports To</th><th>Level</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>${EMPLOYEES.map(e=>`<tr onclick="showEmployeeDetail('${e.id}')">
+    <td><div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:30px;height:30px;border-radius:50%;background:${e.color};display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:700;color:white;flex-shrink:0;">${e.initials}</div>
+      <div><div style="font-weight:600;">${e.name}</div><div style="font-size:0.62rem;color:var(--text3);">${e.id}</div></div>
+    </div></td>
+    <td><span style="font-size:0.7rem;background:${e.color}18;color:${e.color};padding:2px 7px;border-radius:10px;font-weight:600;">${e.dept}</span></td>
+    <td>${e.title}</td>
+    <td style="font-size:0.75rem;color:var(--text2);">${e.reportsTo}</td>
+    <td><span class="b bb">${e.level}</span></td>
+    <td style="font-size:0.72rem;color:var(--text3);">${e.join}</td>
+    <td><span class="b ${e.status==='Active'?'bg':e.status==='On Leave'?'ba':'br'}">${e.status}</span></td>
+    <td><div style="display:flex;gap:4px;" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm">Edit</button></div></td>
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function empToggleView(view){
+  document.getElementById('empContainer').innerHTML = view==='grid' ? empGridHTML() : empListHTML();
+  document.getElementById('viewGrid').style.fontWeight = view==='grid'?'700':'400';
+  document.getElementById('viewList').style.fontWeight = view==='list'?'700':'400';
+}
+
+function filterEmpDept(dept){
+  // Filter is done by re-rendering — in real app would filter EMPLOYEES array
+}
+
+function showEmployeeDetail(id){
+  const e=EMPLOYEES.find(x=>x.id===id);
+  if(!e)return;
+  const reports=EMPLOYEES.filter(x=>x.reportsTo===e.name);
+  openDetail(`
+    <div class="form-header"><div class="form-title">👤 ${e.name}</div><div class="form-close" onclick="closeDetail()">✕</div></div>
+    <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface2);">
+      <div style="width:56px;height:56px;border-radius:50%;background:${e.color};display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:white;flex-shrink:0;">${e.initials}</div>
+      <div style="flex:1;">
+        <div style="font-size:1rem;font-weight:700;">${e.name}</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:2px;">${e.title} · <span style="color:${e.color};font-weight:600;">${e.dept}</span></div>
+        <div style="font-size:0.68rem;color:var(--text3);margin-top:1px;">${e.email} · ${e.phone}</div>
+      </div>
+      <div style="text-align:right;">
+        <span class="b ${e.status==='Active'?'bg':e.status==='On Leave'?'ba':'br'}" style="margin-bottom:4px;display:block;">${e.status}</span>
+        <span class="b bb">${e.level}</span>
+      </div>
+    </div>
+    <div style="padding:16px 20px;max-height:480px;overflow-y:auto;">
+      <div class="info-grid" style="margin-bottom:16px;">
+        <div class="ig-item"><div class="ig-label">Employee ID</div><div class="ig-val mono">${e.id}</div></div>
+        <div class="ig-item"><div class="ig-label">Department</div><div class="ig-val" style="color:${e.color};">${e.dept}</div></div>
+        <div class="ig-item"><div class="ig-label">Reports To</div><div class="ig-val">${e.reportsTo}</div></div>
+        <div class="ig-item"><div class="ig-label">Access Level</div><div class="ig-val">${e.level}</div></div>
+        <div class="ig-item"><div class="ig-label">Joined</div><div class="ig-val">${e.join}</div></div>
+        <div class="ig-item"><div class="ig-label">Work Email</div><div class="ig-val" style="font-size:0.72rem;">${e.email}</div></div>
+      </div>
+      ${reports.length>0?`
+      <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Direct Reports (${reports.length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
+        ${reports.map(r=>`<div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;" onclick="closeDetail();showEmployeeDetail('${r.id}')"><div style="width:24px;height:24px;border-radius:50%;background:${r.color};display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:white;">${r.initials}</div><div><div style="font-size:0.75rem;font-weight:600;">${r.name}</div><div style="font-size:0.62rem;color:var(--text3);">${r.title}</div></div></div>`).join('')}
+      </div>`:``}
+      <div style="font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Employment Details</div>
+      ${[['Employment Type','Full-time'],['Contract Status','Active'],['Work Location','Office — Manama'],['Probation','Completed'],['Notice Period','30 days']].map(r=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="font-size:0.78rem;color:var(--text2);">${r[0]}</span><span style="font-size:0.78rem;font-weight:600;">${r[1]}</span></div>`).join('')}
+      <div style="margin-top:14px;font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Documents</div>
+      ${[['CPR / National ID','bg','✓ Valid'],['Passport','bg','✓ Valid'],['Employment Contract','bg','✓ Signed'],['LMRA Work Permit','ba','⚠ Renewing']].map(d=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="font-size:0.78rem;">${d[0]}</span><div style="display:flex;gap:6px;align-items:center;"><span class="b ${d[1]}">${d[2]}</span><button class="btn btn-ghost btn-sm" onclick="">Update</button></div></div>`).join('')}
+    </div>
+    <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;">
+      <button class="btn btn-primary btn-sm" onclick="closeDetail();openForm('add-employee')">Edit Employee</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeDetail();navTo('payroll',null,'Payroll & Salaries')">View Payroll</button>
+      <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="closeDetail()">Close</button>
+    </div>
+  `);
 }
 
 // ===================== DETAIL MODALS =====================
