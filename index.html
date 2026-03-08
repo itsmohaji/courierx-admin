@@ -494,6 +494,16 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .doc-name{font-size:0.8rem;font-weight:600;color:var(--text);}
 .doc-expiry{font-size:0.68rem;color:var(--text3);margin-top:2px;}
 .doc-actions{display:flex;gap:6px;}
+.settings-nav-item{display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:0.82rem;font-weight:500;color:var(--text2);cursor:pointer;border-left:3px solid transparent;transition:all 0.15s;}
+.settings-nav-item:hover{background:var(--surface2);color:var(--text);}
+.settings-nav-item.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue);font-weight:700;}
+.settings-section-title{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);margin-bottom:12px;margin-top:4px;}
+.settings-field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.settings-field label{font-size:0.7rem;font-weight:600;color:var(--text3);}
+.settings-field input,.settings-field select,.settings-field textarea{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;font-size:0.82rem;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.15s;}
+.settings-field input:focus,.settings-field select:focus,.settings-field textarea:focus{border-color:var(--blue);background:white;}
+.settings-field input:disabled{opacity:0.5;cursor:not-allowed;}
+
 /* SIDEBAR TOOLTIP when collapsed */
 .sidebar.collapsed .nav-item{position:relative;}
 .sidebar.collapsed .nav-item:hover::after{content:attr(data-label);position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);background:var(--text);color:white;padding:4px 10px;border-radius:6px;font-size:0.72rem;white-space:nowrap;z-index:999;pointer-events:none;}
@@ -907,20 +917,7 @@ function toggleMsg(){
   document.getElementById('notifPopup').classList.remove('show');
 }
 function toggleUserPopup(){
-  const p=document.getElementById('userPopup');
-  const suRow=document.querySelector('.su-row');
-  const rect=suRow.getBoundingClientRect();
-  // Position popup just above the user row
-  p.style.bottom=(window.innerHeight-rect.top+8)+'px';
-  p.style.left=rect.left+'px';
-  p.style.width=Math.max(360,rect.width)+'px';
-  p.classList.toggle('show');
-  if(p.classList.contains('show')){
-    const tabs=p.querySelectorAll('.up-tab');
-    tabs.forEach(t=>{t.classList.remove('active');t.style.color='var(--text3)';t.style.borderBottomColor='transparent';});
-    if(tabs[0]){tabs[0].classList.add('active');tabs[0].style.color='var(--blue)';tabs[0].style.borderBottomColor='var(--blue)';}
-    switchUpTab(tabs[0],'profile');
-  }
+  navTo('my-settings', null, 'My Settings');
 }
 function closeUserPopup(){
   document.getElementById('userPopup').classList.remove('show');
@@ -1921,6 +1918,45 @@ function renderContent(role,section,title){
     return;
   }
 
+  // ---- MY SETTINGS ----
+  if(section==='my-settings'){
+    const r=ROLES[currentRole];
+    el.innerHTML=`
+      <div class="sec-header">
+        <div><div class="sec-title">⚙️ My Settings</div><div class="sec-sub">Manage your profile, security, payroll & requests</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:start;">
+
+        <!-- LEFT NAV -->
+        <div class="panel" style="padding:0;overflow:hidden;">
+          <div style="padding:20px;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--blue-light),var(--surface));">
+            <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:white;margin:0 auto 10px;">${r.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+            <div style="font-size:0.9rem;font-weight:700;">${r.name}</div>
+            <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">${r.label}</div>
+            <span class="b bg" style="margin-top:6px;display:inline-block;">Active</span>
+          </div>
+          <div id="settingsNav">
+            ${[
+              {k:'profile',i:'👤',l:'Profile'},
+              {k:'security',i:'🔒',l:'Security'},
+              {k:'payroll',i:'💵',l:'My Payroll'},
+              {k:'leave',i:'🏖️',l:'Leave Requests'},
+              {k:'ticket',i:'🎫',l:'Submit Ticket'},
+              {k:'docs',i:'📄',l:'My Documents'},
+            ].map((item,idx)=>`<div class="settings-nav-item${idx===0?' active':''}" onclick="switchSettingsTab('${item.k}',this)">
+              <span style="font-size:1rem;">${item.i}</span>
+              <span>${item.l}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div id="settingsContent">${settingsTabHTML('profile')}</div>
+      </div>
+    `;
+    return;
+  }
+
   // ---- DRIVERS ----
   if(section==='drivers'){
     const isRestricted=(role==='supervisor'||role==='account-mgr');
@@ -2242,6 +2278,193 @@ function empListHTML(){
     <td><span class="b ${e.status==='Active'?'bg':e.status==='On Leave'?'ba':'br'}">${e.status}</span></td>
     <td><div style="display:flex;gap:4px;" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm">Edit</button></div></td>
   </tr>`).join('')}</tbody></table>`;
+}
+
+function switchSettingsTab(tab, el){
+  document.querySelectorAll('.settings-nav-item').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('settingsContent').innerHTML = settingsTabHTML(tab);
+}
+
+function settingsTabHTML(tab){
+  const r=ROLES[currentRole];
+  if(tab==='profile') return `
+    <div class="panel">
+      <div class="ph"><div class="ph-title">👤 My Profile</div></div>
+      <div class="pb" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="settings-field"><label>Full Name</label><input type="text" value="${r.name}"></div>
+        <div class="settings-field"><label>Job Title</label><input type="text" value="${r.label}" disabled></div>
+        <div class="settings-field"><label>Email Address</label><input type="email" value="${r.email}"></div>
+        <div class="settings-field"><label>Phone Number</label><input type="tel" value="+973 3300 1100"></div>
+        <div class="settings-field"><label>Department</label><input type="text" value="${r.dept||'Executive'}" disabled></div>
+        <div class="settings-field"><label>Employee ID</label><input type="text" value="EMP-001" disabled></div>
+        <div class="settings-field" style="grid-column:span 2"><label>Work Location</label><input type="text" value="Manama, Bahrain"></div>
+        <div class="settings-field" style="grid-column:span 2"><label>Profile Photo</label>
+          <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--surface2);border:1px dashed var(--border2);border-radius:8px;">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:white;">${r.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+            <div><div style="font-size:0.78rem;font-weight:600;">Upload new photo</div><div style="font-size:0.68rem;color:var(--text3);">JPG, PNG · max 2MB</div></div>
+            <button class="btn btn-ghost btn-sm" style="margin-left:auto">Browse</button>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 20px 16px;display:flex;justify-content:flex-end;gap:8px;">
+        <button class="btn btn-ghost" onclick="navTo('dashboard',null,'Dashboard')">Cancel</button>
+        <button class="btn btn-primary" onclick="showFlash('✅','Saved','Profile updated successfully.')">Save Changes</button>
+      </div>
+    </div>`;
+
+  if(tab==='security') return `
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🔒 Security</div></div>
+      <div class="pb" style="max-width:480px;">
+        <div class="settings-section-title">Change Password</div>
+        <div class="settings-field"><label>Current Password</label><input type="password" placeholder="Enter current password"></div>
+        <div class="settings-field"><label>New Password</label><input type="password" placeholder="Minimum 8 characters"></div>
+        <div class="settings-field"><label>Confirm New Password</label><input type="password" placeholder="Repeat new password"></div>
+        <div style="background:var(--blue-light);border:1px solid rgba(37,99,235,0.15);border-radius:8px;padding:12px;font-size:0.75rem;color:var(--blue);margin:4px 0 16px;">
+          🔒 Your password is encrypted. Never share it with anyone.
+        </div>
+        <button class="btn btn-primary" onclick="showFlash('🔒','Updated','Password changed successfully.')">Update Password</button>
+        <div class="settings-section-title" style="margin-top:24px;">Active Sessions</div>
+        ${[['Chrome · Windows · Manama','Now — Current session','bg'],['Mobile App · iOS · Manama','2 hours ago','bg'],['Chrome · MacOS · Manama','Yesterday','ba']].map(s=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface2);border-radius:8px;margin-bottom:6px;">
+            <div style="font-size:1.2rem;">💻</div>
+            <div style="flex:1;"><div style="font-size:0.78rem;font-weight:600;">${s[0]}</div><div style="font-size:0.65rem;color:var(--text3);">${s[1]}</div></div>
+            <span class="b ${s[2]}">${s[2]==='bg'?'Active':'Old'}</span>
+            ${s[2]==='ba'?`<button class="btn btn-ghost btn-sm" onclick="showFlash('🚪','Signed Out','Session revoked.')">Revoke</button>`:''}
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  if(tab==='payroll') return `
+    <div class="panel">
+      <div class="ph"><div class="ph-title">💵 My Payroll</div></div>
+      <div class="pb">
+        <div style="background:linear-gradient(135deg,var(--green),#047857);border-radius:var(--r);padding:20px;color:white;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:0.72rem;opacity:0.8;margin-bottom:4px;">Net Salary — March 2026</div>
+            <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;">BD 1,600</div>
+            <div style="font-size:0.72rem;opacity:0.8;margin-top:4px;">✓ Paid on 1 Mar 2026</div>
+          </div>
+          <div style="font-size:3rem;opacity:0.3;">💵</div>
+        </div>
+        <div class="settings-section-title">Salary Breakdown</div>
+        ${[['Base Salary','BD 1,800',''],['Housing Allowance','BD 200',''],['Transport Allowance','BD 100',''],['Advance Deduction','− BD 300','neg'],['Penalty Deduction','− BD 200','neg'],['Net Pay','BD 1,600','pos']].map((r,i)=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);${i===5?'font-weight:700;border-top:2px solid var(--border2);margin-top:4px;':''}">
+            <span style="font-size:0.82rem;">${r[0]}</span>
+            <span style="font-family:'JetBrains Mono';font-weight:700;color:${r[2]==='neg'?'var(--red)':r[2]==='pos'?'var(--green)':'var(--text)'};">${r[1]}</span>
+          </div>`).join('')}
+        <div class="settings-section-title" style="margin-top:20px;">Payment History</div>
+        <table class="tbl"><thead><tr><th>Month</th><th>Gross</th><th>Deductions</th><th>Net</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          ${[['March 2026','BD 2,100','BD 500','BD 1,600','bg','Paid'],['February 2026','BD 2,100','BD 350','BD 1,750','bg','Paid'],['January 2026','BD 2,100','BD 500','BD 1,600','bg','Paid'],['December 2025','BD 2,100','BD 300','BD 1,800','bg','Paid']].map(r=>`
+            <tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono" style="color:var(--red);">${r[2]}</td><td class="mono" style="font-weight:700;color:var(--green);">${r[3]}</td><td><span class="b ${r[4]}">${r[5]}</span></td><td><button class="btn btn-ghost btn-sm" onclick="showFlash('📥','Downloaded','Payslip downloaded.')">📥 Payslip</button></td></tr>`).join('')}
+        </tbody></table>
+        <div style="margin-top:14px;background:var(--amber-light);border:1px solid var(--amber-dim);border-radius:8px;padding:12px;font-size:0.75rem;color:var(--amber);display:flex;align-items:center;gap:8px;">
+          💡 To dispute your salary, go to <strong style="cursor:pointer;text-decoration:underline;" onclick="switchSettingsTab('ticket',document.querySelectorAll('.settings-nav-item')[4])">Submit Ticket</strong>
+        </div>
+      </div>
+    </div>`;
+
+  if(tab==='leave') return `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+      <div class="panel">
+        <div class="ph"><div class="ph-title">🏖️ Apply for Leave</div></div>
+        <div class="pb">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+            ${[['Annual','18 days','var(--blue)'],['Sick','30 days','var(--green)'],['Used','12 days','var(--red)']].map(b=>`
+              <div style="background:var(--surface2);border-radius:var(--r-sm);padding:12px;text-align:center;border:1px solid var(--border);">
+                <div style="font-size:1.2rem;font-weight:800;color:${b[2]};">${b[1]}</div>
+                <div style="font-size:0.65rem;color:var(--text3);margin-top:2px;">${b[0]}</div>
+              </div>`).join('')}
+          </div>
+          <div class="settings-field"><label>Leave Type</label>
+            <select><option>Annual Leave</option><option>Sick Leave</option><option>Emergency Leave</option><option>Unpaid Leave</option><option>Compassionate Leave</option></select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="settings-field"><label>Start Date</label><input type="date"></div>
+            <div class="settings-field"><label>End Date</label><input type="date"></div>
+          </div>
+          <div class="settings-field"><label>Reason</label><textarea rows="3" placeholder="Briefly describe the reason..."></textarea></div>
+          <div style="background:var(--amber-light);border:1px solid var(--amber-dim);border-radius:8px;padding:10px;font-size:0.72rem;color:var(--amber);margin-bottom:14px;">
+            ⏳ Request goes to HR Lead for approval
+          </div>
+          <button class="btn btn-primary" style="width:100%;" onclick="showFlash('🏖️','Request Sent','Leave request submitted to HR Lead.')">Submit Request</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">📋 My Leave History</div></div>
+        <div class="pb">
+          ${[['Annual Leave','20–24 Jan 2026','5 days','bg','Approved'],['Sick Leave','5 Feb 2026','1 day','ba','Pending'],['Annual Leave','10–14 Dec 2025','5 days','bg','Approved'],['Emergency Leave','3 Nov 2025','2 days','bg','Approved']].map(l=>`
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+              <div style="flex:1;"><div style="font-size:0.8rem;font-weight:600;">${l[0]}</div><div style="font-size:0.65rem;color:var(--text3);margin-top:2px;">${l[1]} · ${l[2]}</div></div>
+              <span class="b ${l[3]}">${l[4]}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  if(tab==='ticket') return `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+      <div class="panel">
+        <div class="ph"><div class="ph-title">🎫 Submit a Ticket</div></div>
+        <div class="pb">
+          <div class="settings-field"><label>Ticket Type</label>
+            <select><option>Salary Dispute / Issue</option><option>Payroll Error</option><option>Leave Not Approved</option><option>Document Update Request</option><option>HR Complaint</option><option>System Access Issue</option><option>Other</option></select>
+          </div>
+          <div class="settings-field"><label>Subject</label><input type="text" placeholder="Brief subject"></div>
+          <div class="settings-field"><label>Priority</label>
+            <select><option>Normal</option><option>Urgent</option><option>Low</option></select>
+          </div>
+          <div class="settings-field"><label>Description</label><textarea rows="5" placeholder="Describe the issue in detail..."></textarea></div>
+          <div class="settings-field"><label>Attachment (optional)</label><input type="file" style="padding:6px;"></div>
+          <div style="background:var(--blue-light);border:1px solid rgba(37,99,235,0.15);border-radius:8px;padding:10px;font-size:0.72rem;color:var(--blue);margin-bottom:14px;">
+            📋 Ticket is sent to HR Lead and your department manager
+          </div>
+          <button class="btn btn-primary" style="width:100%;" onclick="showFlash('🎫','Ticket Submitted','Your ticket has been sent to HR Lead.')">Submit Ticket</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">📂 My Open Tickets</div></div>
+        <div class="pb">
+          ${[['TKT-0041','Salary Dispute — Mar','Urgent','br','Open'],['TKT-0038','Leave Not Approved','Normal','ba','Under Review'],['TKT-0031','CPR Update Request','Low','bg','Resolved'],['TKT-0028','Payroll Error Jan','Normal','bg','Resolved']].map(t=>`
+            <div style="padding:10px;background:var(--surface2);border-radius:var(--r-sm);margin-bottom:6px;border:1px solid var(--border);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span style="font-family:'JetBrains Mono';font-size:0.65rem;color:var(--text3);">${t[0]}</span>
+                <span class="b ${t[3]}" style="margin-left:auto;">${t[4]}</span>
+              </div>
+              <div style="font-size:0.78rem;font-weight:600;">${t[1]}</div>
+              <div style="font-size:0.65rem;color:var(--text3);margin-top:2px;">Priority: ${t[2]}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  if(tab==='docs') return `
+    <div class="panel">
+      <div class="ph"><div class="ph-title">📄 My Documents</div><div class="ph-actions"><button class="btn btn-primary btn-sm" onclick="showFlash('📄','Upload','Select a file to upload.')">+ Upload Document</button></div></div>
+      <div class="pb">
+        ${[
+          {name:'CPR / National ID',num:'841022-1234',exp:'20 Jun 2027',sc:'bg',s:'✓ Valid'},
+          {name:'Passport',num:'BH12345678',exp:'15 Oct 2028',sc:'bg',s:'✓ Valid'},
+          {name:'Employment Contract',num:'CTR-2025-0001',exp:'31 Dec 2026',sc:'bg',s:'✓ Signed'},
+          {name:'LMRA Work Permit',num:'WP-2025-4411',exp:'1 Apr 2026',sc:'ba',s:'⚠ Renewing'},
+          {name:'Driving License',num:'DL-BH-00001',exp:'5 Aug 2027',sc:'bg',s:'✓ Valid'},
+        ].map(d=>`
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;border-bottom:1px solid var(--border);">
+            <div style="font-size:2rem;">${d.sc==='bg'?'✅':'⚠️'}</div>
+            <div style="flex:1;">
+              <div style="font-size:0.85rem;font-weight:700;">${d.name}</div>
+              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px;">${d.num} · Expires: ${d.exp}</div>
+            </div>
+            <span class="b ${d.sc}">${d.s}</span>
+            <button class="btn btn-ghost btn-sm">Update</button>
+            <button class="btn btn-ghost btn-sm">📥</button>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  return '';
 }
 
 function empToggleView(view){
