@@ -18,7 +18,7 @@ import type { Deposit } from '@/types'
 import toast from 'react-hot-toast'
 
 const depositSchema = z.object({
-  amount: z.string().min(1, 'Amount required').transform(Number),
+  amount: z.string().min(1, 'Amount required'),
   bank: z.string().min(1, 'Bank required'),
   date: z.string().min(1, 'Date required'),
   reference: z.string().min(1, 'Reference required'),

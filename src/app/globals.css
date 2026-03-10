@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -12,6 +13,7 @@
 }
 
 body {
+  font-family: 'DM Sans', sans-serif;
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

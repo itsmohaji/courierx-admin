@@ -75,7 +75,7 @@ function CEODashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `${(v / 1000).toFixed(0)}k`} />
-                <Tooltip formatter={(v: number) => [formatCurrency(v), '']} />
+                <Tooltip formatter={(v) => [formatCurrency(Number(v)), '']} />
                 <Bar dataKey="revenue" name="Revenue" fill="#059669" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="expenses" name="Expenses" fill="#e2e8f0" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -100,14 +100,14 @@ function CEODashboard() {
                   outerRadius={90}
                   innerRadius={55}
                   paddingAngle={3}
-                  label={({ platform, percent }) => `${platform} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }: { name?: string; percent?: number }) => `${name ?? ''} ${((percent ?? 0) * 100).toFixed(0)}%`}
                   labelLine={false}
                 >
                   {mockPlatformBreakdown.map((entry, i) => (
                     <Cell key={i} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(v: number) => [formatCurrency(v), 'Revenue']} />
+                <Tooltip formatter={(v) => [formatCurrency(Number(v)), 'Revenue']} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -200,7 +200,7 @@ function FinanceDashboard() {
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `${(v / 1000).toFixed(0)}k`} />
-              <Tooltip formatter={(v: number) => [formatCurrency(v), '']} />
+              <Tooltip formatter={(v) => [formatCurrency(Number(v)), '']} />
               <Bar dataKey="revenue" name="Revenue" fill="#059669" radius={[4, 4, 0, 0]} />
               <Bar dataKey="expenses" name="Expenses" fill="#fca5a5" radius={[4, 4, 0, 0]} />
               <Bar dataKey="profit" name="Profit" fill="#86efac" radius={[4, 4, 0, 0]} />
