@@ -1,0 +1,196 @@
+import type {
+  Employee,
+  Driver,
+  CODEntry,
+  Deposit,
+  Candidate,
+  Ticket,
+  ComplianceDoc,
+  PayrollRecord,
+  AttendanceRecord,
+  MonthlyRevenue,
+  PlatformBreakdown,
+} from '@/types'
+
+export const mockEmployees: Employee[] = [
+  { id: 'emp-001', name: 'Ahmed Al-Rashid', email: 'ahmed@courierx.sa', phone: '+966-55-1234567', department: 'Finance', position: 'Finance Controller', status: 'active', salary: 18000, joinDate: '2021-03-15' },
+  { id: 'emp-002', name: 'Sara Al-Mutairi', email: 'sara@courierx.sa', phone: '+966-55-2345678', department: 'HR', position: 'HR Lead', status: 'active', salary: 16000, joinDate: '2020-08-01' },
+  { id: 'emp-003', name: 'Khalid Al-Dosari', email: 'khalid@courierx.sa', phone: '+966-55-3456789', department: 'Operations', position: 'Operations Manager', status: 'active', salary: 22000, joinDate: '2019-11-10' },
+  { id: 'emp-004', name: 'Fatima Al-Harbi', email: 'fatima@courierx.sa', phone: '+966-55-4567890', department: 'Legal', position: 'Legal Officer', status: 'active', salary: 20000, joinDate: '2022-01-05' },
+  { id: 'emp-005', name: 'Mohammed Al-Qahtani', email: 'mohammed@courierx.sa', phone: '+966-55-5678901', department: 'Finance', position: 'Accountant', status: 'active', salary: 12000, joinDate: '2021-06-20' },
+  { id: 'emp-006', name: 'Noura Al-Shehri', email: 'noura@courierx.sa', phone: '+966-55-6789012', department: 'HR', position: 'Recruiter', status: 'active', salary: 10000, joinDate: '2022-09-15' },
+  { id: 'emp-007', name: 'Abdullah Al-Zahrani', email: 'abdullah@courierx.sa', phone: '+966-55-7890123', department: 'Operations', position: 'Fleet Supervisor', status: 'active', salary: 14000, joinDate: '2020-04-12' },
+  { id: 'emp-008', name: 'Hessa Al-Ghamdi', email: 'hessa@courierx.sa', phone: '+966-55-8901234', department: 'Legal', position: 'Compliance Officer', status: 'on_leave', salary: 15000, joinDate: '2021-12-01' },
+  { id: 'emp-009', name: 'Omar Al-Anazi', email: 'omar@courierx.sa', phone: '+966-55-9012345', department: 'IT', position: 'System Admin', status: 'active', salary: 17000, joinDate: '2020-07-08' },
+  { id: 'emp-010', name: 'Reem Al-Subaie', email: 'reem@courierx.sa', phone: '+966-55-0123456', department: 'Finance', position: 'Junior Accountant', status: 'active', salary: 9000, joinDate: '2023-02-14' },
+  { id: 'emp-011', name: 'Faisal Al-Otaibi', email: 'faisal@courierx.sa', phone: '+966-55-1234568', department: 'Operations', position: 'Driver Coordinator', status: 'active', salary: 11000, joinDate: '2022-05-30' },
+  { id: 'emp-012', name: 'Mona Al-Jaber', email: 'mona@courierx.sa', phone: '+966-55-2345679', department: 'HR', position: 'Training Specialist', status: 'active', salary: 11500, joinDate: '2021-10-18' },
+  { id: 'emp-013', name: 'Tariq Al-Maliki', email: 'tariq@courierx.sa', phone: '+966-55-3456780', department: 'Finance', position: 'Budget Analyst', status: 'inactive', salary: 13000, joinDate: '2020-02-25' },
+  { id: 'emp-014', name: 'Lama Al-Saud', email: 'lama@courierx.sa', phone: '+966-55-4567891', department: 'Legal', position: 'Contract Specialist', status: 'active', salary: 14500, joinDate: '2022-08-11' },
+  { id: 'emp-015', name: 'Yousef Al-Rashidi', email: 'yousef@courierx.sa', phone: '+966-55-5678902', department: 'Operations', position: 'Dispatch Officer', status: 'active', salary: 10500, joinDate: '2023-01-09' },
+  { id: 'emp-016', name: 'Dalal Al-Hamdan', email: 'dalal@courierx.sa', phone: '+966-55-6789013', department: 'HR', position: 'HR Assistant', status: 'active', salary: 8500, joinDate: '2023-04-03' },
+  { id: 'emp-017', name: 'Nawaf Al-Buqami', email: 'nawaf@courierx.sa', phone: '+966-55-7890124', department: 'IT', position: 'Developer', status: 'active', salary: 18500, joinDate: '2021-08-22' },
+  { id: 'emp-018', name: 'Ghada Al-Mutlaq', email: 'ghada@courierx.sa', phone: '+966-55-8901235', department: 'Operations', position: 'Customer Support Lead', status: 'on_leave', salary: 12500, joinDate: '2020-11-14' },
+  { id: 'emp-019', name: 'Saad Al-Yami', email: 'saad@courierx.sa', phone: '+966-55-9012346', department: 'Finance', position: 'Payroll Specialist', status: 'active', salary: 11800, joinDate: '2022-03-07' },
+  { id: 'emp-020', name: 'Wafa Al-Ajmi', email: 'wafa@courierx.sa', phone: '+966-55-0123457', department: 'Legal', position: 'Legal Assistant', status: 'active', salary: 9500, joinDate: '2023-06-19' },
+]
+
+export const mockDrivers: Driver[] = [
+  { id: 'drv-001', name: 'Hassan Al-Bakri', phone: '+966-50-1111111', platform: 'Keeta', status: 'active', deliveries: 1240, rating: 4.8, vehicle: 'Motorcycle', area: 'Riyadh North', joinDate: '2022-01-10' },
+  { id: 'drv-002', name: 'Khaled Al-Farsi', phone: '+966-50-2222222', platform: 'Jahez', status: 'active', deliveries: 980, rating: 4.6, vehicle: 'Car', area: 'Riyadh South', joinDate: '2021-07-15' },
+  { id: 'drv-003', name: 'Adel Al-Shammari', phone: '+966-50-3333333', platform: 'Ninja', status: 'active', deliveries: 1560, rating: 4.9, vehicle: 'Motorcycle', area: 'Jeddah Central', joinDate: '2020-11-20' },
+  { id: 'drv-004', name: 'Rami Al-Harthy', phone: '+966-50-4444444', platform: 'Noon', status: 'inactive', deliveries: 450, rating: 4.2, vehicle: 'Van', area: 'Jeddah North', joinDate: '2022-08-05' },
+  { id: 'drv-005', name: 'Bilal Al-Qahtani', phone: '+966-50-5555555', platform: 'Keeta', status: 'active', deliveries: 890, rating: 4.7, vehicle: 'Motorcycle', area: 'Dammam', joinDate: '2021-03-12' },
+  { id: 'drv-006', name: 'Sami Al-Zahrani', phone: '+966-50-6666666', platform: 'Jahez', status: 'suspended', deliveries: 320, rating: 3.8, vehicle: 'Car', area: 'Riyadh East', joinDate: '2022-05-18' },
+  { id: 'drv-007', name: 'Turki Al-Ghamdi', phone: '+966-50-7777777', platform: 'Ninja', status: 'active', deliveries: 2100, rating: 5.0, vehicle: 'Motorcycle', area: 'Riyadh West', joinDate: '2020-02-28' },
+  { id: 'drv-008', name: 'Majed Al-Otaibi', phone: '+966-50-8888888', platform: 'Noon', status: 'active', deliveries: 760, rating: 4.5, vehicle: 'Car', area: 'Jeddah South', joinDate: '2021-09-01' },
+  { id: 'drv-009', name: 'Fahad Al-Anazi', phone: '+966-50-9999999', platform: 'Keeta', status: 'active', deliveries: 1380, rating: 4.8, vehicle: 'Motorcycle', area: 'Madinah', joinDate: '2020-12-15' },
+  { id: 'drv-010', name: 'Nasser Al-Rashid', phone: '+966-50-1011010', platform: 'Jahez', status: 'active', deliveries: 670, rating: 4.4, vehicle: 'Car', area: 'Makkah', joinDate: '2022-04-20' },
+  { id: 'drv-011', name: 'Ibrahim Al-Sulaimi', phone: '+966-50-1112112', platform: 'Ninja', status: 'active', deliveries: 1190, rating: 4.7, vehicle: 'Motorcycle', area: 'Riyadh Central', joinDate: '2021-01-08' },
+  { id: 'drv-012', name: 'Waleed Al-Harbi', phone: '+966-50-1213213', platform: 'Noon', status: 'inactive', deliveries: 290, rating: 4.0, vehicle: 'Motorcycle', area: 'Taif', joinDate: '2022-10-25' },
+  { id: 'drv-013', name: 'Saeed Al-Jaber', phone: '+966-50-1314314', platform: 'Keeta', status: 'active', deliveries: 1720, rating: 4.9, vehicle: 'Motorcycle', area: 'Abha', joinDate: '2020-06-30' },
+  { id: 'drv-014', name: 'Emad Al-Mutairi', phone: '+966-50-1415415', platform: 'Jahez', status: 'active', deliveries: 830, rating: 4.6, vehicle: 'Car', area: 'Tabuk', joinDate: '2021-11-12' },
+  { id: 'drv-015', name: 'Ziad Al-Maliki', phone: '+966-50-1516516', platform: 'Ninja', status: 'active', deliveries: 1040, rating: 4.7, vehicle: 'Motorcycle', area: 'Al Ahsa', joinDate: '2021-05-22' },
+  { id: 'drv-016', name: 'Younis Al-Dosari', phone: '+966-50-1617617', platform: 'Noon', status: 'active', deliveries: 560, rating: 4.3, vehicle: 'Van', area: 'Jizan', joinDate: '2022-07-14' },
+  { id: 'drv-017', name: 'Raed Al-Shehri', phone: '+966-50-1718718', platform: 'Keeta', status: 'active', deliveries: 1450, rating: 4.8, vehicle: 'Motorcycle', area: 'Riyadh North', joinDate: '2020-09-03' },
+  { id: 'drv-018', name: 'Hamad Al-Buqami', phone: '+966-50-1819819', platform: 'Jahez', status: 'suspended', deliveries: 210, rating: 3.5, vehicle: 'Car', area: 'Riyadh South', joinDate: '2023-01-17' },
+  { id: 'drv-019', name: 'Sultan Al-Ajmi', phone: '+966-50-1920920', platform: 'Ninja', status: 'active', deliveries: 980, rating: 4.5, vehicle: 'Motorcycle', area: 'Jeddah East', joinDate: '2021-08-28' },
+  { id: 'drv-020', name: 'Jaber Al-Saud', phone: '+966-50-2021021', platform: 'Noon', status: 'active', deliveries: 640, rating: 4.4, vehicle: 'Car', area: 'Riyadh West', joinDate: '2022-02-09' },
+  { id: 'drv-021', name: 'Munir Al-Qureshi', phone: '+966-50-2122122', platform: 'Keeta', status: 'active', deliveries: 1110, rating: 4.6, vehicle: 'Motorcycle', area: 'Dammam', joinDate: '2021-04-16' },
+  { id: 'drv-022', name: 'Ghassan Al-Lami', phone: '+966-50-2223223', platform: 'Jahez', status: 'active', deliveries: 750, rating: 4.5, vehicle: 'Motorcycle', area: 'Khobar', joinDate: '2021-06-04' },
+  { id: 'drv-023', name: 'Faris Al-Bakr', phone: '+966-50-2324324', platform: 'Ninja', status: 'inactive', deliveries: 380, rating: 4.1, vehicle: 'Car', area: 'Jubail', joinDate: '2022-11-30' },
+  { id: 'drv-024', name: 'Khattab Al-Wazir', phone: '+966-50-2425425', platform: 'Noon', status: 'active', deliveries: 1260, rating: 4.7, vehicle: 'Van', area: 'Riyadh Central', joinDate: '2020-08-19' },
+  { id: 'drv-025', name: 'Rashid Al-Tamimi', phone: '+966-50-2526526', platform: 'Keeta', status: 'active', deliveries: 870, rating: 4.6, vehicle: 'Motorcycle', area: 'Riyadh East', joinDate: '2021-12-07' },
+  { id: 'drv-026', name: 'Dakheel Al-Yami', phone: '+966-50-2627627', platform: 'Jahez', status: 'active', deliveries: 1030, rating: 4.8, vehicle: 'Motorcycle', area: 'Madinah', joinDate: '2020-05-23' },
+  { id: 'drv-027', name: 'Barrak Al-Shamri', phone: '+966-50-2728728', platform: 'Ninja', status: 'active', deliveries: 690, rating: 4.3, vehicle: 'Car', area: 'Makkah', joinDate: '2022-09-11' },
+  { id: 'drv-028', name: 'Awad Al-Zahrani', phone: '+966-50-2829829', platform: 'Noon', status: 'suspended', deliveries: 160, rating: 3.2, vehicle: 'Motorcycle', area: 'Jeddah North', joinDate: '2023-03-05' },
+  { id: 'drv-029', name: 'Mishaal Al-Hamdan', phone: '+966-50-2930930', platform: 'Keeta', status: 'active', deliveries: 1590, rating: 4.9, vehicle: 'Motorcycle', area: 'Jeddah South', joinDate: '2020-10-14' },
+  { id: 'drv-030', name: 'Hazim Al-Otaibi', phone: '+966-50-3031031', platform: 'Jahez', status: 'active', deliveries: 920, rating: 4.6, vehicle: 'Car', area: 'Abha', joinDate: '2021-02-26' },
+]
+
+export const mockCODEntries: CODEntry[] = [
+  { id: 'cod-001', driverId: 'drv-001', driverName: 'Hassan Al-Bakri', amount: 2450.00, platform: 'Keeta', status: 'pending', date: '2024-01-15', batchId: 'BATCH-2401-001' },
+  { id: 'cod-002', driverId: 'drv-002', driverName: 'Khaled Al-Farsi', amount: 1820.50, platform: 'Jahez', status: 'pending', date: '2024-01-15', batchId: 'BATCH-2401-001' },
+  { id: 'cod-003', driverId: 'drv-003', driverName: 'Adel Al-Shammari', amount: 3100.00, platform: 'Ninja', status: 'approved', date: '2024-01-14', batchId: 'BATCH-2401-002' },
+  { id: 'cod-004', driverId: 'drv-005', driverName: 'Bilal Al-Qahtani', amount: 1650.75, platform: 'Keeta', status: 'pending', date: '2024-01-15', batchId: 'BATCH-2401-001' },
+  { id: 'cod-005', driverId: 'drv-007', driverName: 'Turki Al-Ghamdi', amount: 4200.00, platform: 'Ninja', status: 'approved', date: '2024-01-13', batchId: 'BATCH-2401-003' },
+  { id: 'cod-006', driverId: 'drv-008', driverName: 'Majed Al-Otaibi', amount: 980.25, platform: 'Noon', status: 'rejected', date: '2024-01-12', batchId: 'BATCH-2401-004', notes: 'Amount discrepancy' },
+  { id: 'cod-007', driverId: 'drv-009', driverName: 'Fahad Al-Anazi', amount: 2780.00, platform: 'Keeta', status: 'pending', date: '2024-01-15', batchId: 'BATCH-2401-001' },
+  { id: 'cod-008', driverId: 'drv-010', driverName: 'Nasser Al-Rashid', amount: 1340.50, platform: 'Jahez', status: 'approved', date: '2024-01-14', batchId: 'BATCH-2401-002' },
+  { id: 'cod-009', driverId: 'drv-011', driverName: 'Ibrahim Al-Sulaimi', amount: 2100.00, platform: 'Ninja', status: 'pending', date: '2024-01-15', batchId: 'BATCH-2401-001' },
+  { id: 'cod-010', driverId: 'drv-013', driverName: 'Saeed Al-Jaber', amount: 3450.75, platform: 'Keeta', status: 'approved', date: '2024-01-13', batchId: 'BATCH-2401-003' },
+  { id: 'cod-011', driverId: 'drv-014', driverName: 'Emad Al-Mutairi', amount: 1890.00, platform: 'Jahez', status: 'pending', date: '2024-01-15', batchId: 'BATCH-2401-001' },
+  { id: 'cod-012', driverId: 'drv-015', driverName: 'Ziad Al-Maliki', amount: 2230.25, platform: 'Ninja', status: 'approved', date: '2024-01-14', batchId: 'BATCH-2401-002' },
+  { id: 'cod-013', driverId: 'drv-017', driverName: 'Raed Al-Shehri', amount: 2890.50, platform: 'Keeta', status: 'pending', date: '2024-01-15', batchId: 'BATCH-2401-001' },
+  { id: 'cod-014', driverId: 'drv-021', driverName: 'Munir Al-Qureshi', amount: 1560.00, platform: 'Keeta', status: 'approved', date: '2024-01-12', batchId: 'BATCH-2401-004' },
+  { id: 'cod-015', driverId: 'drv-024', driverName: 'Khattab Al-Wazir', amount: 2670.25, platform: 'Noon', status: 'pending', date: '2024-01-15', batchId: 'BATCH-2401-001' },
+]
+
+export const mockDeposits: Deposit[] = [
+  { id: 'dep-001', amount: 45000.00, bank: 'Al Rajhi Bank', date: '2024-01-15', status: 'confirmed', reference: 'TXN-240115-001' },
+  { id: 'dep-002', amount: 32500.50, bank: 'Saudi National Bank', date: '2024-01-14', status: 'confirmed', reference: 'TXN-240114-001' },
+  { id: 'dep-003', amount: 28000.00, bank: 'Riyad Bank', date: '2024-01-13', status: 'confirmed', reference: 'TXN-240113-001' },
+  { id: 'dep-004', amount: 51200.75, bank: 'Al Rajhi Bank', date: '2024-01-12', status: 'confirmed', reference: 'TXN-240112-001' },
+  { id: 'dep-005', amount: 19800.00, bank: 'Banque Saudi Fransi', date: '2024-01-11', status: 'confirmed', reference: 'TXN-240111-001' },
+  { id: 'dep-006', amount: 36400.25, bank: 'Saudi National Bank', date: '2024-01-10', status: 'confirmed', reference: 'TXN-240110-001' },
+  { id: 'dep-007', amount: 22500.00, bank: 'Arab National Bank', date: '2024-01-09', status: 'pending', reference: 'TXN-240109-001' },
+  { id: 'dep-008', amount: 41000.50, bank: 'Al Rajhi Bank', date: '2024-01-08', status: 'confirmed', reference: 'TXN-240108-001' },
+  { id: 'dep-009', amount: 16700.00, bank: 'Riyad Bank', date: '2024-01-07', status: 'failed', reference: 'TXN-240107-001', notes: 'Bank processing error' },
+  { id: 'dep-010', amount: 38900.75, bank: 'Saudi National Bank', date: '2024-01-06', status: 'confirmed', reference: 'TXN-240106-001' },
+]
+
+export const mockCandidates: Candidate[] = [
+  { id: 'cand-001', name: 'Ali Hassan Al-Zahrani', email: 'ali.hassan@email.com', phone: '+966-55-1111111', position: 'Operations Supervisor', department: 'Operations', stage: 'applied', appliedDate: '2024-01-10' },
+  { id: 'cand-002', name: 'Maha Al-Rashidi', email: 'maha.rashidi@email.com', phone: '+966-55-2222222', position: 'HR Specialist', department: 'HR', stage: 'screening', appliedDate: '2024-01-08' },
+  { id: 'cand-003', name: 'Tariq Al-Shammari', email: 'tariq.shammari@email.com', phone: '+966-55-3333333', position: 'Finance Analyst', department: 'Finance', stage: 'interview', appliedDate: '2024-01-05' },
+  { id: 'cand-004', name: 'Rawan Al-Harbi', email: 'rawan.harbi@email.com', phone: '+966-55-4444444', position: 'Legal Officer', department: 'Legal', stage: 'offer', appliedDate: '2023-12-28' },
+  { id: 'cand-005', name: 'Khalid Al-Mutairi', email: 'khalid.mutairi@email.com', phone: '+966-55-5555555', position: 'IT Developer', department: 'IT', stage: 'hired', appliedDate: '2023-12-20' },
+  { id: 'cand-006', name: 'Nada Al-Otaibi', email: 'nada.otaibi@email.com', phone: '+966-55-6666666', position: 'Accountant', department: 'Finance', stage: 'applied', appliedDate: '2024-01-12' },
+  { id: 'cand-007', name: 'Basem Al-Dosari', email: 'basem.dosari@email.com', phone: '+966-55-7777777', position: 'Fleet Coordinator', department: 'Operations', stage: 'screening', appliedDate: '2024-01-09' },
+  { id: 'cand-008', name: 'Dana Al-Ghamdi', email: 'dana.ghamdi@email.com', phone: '+966-55-8888888', position: 'Customer Service Rep', department: 'Operations', stage: 'interview', appliedDate: '2024-01-03' },
+  { id: 'cand-009', name: 'Yazeed Al-Anazi', email: 'yazeed.anazi@email.com', phone: '+966-55-9999999', position: 'Compliance Specialist', department: 'Legal', stage: 'screening', appliedDate: '2024-01-07' },
+  { id: 'cand-010', name: 'Lujain Al-Qahtani', email: 'lujain.qahtani@email.com', phone: '+966-55-1010101', position: 'Payroll Specialist', department: 'Finance', stage: 'interview', appliedDate: '2024-01-01' },
+  { id: 'cand-011', name: 'Abdulaziz Al-Saud', email: 'abdulaziz.saud@email.com', phone: '+966-55-1111112', position: 'Senior Developer', department: 'IT', stage: 'offer', appliedDate: '2023-12-25' },
+  { id: 'cand-012', name: 'Rima Al-Zahrani', email: 'rima.zahrani@email.com', phone: '+966-55-1212121', position: 'Operations Analyst', department: 'Operations', stage: 'applied', appliedDate: '2024-01-14' },
+  { id: 'cand-013', name: 'Fayez Al-Maliki', email: 'fayez.maliki@email.com', phone: '+966-55-1313131', position: 'HR Manager', department: 'HR', stage: 'hired', appliedDate: '2023-12-10' },
+  { id: 'cand-014', name: 'Amira Al-Shehri', email: 'amira.shehri@email.com', phone: '+966-55-1414141', position: 'Legal Advisor', department: 'Legal', stage: 'rejected', appliedDate: '2023-12-15' },
+  { id: 'cand-015', name: 'Mansour Al-Buqami', email: 'mansour.buqami@email.com', phone: '+966-55-1515151', position: 'Finance Manager', department: 'Finance', stage: 'interview', appliedDate: '2023-12-30' },
+  { id: 'cand-016', name: 'Shahad Al-Tamimi', email: 'shahad.tamimi@email.com', phone: '+966-55-1616161', position: 'Recruiter', department: 'HR', stage: 'screening', appliedDate: '2024-01-11' },
+  { id: 'cand-017', name: 'Naif Al-Hamdan', email: 'naif.hamdan@email.com', phone: '+966-55-1717171', position: 'Logistics Coordinator', department: 'Operations', stage: 'applied', appliedDate: '2024-01-13' },
+  { id: 'cand-018', name: 'Waad Al-Ajmi', email: 'waad.ajmi@email.com', phone: '+966-55-1818181', position: 'Tax Specialist', department: 'Finance', stage: 'screening', appliedDate: '2024-01-06' },
+  { id: 'cand-019', name: 'Zeyad Al-Lami', email: 'zeyad.lami@email.com', phone: '+966-55-1919191', position: 'IT Support', department: 'IT', stage: 'interview', appliedDate: '2024-01-02' },
+  { id: 'cand-020', name: 'Joud Al-Rashid', email: 'joud.rashid@email.com', phone: '+966-55-2020202', position: 'Customer Relations', department: 'Operations', stage: 'offer', appliedDate: '2023-12-22' },
+]
+
+export const mockTickets: Ticket[] = [
+  { id: 'tkt-001', title: 'Driver payment discrepancy - COD batch Jan 15', description: 'Driver Hassan Al-Bakri reports missing payment for 3 deliveries totaling SAR 450', status: 'open', priority: 'high', assignee: 'Ahmed Al-Rashid', reporter: 'Hassan Al-Bakri', createdAt: '2024-01-15', updatedAt: '2024-01-15' },
+  { id: 'tkt-002', title: 'System slowdown during peak hours', description: 'The tracking system becomes unresponsive between 6PM-9PM daily', status: 'in_progress', priority: 'critical', assignee: 'Omar Al-Anazi', reporter: 'Khalid Al-Dosari', createdAt: '2024-01-14', updatedAt: '2024-01-15' },
+  { id: 'tkt-003', title: 'Vehicle registration renewal for Fleet #12', description: 'Registration expires on Feb 1, 2024 - needs immediate processing', status: 'open', priority: 'high', assignee: 'Fatima Al-Harbi', reporter: 'Abdullah Al-Zahrani', createdAt: '2024-01-13', updatedAt: '2024-01-13' },
+  { id: 'tkt-004', title: 'Employee leave balance calculation error', description: 'HR system showing incorrect annual leave balance for Q4 employees', status: 'in_progress', priority: 'medium', assignee: 'Sara Al-Mutairi', reporter: 'Multiple employees', createdAt: '2024-01-12', updatedAt: '2024-01-14' },
+  { id: 'tkt-005', title: 'New driver onboarding documentation missing', description: 'Driver Jaber Al-Saud missing insurance documents for activation', status: 'resolved', priority: 'medium', assignee: 'Fatima Al-Harbi', reporter: 'Faisal Al-Otaibi', createdAt: '2024-01-11', updatedAt: '2024-01-13' },
+  { id: 'tkt-006', title: 'Bank deposit receipt verification needed', description: 'Al Rajhi Bank deposit TXN-240109-001 not reflecting in system', status: 'open', priority: 'high', assignee: 'Ahmed Al-Rashid', reporter: 'Reem Al-Subaie', createdAt: '2024-01-10', updatedAt: '2024-01-10' },
+  { id: 'tkt-007', title: 'Platform API integration issue with Ninja', description: 'Ninja platform delivery data not syncing correctly', status: 'in_progress', priority: 'critical', assignee: 'Nawaf Al-Buqami', reporter: 'Yousef Al-Rashidi', createdAt: '2024-01-09', updatedAt: '2024-01-14' },
+  { id: 'tkt-008', title: 'HR policy update distribution', description: 'Updated overtime policy needs distribution to all staff', status: 'resolved', priority: 'low', assignee: 'Sara Al-Mutairi', reporter: 'Sara Al-Mutairi', createdAt: '2024-01-08', updatedAt: '2024-01-10' },
+  { id: 'tkt-009', title: 'COD reconciliation report for December', description: 'Monthly COD reconciliation report needed for audit purposes', status: 'closed', priority: 'medium', assignee: 'Ahmed Al-Rashid', reporter: 'Mohammed Al-Qahtani', createdAt: '2024-01-05', updatedAt: '2024-01-12' },
+  { id: 'tkt-010', title: 'Driver rating dispute - Adel Al-Shammari', description: 'Driver disputes low rating from customer, requesting review', status: 'open', priority: 'low', assignee: 'Ghada Al-Mutlaq', reporter: 'Adel Al-Shammari', createdAt: '2024-01-15', updatedAt: '2024-01-15' },
+]
+
+export const mockComplianceDocs: ComplianceDoc[] = [
+  { id: 'doc-001', title: 'Commercial Registration Certificate', type: 'Corporate', status: 'active', expiryDate: '2025-03-15', uploadedAt: '2024-01-01', uploadedBy: 'Fatima Al-Harbi', fileUrl: '#' },
+  { id: 'doc-002', title: 'VAT Registration Certificate', type: 'Tax', status: 'active', expiryDate: '2026-01-01', uploadedAt: '2023-12-15', uploadedBy: 'Ahmed Al-Rashid', fileUrl: '#' },
+  { id: 'doc-003', title: 'GOSI Registration Certificate', type: 'HR', status: 'active', expiryDate: '2025-06-30', uploadedAt: '2024-01-05', uploadedBy: 'Sara Al-Mutairi', fileUrl: '#' },
+  { id: 'doc-004', title: 'Saudization (Nitaqat) Compliance', type: 'HR', status: 'expiring_soon', expiryDate: '2024-02-28', uploadedAt: '2023-11-01', uploadedBy: 'Sara Al-Mutairi', fileUrl: '#' },
+  { id: 'doc-005', title: 'Fleet Insurance Policy', type: 'Insurance', status: 'active', expiryDate: '2024-12-31', uploadedAt: '2024-01-01', uploadedBy: 'Abdullah Al-Zahrani', fileUrl: '#' },
+  { id: 'doc-006', title: 'Municipal Operating License', type: 'Corporate', status: 'expiring_soon', expiryDate: '2024-03-01', uploadedAt: '2023-03-01', uploadedBy: 'Fatima Al-Harbi', fileUrl: '#' },
+  { id: 'doc-007', title: 'Data Protection Policy', type: 'Legal', status: 'active', expiryDate: '2025-01-01', uploadedAt: '2023-01-15', uploadedBy: 'Lama Al-Saud', fileUrl: '#' },
+  { id: 'doc-008', title: 'Environmental Compliance Certificate', type: 'Regulatory', status: 'expired', expiryDate: '2024-01-01', uploadedAt: '2022-12-20', uploadedBy: 'Fatima Al-Harbi', fileUrl: '#' },
+]
+
+export const mockPayroll: PayrollRecord[] = mockEmployees.slice(0, 15).map((emp, index) => ({
+  id: `pay-${String(index + 1).padStart(3, '0')}`,
+  employeeId: emp.id,
+  employeeName: emp.name,
+  department: emp.department,
+  baseSalary: emp.salary,
+  overtime: Math.round(Math.random() * 2000),
+  deductions: Math.round(emp.salary * 0.1),
+  netSalary: emp.salary + Math.round(Math.random() * 2000) - Math.round(emp.salary * 0.1),
+  month: '2024-01',
+  status: index < 10 ? 'paid' : index < 13 ? 'processed' : 'pending',
+}))
+
+export const mockAttendance: AttendanceRecord[] = mockEmployees.slice(0, 15).map((emp, index) => ({
+  id: `att-${String(index + 1).padStart(3, '0')}`,
+  employeeId: emp.id,
+  employeeName: emp.name,
+  date: '2024-01-15',
+  checkIn: index % 7 === 3 ? '' : `0${7 + (index % 3)}:${index % 2 === 0 ? '00' : '30'}`,
+  checkOut: index % 7 === 3 ? '' : `${17 + (index % 2)}:${index % 2 === 0 ? '00' : '30'}`,
+  status: index % 7 === 3 ? 'absent' : index % 5 === 0 ? 'late' : index % 11 === 0 ? 'on_leave' : 'present',
+  department: emp.department,
+}))
+
+export const mockMonthlyRevenue: MonthlyRevenue[] = [
+  { month: 'Jul', revenue: 285000, expenses: 198000, profit: 87000 },
+  { month: 'Aug', revenue: 312000, expenses: 210000, profit: 102000 },
+  { month: 'Sep', revenue: 298000, expenses: 205000, profit: 93000 },
+  { month: 'Oct', revenue: 341000, expenses: 225000, profit: 116000 },
+  { month: 'Nov', revenue: 378000, expenses: 248000, profit: 130000 },
+  { month: 'Dec', revenue: 425000, expenses: 270000, profit: 155000 },
+  { month: 'Jan', revenue: 392000, expenses: 255000, profit: 137000 },
+]
+
+export const mockPlatformBreakdown: PlatformBreakdown[] = [
+  { platform: 'Keeta', amount: 148000, deliveries: 4820, color: '#059669' },
+  { platform: 'Jahez', amount: 112000, deliveries: 3650, color: '#3b82f6' },
+  { platform: 'Ninja', amount: 98000, deliveries: 3190, color: '#8b5cf6' },
+  { platform: 'Noon', amount: 34000, deliveries: 1100, color: '#f59e0b' },
+]
+
+export const mockAlerts = [
+  { id: 'alert-001', type: 'error', message: '3 COD entries pending for more than 48 hours', time: '2 hours ago' },
+  { id: 'alert-002', type: 'warning', message: 'Fleet insurance expiring in 45 days', time: '5 hours ago' },
+  { id: 'alert-003', type: 'warning', message: 'Saudization compliance deadline approaching', time: '1 day ago' },
+  { id: 'alert-004', type: 'success', message: 'January payroll processed successfully', time: '2 days ago' },
+  { id: 'alert-005', type: 'info', message: '5 new driver applications pending review', time: '3 days ago' },
+]
