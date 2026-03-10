@@ -28,7 +28,7 @@ const roles: { value: Role; label: string; description: string }[] = [
 
 export default function LoginPage() {
   const router = useRouter()
-  const { user, signIn, updateRole } = useAuth()
+  const { user, signIn, signInDemo, updateRole } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [selectedRole, setSelectedRole] = useState<Role>('super-admin')
   const [roleDropOpen, setRoleDropOpen] = useState(false)
@@ -57,9 +57,9 @@ export default function LoginPage() {
       }
       const { error } = await signIn(data.email, data.password)
       if (error) {
-        // For demo, allow mock login with any credentials
+        // Supabase login failed — fall back to demo mode
         if (data.email && data.password.length >= 6) {
-          updateRole(selectedRole)
+          signInDemo(selectedRole)
           toast.success(`Welcome! Signed in as ${roles.find(r => r.value === selectedRole)?.label}`)
           router.push('/dashboard')
         } else {
@@ -78,9 +78,9 @@ export default function LoginPage() {
   }
 
   const handleDemoLogin = (role: Role) => {
-    setSelectedRole(role)
-    setValue('email', `demo.${role}@courierx.sa`)
-    setValue('password', 'demo123456')
+    signInDemo(role)
+    toast.success(`Welcome! Signed in as ${roles.find(r => r.value === role)?.label}`)
+    router.push('/dashboard')
   }
 
   const selectedRoleInfo = roles.find(r => r.value === selectedRole)
