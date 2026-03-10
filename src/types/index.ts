@@ -187,6 +187,116 @@ export interface OnboardingApplication {
   notes?: string
 }
 
+export type OnboardingStage =
+  | 'applied'
+  | 'screening'
+  | 'interview'
+  | 'offer'
+  | 'hr_processing'
+  | 'visa_processing'
+  | 'contract_signing'
+  | 'onboarded'
+  | 'rejected'
+
+export type HiringType = 'local' | 'offshore' | 'rider'
+
+export interface HROnboardingApplication {
+  id: string
+  applicantName: string
+  email: string
+  phone: string
+  nationality: string
+  position: string
+  department: string
+  type: HiringType
+  stage: OnboardingStage
+  appliedDate: string
+  notes?: string
+  visaRequired: boolean
+  source: string
+}
+
+export interface EmployeeContract {
+  id: string
+  employeeId: string
+  employeeName: string
+  department: string
+  position: string
+  contractType: 'full_time' | 'part_time' | 'contract' | 'probation'
+  startDate: string
+  endDate: string
+  salary: number
+  status: 'active' | 'expiring' | 'expired' | 'terminated'
+  nationality: string
+  daysUntilExpiry?: number
+}
+
+export interface VisaRecord {
+  id: string
+  employeeId: string
+  employeeName: string
+  nationality: string
+  visaType: string
+  issueDate: string
+  expiryDate: string
+  cprNumber: string
+  passportNumber: string
+  passportExpiry: string
+  status: 'valid' | 'expiring' | 'expired'
+  sponsor: string
+}
+
+export interface WorkPermit {
+  id: string
+  employeeId: string
+  employeeName: string
+  nationality: string
+  permitNumber: string
+  issueDate: string
+  expiryDate: string
+  category: string
+  status: 'valid' | 'expiring' | 'expired'
+}
+
+export interface KPI {
+  id: string
+  department: string
+  metric: string
+  target: number
+  actual: number
+  unit: string
+  period: string
+  trend: 'up' | 'down' | 'stable'
+}
+
+export interface TalentRecord {
+  id: string
+  employeeId: string
+  employeeName: string
+  department: string
+  position: string
+  performanceScore: number
+  potential: 'high' | 'medium' | 'low'
+  promotionReady: boolean
+  trainingNeeds: string[]
+  strengths: string[]
+}
+
+export interface JobPosting {
+  id: string
+  title: string
+  department: string
+  type: 'full_time' | 'part_time' | 'contract'
+  location: string
+  postedDate: string
+  closingDate: string
+  applicants: number
+  status: 'active' | 'closed' | 'draft'
+  hiringType: HiringType
+  salaryMin: number
+  salaryMax: number
+}
+
 export interface PerformanceReview {
   id: string
   employeeId: string

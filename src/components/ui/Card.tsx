@@ -10,7 +10,7 @@ interface CardProps {
 export function Card({ children, className, onClick }: CardProps) {
   return (
     <div
-      className={cn('bg-white rounded-2xl border border-gray-100 shadow-card', className)}
+      className={cn('bg-white rounded-xl shadow-card', className)}
       onClick={onClick}
     >
       {children}
@@ -21,12 +21,14 @@ export function Card({ children, className, onClick }: CardProps) {
 interface CardHeaderProps {
   children: React.ReactNode
   className?: string
+  action?: React.ReactNode
 }
 
-export function CardHeader({ children, className }: CardHeaderProps) {
+export function CardHeader({ children, className, action }: CardHeaderProps) {
   return (
-    <div className={cn('px-5 py-4 border-b border-gray-50', className)}>
-      {children}
+    <div className={cn('px-5 py-4 border-b border-gray-100 flex items-center justify-between', className)}>
+      <div className="flex-1 min-w-0">{children}</div>
+      {action && <div className="flex-shrink-0 ml-4">{action}</div>}
     </div>
   )
 }

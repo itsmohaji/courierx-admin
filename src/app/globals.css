@@ -2,14 +2,16 @@
 @import "tailwindcss";
 
 :root {
-  --sidebar-bg: #0B2416;
-  --sidebar-hover: #143320;
+  --sidebar-bg:     #0B2416;
+  --sidebar-hover:  #143320;
   --sidebar-active: #1C4229;
   --sidebar-border: #1A3D25;
-  --sidebar-text: #8FC4A2;
-  --accent: #14B8A6;
-  --accent-dark: #0D9488;
-  --app-bg: #EEF4F0;
+  --sidebar-text:   #8FC4A2;
+  --sidebar-muted:  #4A7A5C;
+  --accent:         #14B8A6;
+  --accent-dark:    #0D9488;
+  --accent-light:   #5eead4;
+  --app-bg:         #EEF4F0;
 }
 
 * { box-sizing: border-box; }
