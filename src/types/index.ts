@@ -21,8 +21,9 @@ export interface Employee {
   salary: number
   joinDate: string
   avatar?: string
-  nationalId?: string
-  address?: string
+  nationality?: string
+  visaExpiry?: string
+  contractType?: 'local' | 'offshore' | 'contract'
 }
 
 export interface Driver {
@@ -36,9 +37,27 @@ export interface Driver {
   vehicle: string
   area: string
   joinDate: string
-  nationalId?: string
+  nationality?: string
   licenseExpiry?: string
-  avatar?: string
+  platformAccountId?: string
+  platformStatus?: 'verified' | 'pending' | 'rejected'
+  codBalance?: number
+  weeklyEarnings?: number
+  monthlyEarnings?: number
+}
+
+export interface PlatformAccount {
+  id: string
+  platform: 'Keeta' | 'Jahez' | 'Ninja' | 'Noon'
+  accountId: string
+  status: 'active' | 'suspended' | 'pending'
+  totalDrivers: number
+  activeDrivers: number
+  monthlyRevenue: number
+  commissionRate: number
+  lastSync: string
+  contactPerson: string
+  contractExpiry: string
 }
 
 export interface CODEntry {
@@ -46,8 +65,11 @@ export interface CODEntry {
   driverId: string
   driverName: string
   amount: number
+  platformFee?: number
+  tax?: number
+  netAmount?: number
   platform: string
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'pending' | 'approved' | 'rejected' | 'disbursed'
   date: string
   batchId: string
   notes?: string
@@ -60,7 +82,33 @@ export interface Deposit {
   date: string
   status: 'pending' | 'confirmed' | 'failed'
   reference: string
+  depositType?: 'cod_collection' | 'bank_transfer' | 'wps'
   notes?: string
+}
+
+export interface Invoice {
+  id: string
+  invoiceNo: string
+  client: string
+  platform?: string
+  amount: number
+  tax: number
+  total: number
+  status: 'draft' | 'sent' | 'paid' | 'overdue'
+  dueDate: string
+  issueDate: string
+}
+
+export interface AccountingEntry {
+  id: string
+  date: string
+  type: 'income' | 'expense'
+  category: string
+  description: string
+  amount: number
+  department?: string
+  costCenter?: string
+  reference?: string
 }
 
 export interface Notification {
@@ -103,10 +151,138 @@ export interface Candidate {
   phone: string
   position: string
   department: string
+  hiringType?: 'local' | 'offshore' | 'rider'
   stage: 'applied' | 'screening' | 'interview' | 'offer' | 'hired' | 'rejected'
   appliedDate: string
+  nationality?: string
   notes?: string
-  resumeUrl?: string
+  visaRequired?: boolean
+}
+
+export interface Contract {
+  id: string
+  employeeId: string
+  employeeName: string
+  type: 'local' | 'offshore' | 'rider' | 'contract'
+  status: 'active' | 'expired' | 'pending_renewal' | 'terminated'
+  startDate: string
+  endDate: string
+  salary: number
+  visaStatus?: 'valid' | 'expiring_soon' | 'expired' | 'not_required'
+  visaExpiry?: string
+  nationality: string
+  department: string
+}
+
+export interface OnboardingApplication {
+  id: string
+  applicantName: string
+  phone: string
+  email: string
+  nationality: string
+  platform: 'Keeta' | 'Jahez' | 'Ninja' | 'Noon'
+  vehicleType: 'motorcycle' | 'car' | 'van'
+  status: 'submitted' | 'documents_review' | 'background_check' | 'platform_registration' | 'training' | 'active' | 'rejected'
+  appliedDate: string
+  notes?: string
+}
+
+export interface PerformanceReview {
+  id: string
+  employeeId: string
+  employeeName: string
+  department: string
+  position: string
+  period: string
+  overallScore: number
+  kpiScore: number
+  behaviorScore: number
+  goalsScore: number
+  reviewer: string
+  status: 'draft' | 'submitted' | 'approved'
+  reviewDate: string
+}
+
+export interface Asset {
+  id: string
+  assetNo: string
+  name: string
+  category: 'vehicle' | 'equipment' | 'it' | 'furniture' | 'other'
+  status: 'active' | 'maintenance' | 'disposed' | 'retired'
+  purchaseDate: string
+  purchasePrice: number
+  currentValue: number
+  depreciationRate: number
+  assignedTo?: string
+  department?: string
+  serialNumber?: string
+}
+
+export interface Vehicle {
+  id: string
+  plateNumber: string
+  make: string
+  model: string
+  year: number
+  type: 'motorcycle' | 'car' | 'van' | 'truck'
+  status: 'active' | 'maintenance' | 'retired'
+  assignedDriverId?: string
+  assignedDriverName?: string
+  mileage: number
+  nextServiceDue: string
+  insuranceExpiry: string
+  registrationExpiry: string
+  purchasePrice: number
+  currentValue: number
+  fuelType: 'petrol' | 'diesel' | 'electric'
+}
+
+export interface MaintenanceRecord {
+  id: string
+  vehicleId: string
+  vehiclePlate: string
+  type: 'routine' | 'repair' | 'inspection' | 'accident'
+  description: string
+  cost: number
+  date: string
+  vendor: string
+  status: 'scheduled' | 'in_progress' | 'completed'
+  nextDue?: string
+}
+
+export interface InsurancePolicy {
+  id: string
+  policyNo: string
+  assetId: string
+  assetName: string
+  provider: string
+  type: 'comprehensive' | 'third_party' | 'fleet'
+  premium: number
+  startDate: string
+  endDate: string
+  status: 'active' | 'expired' | 'expiring_soon' | 'cancelled'
+  coverageAmount: number
+}
+
+export interface WhatsAppContact {
+  id: string
+  name: string
+  phone: string
+  category: 'driver' | 'client' | 'staff' | 'supplier'
+  lastMessage?: string
+  lastMessageTime?: string
+  unreadCount: number
+  platform?: string
+}
+
+export interface WhatsAppMessage {
+  id: string
+  contactId: string
+  direction: 'inbound' | 'outbound'
+  message: string
+  timestamp: string
+  status: 'sent' | 'delivered' | 'read' | 'failed'
+  templateId?: string
 }
 
 export interface PayrollRecord {
@@ -116,10 +292,12 @@ export interface PayrollRecord {
   department: string
   baseSalary: number
   overtime: number
+  allowances?: number
   deductions: number
   netSalary: number
   month: string
   status: 'pending' | 'processed' | 'paid'
+  paymentMethod?: 'wps' | 'bank_transfer' | 'cash'
 }
 
 export interface AttendanceRecord {
@@ -131,6 +309,7 @@ export interface AttendanceRecord {
   checkOut: string
   status: 'present' | 'absent' | 'late' | 'half_day' | 'on_leave'
   department: string
+  hoursWorked?: number
 }
 
 export interface MonthlyRevenue {
@@ -145,4 +324,5 @@ export interface PlatformBreakdown {
   amount: number
   deliveries: number
   color: string
+  commissionRate?: number
 }
