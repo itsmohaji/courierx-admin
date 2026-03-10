@@ -1,239 +1,165 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { Bell, Search, ChevronDown, User, Settings, LogOut, Menu, Check, MessageSquare } from 'lucide-react'
+import React, { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { useNotifications } from '@/hooks/useNotifications'
-import { cn } from '@/lib/utils'
-import { formatDate } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
+import { Bell, HelpCircle, Upload, Menu, Plus } from 'lucide-react'
+import { getInitials } from '@/lib/utils'
 
-const routeLabels: Record<string, string> = {
+const pageNames: Record<string, string> = {
   '/dashboard': 'Dashboard',
-  '/admin': 'Admin Panel',
   '/finance': 'Finance Overview',
   '/finance/cod-queue': 'COD Queue',
   '/finance/deposits': 'Deposits',
-  '/finance/reports': 'Reports',
+  '/finance/invoicing': 'Invoicing',
+  '/finance/accounting': 'Accounting',
+  '/finance/reports': 'Financial Reports',
   '/hr/employees': 'Employees',
   '/hr/attendance': 'Attendance',
   '/hr/payroll': 'Payroll',
   '/hr/recruitment': 'Recruitment',
+  '/hr/onboarding': 'Rider Onboarding',
+  '/hr/contracts': 'Contracts & Visa',
+  '/hr/performance': 'Performance',
   '/operations/drivers': 'Drivers',
-  '/operations/performance': 'Performance',
+  '/operations/performance': 'Driver Performance',
+  '/operations/platforms': 'Platform Accounts',
+  '/fleet/assets': 'Asset Master',
+  '/fleet/vehicles': 'Vehicles',
+  '/fleet/maintenance': 'Maintenance',
+  '/fleet/insurance': 'Insurance',
   '/legal/compliance': 'Compliance',
   '/legal/documents': 'Documents',
+  '/whatsapp': 'WhatsApp',
+  '/analytics': 'Analytics',
   '/settings': 'Settings',
+  '/settings/integrations': 'Integrations',
+  '/admin': 'Admin Panel',
 }
 
-function getBreadcrumbs(pathname: string) {
-  const parts = pathname.split('/').filter(Boolean)
-  const crumbs = [{ label: 'CourierX', href: '/dashboard' }]
-  let path = ''
-  for (const part of parts) {
-    path += `/${part}`
-    const label = routeLabels[path]
-    if (label) crumbs.push({ label, href: path })
-  }
-  return crumbs
+const subTitles: Record<string, string> = {
+  '/dashboard': 'Welcome back — here\'s what\'s happening today',
+  '/finance': 'Financial management & cash flow',
+  '/finance/cod-queue': 'Cash on delivery management',
+  '/hr/employees': 'Manage all staff members',
+  '/operations/drivers': 'Fleet driver management',
+  '/whatsapp': 'Business messaging',
 }
+
+// Sample avatar colors for the cluster
+const AVATAR_COLORS = ['#14B8A6', '#0D9488', '#059669']
+const AVATAR_INITIALS = ['AK', 'SA', 'MQ']
 
 interface TopbarProps {
   onMenuClick: () => void
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
-  const { user, role, signOut } = useAuth()
-  const { notifications, unreadCount, markAllRead, markRead } = useNotifications(user?.id)
+  const { user, role } = useAuth()
   const pathname = usePathname()
-  const router = useRouter()
-  const crumbs = getBreadcrumbs(pathname)
-  const pageTitle = routeLabels[pathname] || 'Dashboard'
-
   const [notifOpen, setNotifOpen] = useState(false)
-  const [profileOpen, setProfileOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
 
-  const notifRef = useRef<HTMLDivElement>(null)
-  const profileRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (notifRef.current && !notifRef.current.contains(e.target as Node)) setNotifOpen(false)
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) setProfileOpen(false)
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
-
-  const notifTypeIcon = (type: string) => {
-    const map: Record<string, string> = {
-      info: '💬',
-      success: '✅',
-      warning: '⚠️',
-      error: '🚨',
-    }
-    return map[type] || '💬'
-  }
+  const title = pageNames[pathname] || 'Dashboard'
+  const subtitle = subTitles[pathname] || ''
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 lg:px-6 py-3">
+    <header className="flex items-center justify-between px-6 py-3.5 bg-white border-b border-gray-100 sticky top-0 z-30">
+      {/* Left: mobile menu + page title */}
       <div className="flex items-center gap-4">
-        {/* Mobile menu button */}
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 flex-shrink-0"
+          className="lg:hidden p-2 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors"
         >
           <Menu className="w-5 h-5" />
         </button>
+        <div>
+          <h1 className="text-xl font-bold text-gray-900 leading-tight">{title}</h1>
+          {subtitle && (
+            <p className="text-xs text-gray-400 mt-0.5 leading-none">{subtitle}</p>
+          )}
+        </div>
+      </div>
 
-        {/* Breadcrumb / Title */}
-        <div className="flex-1 min-w-0">
-          <div className="hidden sm:flex items-center gap-1.5 text-sm text-gray-500 mb-0.5">
-            {crumbs.map((crumb, i) => (
-              <React.Fragment key={crumb.href}>
-                {i > 0 && <span className="text-gray-300">/</span>}
-                <button
-                  onClick={() => router.push(crumb.href)}
-                  className={cn(
-                    'hover:text-primary-600 transition-colors',
-                    i === crumbs.length - 1 ? 'text-gray-700 font-medium' : ''
-                  )}
-                >
-                  {crumb.label}
-                </button>
-              </React.Fragment>
+      {/* Right: avatar cluster, actions, export */}
+      <div className="flex items-center gap-2.5">
+        {/* User avatar cluster */}
+        <div className="hidden sm:flex items-center">
+          <div className="flex -space-x-2">
+            {AVATAR_INITIALS.map((initials, i) => (
+              <div
+                key={i}
+                className="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold"
+                style={{ background: AVATAR_COLORS[i] }}
+                title={initials}
+              >
+                {initials}
+              </div>
             ))}
           </div>
-          <h1 className="text-base font-semibold text-gray-900 leading-none sm:hidden">{pageTitle}</h1>
-        </div>
-
-        {/* Search */}
-        <div className="hidden md:flex relative w-64 xl:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white transition-all"
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          {/* Messages icon */}
-          <button className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 relative">
-            <MessageSquare className="w-5 h-5" />
+          {/* Plus button */}
+          <button
+            className="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors -ml-2 z-10"
+            title="Add member"
+          >
+            <Plus className="w-3.5 h-3.5" />
           </button>
-
-          {/* Notifications */}
-          <div className="relative" ref={notifRef}>
-            <button
-              onClick={() => { setNotifOpen(o => !o); setProfileOpen(false) }}
-              className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 relative"
-            >
-              <Bell className="w-5 h-5" />
-              {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 min-w-[16px] h-4 flex items-center justify-center text-[10px] font-bold bg-red-500 text-white rounded-full px-0.5">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </button>
-
-            {notifOpen && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-                  <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
-                  {unreadCount > 0 && (
-                    <button
-                      onClick={markAllRead}
-                      className="flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 font-medium"
-                    >
-                      <Check className="w-3 h-3" />
-                      Mark all read
-                    </button>
-                  )}
-                </div>
-                <div className="max-h-80 overflow-y-auto divide-y divide-gray-50">
-                  {notifications.length === 0 ? (
-                    <p className="text-sm text-gray-500 text-center py-8">No notifications</p>
-                  ) : (
-                    notifications.map(n => (
-                      <div
-                        key={n.id}
-                        className={cn(
-                          'flex gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors',
-                          !n.read && 'bg-primary-50/50'
-                        )}
-                        onClick={() => markRead(n.id)}
-                      >
-                        <span className="text-base flex-shrink-0 mt-0.5">{notifTypeIcon(n.type)}</span>
-                        <div className="min-w-0 flex-1">
-                          <p className={cn('text-sm', !n.read ? 'font-semibold text-gray-900' : 'font-medium text-gray-700')}>{n.title}</p>
-                          <p className="text-xs text-gray-500 truncate">{n.body}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">{formatDate(n.createdAt)}</p>
-                        </div>
-                        {!n.read && <div className="w-2 h-2 rounded-full bg-primary-600 flex-shrink-0 mt-1.5" />}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Profile dropdown */}
-          <div className="relative" ref={profileRef}>
-            <button
-              onClick={() => { setProfileOpen(o => !o); setNotifOpen(false) }}
-              className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-semibold">
-                {user?.name?.charAt(0).toUpperCase() || 'U'}
-              </div>
-              <div className="hidden sm:block text-left">
-                <p className="text-sm font-medium text-gray-700 leading-none">{user?.name?.split(' ')[0] || 'User'}</p>
-                <p className="text-xs text-gray-400 capitalize mt-0.5">{role?.replace('-', ' ') || 'Admin'}</p>
-              </div>
-              <ChevronDown className={cn('w-3.5 h-3.5 text-gray-400 transition-transform', profileOpen && 'rotate-180')} />
-            </button>
-
-            {profileOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-semibold text-gray-900 truncate">{user?.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{user?.email}</p>
-                </div>
-                <div className="py-1">
-                  <button
-                    onClick={() => { router.push('/settings'); setProfileOpen(false) }}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
-                  >
-                    <User className="w-4 h-4 text-gray-400" />
-                    Profile
-                  </button>
-                  <button
-                    onClick={() => { router.push('/settings'); setProfileOpen(false) }}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
-                  >
-                    <Settings className="w-4 h-4 text-gray-400" />
-                    Settings
-                  </button>
-                </div>
-                <div className="py-1 border-t border-gray-100">
-                  <button
-                    onClick={() => { signOut(); setProfileOpen(false) }}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Sign Out
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
+
+        {/* Divider */}
+        <div className="hidden sm:block w-px h-6 bg-gray-100 mx-1" />
+
+        {/* Help */}
+        <button
+          className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 transition-colors"
+          title="Help"
+        >
+          <HelpCircle className="w-4.5 h-4.5" style={{ width: 18, height: 18 }} />
+        </button>
+
+        {/* Notifications */}
+        <div className="relative">
+          <button
+            onClick={() => setNotifOpen(v => !v)}
+            className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 transition-colors relative"
+            title="Notifications"
+          >
+            <Bell className="w-4.5 h-4.5" style={{ width: 18, height: 18 }} />
+            <span
+              className="absolute top-1 right-1 w-2 h-2 rounded-full border-2 border-white"
+              style={{ background: 'var(--accent)' }}
+            />
+          </button>
+          {notifOpen && (
+            <div className="absolute right-0 top-10 w-72 bg-white rounded-2xl shadow-card-md border border-gray-100 z-50 animate-in p-4">
+              <p className="font-semibold text-gray-900 text-sm mb-3">Notifications</p>
+              {[
+                { title: 'New COD submission', body: 'Hassan Al-Bakri submitted BD 245', time: '2m ago', dot: 'var(--accent)' },
+                { title: 'Payroll processed', body: '15 records processed for March', time: '1h ago', dot: '#F59E0B' },
+                { title: 'Driver suspended', body: 'Hamad Al-Buqami — review required', time: '3h ago', dot: '#EF4444' },
+              ].map((n, i) => (
+                <div key={i} className="flex items-start gap-3 py-2.5 border-b border-gray-50 last:border-0">
+                  <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: n.dot }} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-800">{n.title}</p>
+                    <p className="text-xs text-gray-400">{n.body}</p>
+                  </div>
+                  <span className="text-xs text-gray-300">{n.time}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Export button — dark green */}
+        <button
+          className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-colors"
+          style={{ background: 'var(--sidebar-bg)' }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--sidebar-hover)'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'var(--sidebar-bg)'}
+        >
+          <Upload className="w-3.5 h-3.5" />
+          Export
+        </button>
       </div>
     </header>
   )

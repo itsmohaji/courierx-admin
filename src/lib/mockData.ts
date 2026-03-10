@@ -10,6 +10,23 @@ import type {
   AttendanceRecord,
   MonthlyRevenue,
   PlatformBreakdown,
+  HROnboardingApplication,
+  EmployeeContract,
+  VisaRecord,
+  WorkPermit,
+  PerformanceReview,
+  KPI,
+  TalentRecord,
+  JobPosting,
+  Vehicle,
+  MaintenanceRecord,
+  InsurancePolicy,
+  Asset,
+  Invoice,
+  AccountingEntry,
+  WhatsAppContact,
+  WhatsAppMessage,
+  PlatformAccount,
 } from '@/types'
 
 export const mockEmployees: Employee[] = [
@@ -193,4 +210,223 @@ export const mockAlerts = [
   { id: 'alert-003', type: 'warning', message: 'Saudization compliance deadline approaching', time: '1 day ago' },
   { id: 'alert-004', type: 'success', message: 'January payroll processed successfully', time: '2 days ago' },
   { id: 'alert-005', type: 'info', message: '5 new driver applications pending review', time: '3 days ago' },
+]
+
+// ─── WhatsApp Mock Data ───────────────────────────────────────────────────────
+
+export const mockWhatsAppContacts: WhatsAppContact[] = [
+  { id: 'wa-001', name: 'Hassan Al-Bakri', phone: '+973-3811-1111', category: 'driver', lastMessage: 'My COD payment not received yet', lastMessageTime: '2026-03-10T09:45:00', unreadCount: 3, platform: 'Keeta' },
+  { id: 'wa-002', name: 'Ahmed Al-Rashid', phone: '+973-3811-2222', category: 'staff', lastMessage: 'Finance report sent ✓', lastMessageTime: '2026-03-10T09:10:00', unreadCount: 0, platform: undefined },
+  { id: 'wa-003', name: 'Adel Al-Shammari', phone: '+973-3811-3333', category: 'driver', lastMessage: 'Ok I will be there', lastMessageTime: '2026-03-10T08:55:00', unreadCount: 1, platform: 'Ninja' },
+  { id: 'wa-004', name: 'Keeta Operations', phone: '+973-3811-4444', category: 'client', lastMessage: 'Please send the monthly settlement', lastMessageTime: '2026-03-10T08:30:00', unreadCount: 2, platform: 'Keeta' },
+  { id: 'wa-005', name: 'Bilal Al-Qahtani', phone: '+973-3811-5555', category: 'driver', lastMessage: 'Can I get advance?', lastMessageTime: '2026-03-10T07:50:00', unreadCount: 0, platform: 'Keeta' },
+  { id: 'wa-006', name: 'Ninja Bahrain Support', phone: '+973-3811-6666', category: 'client', lastMessage: 'API key updated successfully', lastMessageTime: '2026-03-09T17:30:00', unreadCount: 0, platform: 'Ninja' },
+  { id: 'wa-007', name: 'Turki Al-Ghamdi', phone: '+973-3811-7777', category: 'driver', lastMessage: 'Delivered 45 today 🎉', lastMessageTime: '2026-03-09T21:00:00', unreadCount: 0, platform: 'Ninja' },
+  { id: 'wa-008', name: 'Sara Al-Mutairi', phone: '+973-3811-8888', category: 'staff', lastMessage: 'Payroll ready for approval', lastMessageTime: '2026-03-09T16:00:00', unreadCount: 1, platform: undefined },
+  { id: 'wa-009', name: 'Noon Delivery BH', phone: '+973-3811-9999', category: 'client', lastMessage: 'New batch of 150 orders assigned', lastMessageTime: '2026-03-09T14:15:00', unreadCount: 0, platform: 'Noon' },
+  { id: 'wa-010', name: 'Fahad Al-Anazi', phone: '+973-3811-0101', category: 'driver', lastMessage: 'Vehicle issue - need help', lastMessageTime: '2026-03-09T12:45:00', unreadCount: 4, platform: 'Keeta' },
+]
+
+export const mockWhatsAppMessages: Record<string, WhatsAppMessage[]> = {
+  'wa-001': [
+    { id: 'msg-001-1', contactId: 'wa-001', direction: 'inbound', message: 'Hello, my COD payment for yesterday is not showing in my account.', timestamp: '2026-03-10T09:00:00', status: 'read' },
+    { id: 'msg-001-2', contactId: 'wa-001', direction: 'outbound', message: 'Hi Hassan, let me check that for you. Can you share your driver ID?', timestamp: '2026-03-10T09:05:00', status: 'read' },
+    { id: 'msg-001-3', contactId: 'wa-001', direction: 'inbound', message: 'My ID is DRV-001', timestamp: '2026-03-10T09:10:00', status: 'read' },
+    { id: 'msg-001-4', contactId: 'wa-001', direction: 'outbound', message: 'Thank you. I can see the payment is processing. It should reflect within 24 hours.', timestamp: '2026-03-10T09:20:00', status: 'delivered' },
+    { id: 'msg-001-5', contactId: 'wa-001', direction: 'inbound', message: 'My COD payment not received yet', timestamp: '2026-03-10T09:45:00', status: 'read' },
+  ],
+  'wa-003': [
+    { id: 'msg-003-1', contactId: 'wa-003', direction: 'outbound', message: 'Adel, please report to the office tomorrow at 9 AM for the monthly review.', timestamp: '2026-03-10T08:30:00', status: 'read' },
+    { id: 'msg-003-2', contactId: 'wa-003', direction: 'inbound', message: 'Ok I will be there', timestamp: '2026-03-10T08:55:00', status: 'read' },
+  ],
+  'wa-004': [
+    { id: 'msg-004-1', contactId: 'wa-004', direction: 'inbound', message: 'Good morning, we need the monthly driver settlement report.', timestamp: '2026-03-10T08:00:00', status: 'read' },
+    { id: 'msg-004-2', contactId: 'wa-004', direction: 'outbound', message: 'Good morning! We will prepare and send it by end of day today.', timestamp: '2026-03-10T08:15:00', status: 'read' },
+    { id: 'msg-004-3', contactId: 'wa-004', direction: 'inbound', message: 'Please send the monthly settlement', timestamp: '2026-03-10T08:30:00', status: 'read' },
+  ],
+  'wa-010': [
+    { id: 'msg-010-1', contactId: 'wa-010', direction: 'inbound', message: 'My motorcycle has a flat tire, I am stuck at Seef Mall.', timestamp: '2026-03-09T12:30:00', status: 'read' },
+    { id: 'msg-010-2', contactId: 'wa-010', direction: 'outbound', message: 'Fahad, please call roadside assistance at 17001234. We will cover the cost.', timestamp: '2026-03-09T12:35:00', status: 'read' },
+    { id: 'msg-010-3', contactId: 'wa-010', direction: 'inbound', message: 'Vehicle issue - need help', timestamp: '2026-03-09T12:45:00', status: 'read' },
+    { id: 'msg-010-4', contactId: 'wa-010', direction: 'inbound', message: 'Still waiting...', timestamp: '2026-03-10T08:00:00', status: 'read' },
+    { id: 'msg-010-5', contactId: 'wa-010', direction: 'inbound', message: 'Anyone there?', timestamp: '2026-03-10T08:20:00', status: 'read' },
+    { id: 'msg-010-6', contactId: 'wa-010', direction: 'inbound', message: 'Please respond urgently', timestamp: '2026-03-10T08:40:00', status: 'delivered' },
+  ],
+}
+
+// ─── Platform Accounts Mock Data ─────────────────────────────────────────────
+
+export const mockPlatformAccounts: PlatformAccount[] = [
+  {
+    id: 'pa-001',
+    platform: 'Keeta',
+    accountId: 'KEETA-BH-2401',
+    status: 'active',
+    totalDrivers: 95,
+    activeDrivers: 82,
+    monthlyRevenue: 48500,
+    commissionRate: 18,
+    lastSync: '2026-03-10T08:00:00',
+    contactPerson: 'Mohammed Al-Hassan',
+    contractExpiry: '2026-12-31',
+  },
+  {
+    id: 'pa-002',
+    platform: 'Jahez',
+    accountId: 'JAHEZ-BH-2301',
+    status: 'active',
+    totalDrivers: 72,
+    activeDrivers: 61,
+    monthlyRevenue: 36200,
+    commissionRate: 20,
+    lastSync: '2026-03-10T07:45:00',
+    contactPerson: 'Fatima Al-Zahraa',
+    contractExpiry: '2026-09-30',
+  },
+  {
+    id: 'pa-003',
+    platform: 'Ninja',
+    accountId: 'NINJA-BH-2302',
+    status: 'active',
+    totalDrivers: 58,
+    activeDrivers: 49,
+    monthlyRevenue: 29800,
+    commissionRate: 15,
+    lastSync: '2026-03-10T08:15:00',
+    contactPerson: 'Khaled Al-Mansouri',
+    contractExpiry: '2027-03-31',
+  },
+  {
+    id: 'pa-004',
+    platform: 'Noon',
+    accountId: 'NOON-BH-2401',
+    status: 'suspended',
+    totalDrivers: 35,
+    activeDrivers: 0,
+    monthlyRevenue: 0,
+    commissionRate: 22,
+    lastSync: '2026-02-28T12:00:00',
+    contactPerson: 'Rania Al-Khalifa',
+    contractExpiry: '2026-06-30',
+  },
+]
+
+// ─── Analytics Summary Data ───────────────────────────────────────────────────
+
+export const mockAnalyticsSummary = {
+  totalRevenue: 114500,
+  totalDeliveries: 12760,
+  activeDrivers: 192,
+  platformDistribution: [
+    { platform: 'Keeta', deliveries: 5120, revenue: 48500, avgOrderValue: 9.47, commissionPaid: 8730, netRevenue: 39770, color: '#059669' },
+    { platform: 'Jahez', deliveries: 3860, revenue: 36200, avgOrderValue: 9.38, commissionPaid: 7240, netRevenue: 28960, color: '#3b82f6' },
+    { platform: 'Ninja', deliveries: 2980, revenue: 29800, avgOrderValue: 10.0, commissionPaid: 4470, netRevenue: 25330, color: '#8b5cf6' },
+    { platform: 'Noon', deliveries: 800, revenue: 0, avgOrderValue: 0, commissionPaid: 0, netRevenue: 0, color: '#f59e0b' },
+  ],
+}
+
+export const mockRevenueByMonth: MonthlyRevenue[] = [
+  { month: 'Apr', revenue: 68000, expenses: 47000, profit: 21000 },
+  { month: 'May', revenue: 72000, expenses: 50000, profit: 22000 },
+  { month: 'Jun', revenue: 78000, expenses: 53000, profit: 25000 },
+  { month: 'Jul', revenue: 85000, expenses: 58000, profit: 27000 },
+  { month: 'Aug', revenue: 91000, expenses: 62000, profit: 29000 },
+  { month: 'Sep', revenue: 88000, expenses: 60000, profit: 28000 },
+  { month: 'Oct', revenue: 96000, expenses: 65000, profit: 31000 },
+  { month: 'Nov', revenue: 104000, expenses: 70000, profit: 34000 },
+  { month: 'Dec', revenue: 118000, expenses: 79000, profit: 39000 },
+  { month: 'Jan', revenue: 108000, expenses: 74000, profit: 34000 },
+  { month: 'Feb', revenue: 112000, expenses: 76000, profit: 36000 },
+  { month: 'Mar', revenue: 114500, expenses: 78000, profit: 36500 },
+]
+
+export const mockAreaDeliveries = [
+  { area: 'Manama', deliveries: 3240, successRate: 96.2 },
+  { area: 'Riffa', deliveries: 2180, successRate: 94.8 },
+  { area: 'Muharraq', deliveries: 1960, successRate: 95.5 },
+  { area: 'Hamad Town', deliveries: 1540, successRate: 93.1 },
+  { area: 'Isa Town', deliveries: 1380, successRate: 97.0 },
+  { area: 'Budaiya', deliveries: 980, successRate: 94.3 },
+  { area: 'Jidhafs', deliveries: 870, successRate: 95.9 },
+  { area: 'Sitra', deliveries: 610, successRate: 92.4 },
+]
+
+// ─── Supervisor Performance Mock Data ────────────────────────────────────────
+
+export const mockSupervisors = [
+  {
+    id: 'sup-001',
+    name: 'Khalid Al-Dosari',
+    phone: '+973-3900-1001',
+    teamSize: 28,
+    platform: 'Keeta',
+    area: 'Manama',
+    teamDeliveries: 3240,
+    teamRating: 4.7,
+    kpiScore: 94,
+    efficiency: 96,
+    onTimeRate: 95.2,
+    issuesResolved: 42,
+    status: 'active',
+  },
+  {
+    id: 'sup-002',
+    name: 'Abdullah Al-Zahrani',
+    phone: '+973-3900-1002',
+    teamSize: 22,
+    platform: 'Jahez',
+    area: 'Riffa',
+    teamDeliveries: 2560,
+    teamRating: 4.5,
+    kpiScore: 89,
+    efficiency: 91,
+    onTimeRate: 92.0,
+    issuesResolved: 31,
+    status: 'active',
+  },
+  {
+    id: 'sup-003',
+    name: 'Faisal Al-Otaibi',
+    phone: '+973-3900-1003',
+    teamSize: 19,
+    platform: 'Ninja',
+    area: 'Muharraq',
+    teamDeliveries: 2180,
+    teamRating: 4.6,
+    kpiScore: 92,
+    efficiency: 93,
+    onTimeRate: 94.1,
+    issuesResolved: 28,
+    status: 'active',
+  },
+  {
+    id: 'sup-004',
+    name: 'Yousef Al-Rashidi',
+    phone: '+973-3900-1004',
+    teamSize: 15,
+    platform: 'Noon',
+    area: 'Hamad Town',
+    teamDeliveries: 1540,
+    teamRating: 4.3,
+    kpiScore: 82,
+    efficiency: 85,
+    onTimeRate: 88.5,
+    issuesResolved: 19,
+    status: 'active',
+  },
+  {
+    id: 'sup-005',
+    name: 'Ghada Al-Mutlaq',
+    phone: '+973-3900-1005',
+    teamSize: 17,
+    platform: 'Keeta',
+    area: 'Isa Town',
+    teamDeliveries: 1960,
+    teamRating: 4.8,
+    kpiScore: 97,
+    efficiency: 98,
+    onTimeRate: 97.3,
+    issuesResolved: 35,
+    status: 'active',
+  },
 ]

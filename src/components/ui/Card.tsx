@@ -4,35 +4,43 @@ import { cn } from '@/lib/utils'
 interface CardProps {
   children: React.ReactNode
   className?: string
+  onClick?: () => void
 }
 
-export function Card({ children, className }: CardProps) {
+export function Card({ children, className, onClick }: CardProps) {
   return (
-    <div className={cn('bg-white rounded-xl shadow-sm border border-gray-100', className)}>
+    <div
+      className={cn('bg-white rounded-xl shadow-card', className)}
+      onClick={onClick}
+    >
       {children}
     </div>
   )
 }
 
-export function CardHeader({ children, className }: CardProps) {
+interface CardHeaderProps {
+  children: React.ReactNode
+  className?: string
+  action?: React.ReactNode
+}
+
+export function CardHeader({ children, className, action }: CardHeaderProps) {
   return (
-    <div className={cn('px-6 py-4 border-b border-gray-100', className)}>
-      {children}
+    <div className={cn('px-5 py-4 border-b border-gray-100 flex items-center justify-between', className)}>
+      <div className="flex-1 min-w-0">{children}</div>
+      {action && <div className="flex-shrink-0 ml-4">{action}</div>}
     </div>
   )
 }
 
-export function CardBody({ children, className }: CardProps) {
-  return (
-    <div className={cn('px-6 py-4', className)}>
-      {children}
-    </div>
-  )
+interface CardBodyProps {
+  children: React.ReactNode
+  className?: string
 }
 
-export function CardFooter({ children, className }: CardProps) {
+export function CardBody({ children, className }: CardBodyProps) {
   return (
-    <div className={cn('px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-xl', className)}>
+    <div className={cn('px-5 py-4', className)}>
       {children}
     </div>
   )

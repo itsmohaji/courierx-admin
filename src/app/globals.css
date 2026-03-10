@@ -1,67 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 @import "tailwindcss";
 
 :root {
-  --primary: #059669;
-  --primary-dark: #047857;
-  --primary-light: #ecfdf5;
-  --bg: #f4f6f9;
+  --sidebar-bg:     #0B2416;
+  --sidebar-hover:  #143320;
+  --sidebar-active: #1C4229;
+  --sidebar-border: #1A3D25;
+  --sidebar-text:   #8FC4A2;
+  --sidebar-muted:  #4A7A5C;
+  --accent:         #14B8A6;
+  --accent-dark:    #0D9488;
+  --accent-light:   #5eead4;
+  --app-bg:         #EEF4F0;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
+  background: var(--app-bg);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C8D9D0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #9DB8A8; }
 
-/* Green focus rings */
-input:focus,
-select:focus,
-textarea:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-/* Animate utilities */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.animate-in { animation: fadeIn 0.18s ease-out; }
 
-.animate-in {
-  animation: fadeIn 0.2s ease-out;
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
-
-@keyframes zoomIn95 {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.zoom-in-95 {
-  animation: zoomIn95 0.2s ease-out;
-}
-
-.fade-in-0 {
-  animation: fadeIn 0.15s ease-out;
-}
+.slide-in { animation: slideIn 0.15s ease-out; }
