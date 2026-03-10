@@ -8,6 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'ghost' | 'danger' | 'success' | 'outline'
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
+  icon?: React.ReactNode
   children: React.ReactNode
 }
 
@@ -15,6 +16,7 @@ export function Button({
   variant = 'primary',
   size = 'md',
   loading = false,
+  icon,
   children,
   className,
   disabled,
@@ -42,7 +44,7 @@ export function Button({
       disabled={disabled || loading}
       {...props}
     >
-      {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : icon}
       {children}
     </button>
   )
