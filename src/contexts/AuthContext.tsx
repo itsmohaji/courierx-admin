@@ -5,17 +5,29 @@ import { createClient } from '@/lib/supabase'
 import type { Session, User as SupabaseUser } from '@supabase/supabase-js'
 import type { Role, User } from '@/types'
 
+const DEMO_USER_KEY = 'courierx_demo_user'
+
 interface AuthContextType {
   user: User | null
   session: Session | null
   role: Role | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
+  signInDemo: (role: Role) => void
   signOut: () => Promise<void>
   updateRole: (role: Role) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+const roleLabels: Record<Role, string> = {
+  'super-admin': 'Super Admin',
+  'ceo': 'CEO',
+  'gm': 'General Manager',
+  'finance': 'Finance Controller',
+  'hr': 'HR Lead',
+  'legal': 'Legal Officer',
+}
 
 function buildUser(supabaseUser: SupabaseUser, overrideRole?: Role): User {
   const meta = supabaseUser.user_metadata || {}
@@ -34,6 +46,15 @@ function buildUser(supabaseUser: SupabaseUser, overrideRole?: Role): User {
   }
 }
 
+function buildDemoUser(role: Role): User {
+  return {
+    id: `demo-${role}`,
+    email: `demo.${role}@courierx.sa`,
+    name: roleLabels[role] || role,
+    role,
+  }
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
@@ -48,6 +69,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(u)
         setRole(u.role)
         setSession(session)
+        setLoading(false)
+        return
+      }
+      // No real session — check for a persisted demo user
+      if (typeof window !== 'undefined') {
+        const raw = localStorage.getItem(DEMO_USER_KEY)
+        if (raw) {
+          try {
+            const u = JSON.parse(raw) as User
+            setUser(u)
+            setRole(u.role)
+          } catch { /* ignore */ }
+        }
       }
       setLoading(false)
     })
@@ -61,6 +95,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(u)
         setRole(u.role)
         setSession(session)
+        // Clear demo user when real auth kicks in
+        if (typeof window !== 'undefined') localStorage.removeItem(DEMO_USER_KEY)
       } else {
         setUser(null)
         setRole(null)
@@ -86,10 +122,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error: null }
   }
 
+  const signInDemo = (demoRole: Role) => {
+    const u = buildDemoUser(demoRole)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(DEMO_USER_KEY, JSON.stringify(u))
+      localStorage.setItem('courierx_role', demoRole)
+    }
+    setUser(u)
+    setRole(demoRole)
+  }
+
   const signOut = async () => {
     await supabase.auth.signOut()
     if (typeof window !== 'undefined') {
       localStorage.removeItem('courierx_role')
+      localStorage.removeItem(DEMO_USER_KEY)
     }
     setUser(null)
     setRole(null)
@@ -107,7 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, role, loading, signIn, signOut, updateRole }}>
+    <AuthContext.Provider value={{ user, session, role, loading, signIn, signInDemo, signOut, updateRole }}>
       {children}
     </AuthContext.Provider>
   )
